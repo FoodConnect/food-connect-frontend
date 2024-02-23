@@ -1,4 +1,27 @@
-# Mantine Next.js template
+## Getting Started
+
+First, install Next.js:
+
+```
+npm install next@latest react@latest react-dom@latest
+
+```
+
+Then, run the development server:
+
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
+
+
+# About the Template 
+## Mantine Next.js template
 
 This is a template for [Next.js](https://nextjs.org/) pages router + [Mantine](https://mantine.dev/).
 If you want to use app router instead, see [next-app-template](https://github.com/mantinedev/next-app-template).
