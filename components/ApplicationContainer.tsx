@@ -4,8 +4,9 @@ import Image from 'next/image';
 
 // TODO: Define Interface for 'children'
 // Reminder!!! Remove 'cdn.iconscout.com' from next.config.js
-export function ApplicationContainer({ children }: any) {
+export function ApplicationContainer({ children }: { children: React.ReactNode }) {
   const [opened, { toggle }] = useDisclosure();
+
   return (
     <AppShell
       header={{ height: 60 }}
@@ -13,7 +14,7 @@ export function ApplicationContainer({ children }: any) {
       footer={{ height: 60 }}
       padding="md"
     >
-      <AppShell.Header>
+      <AppShell.Header bg={{ base: 'blue.7', sm: 'red.7', lg: 'blue.9' }}>
         <Group h="100%" px="md">
           <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
           <Image
