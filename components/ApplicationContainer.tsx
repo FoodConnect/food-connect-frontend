@@ -1,5 +1,6 @@
-import { AppShell, Group, Burger, Skeleton, Text, Button } from '@mantine/core';
-import { useDisclosure, useHover, useToggle } from '@mantine/hooks';
+import { AppShell, Group, Skeleton, Text, Button, ActionIcon } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import { IconLayoutSidebarLeftCollapse } from '@tabler/icons-react';
 import Image from 'next/image';
 
 // TODO: Define Interface for 'children'
@@ -28,17 +29,19 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
             Header
           </Text>
         </Group>
-        {!opened ? (
-          <Button color="shrek" onClick={toggle}>
-            OPEN
-          </Button>
-        ) : (
-          ' '
-        )}
+        <ActionIcon
+          variant="light"
+          autoContrast
+          size={40}
+          aria-label="Gradient action icon"
+          onClick={toggle}
+          bg="transparent"
+        >
+          <IconLayoutSidebarLeftCollapse color="gray" size={40} />
+        </ActionIcon>
       </AppShell.Header>
-      {/* TODO: SET COLOR based on color scheme */}
       <AppShell.Navbar p="md" bg="gray">
-        <Button w="50" color="pink" onClick={toggle}>
+        <Button w="50" color="transparent" onClick={toggle}>
           X
         </Button>
         <Text size="md" ta="center" fw={700}>

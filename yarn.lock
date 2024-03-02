@@ -2233,8 +2233,10 @@
 "@swc/types@^0.1.5":
   version "0.1.5"
 
-"@tabler/icons-react@^2.40.0":
+"@tabler/icons-react@^2.47.0":
   version "2.47.0"
+  resolved "https://registry.npmjs.org/@tabler/icons-react/-/icons-react-2.47.0.tgz"
+  integrity sha512-iqly2FvCF/qUbgmvS8E40rVeYY7laltc5GUjRxQj59DuX0x/6CpKHTXt86YlI2whg4czvd/c8Ce8YR08uEku0g==
   dependencies:
     "@tabler/icons" "2.47.0"
     prop-types "^15.7.2"
