@@ -1,12 +1,17 @@
 import { AppShell, Group, Skeleton, Text, Button, ActionIcon } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
-import { IconLayoutSidebarLeftCollapse } from '@tabler/icons-react';
+import { useDisclosure, useHover } from '@mantine/hooks';
+import {
+  IconLayoutSidebarLeftCollapse,
+  IconLayoutSidebarLeftExpand,
+  IconX,
+} from '@tabler/icons-react';
 import Image from 'next/image';
 
 // TODO: Define Interface for 'children'
 // Reminder!!! Remove 'cdn.iconscout.com' from next.config.js
 export function ApplicationContainer({ children }: { children: React.ReactNode }) {
   const [opened, { toggle }] = useDisclosure();
+  const { hovered, ref } = useHover();
 
   return (
     <AppShell
@@ -29,21 +34,21 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
             Header
           </Text>
         </Group>
-        <ActionIcon
-          variant="light"
-          autoContrast
-          size={40}
-          aria-label="Gradient action icon"
-          onClick={toggle}
-          bg="transparent"
-        >
-          <IconLayoutSidebarLeftCollapse color="gray" size={40} />
-        </ActionIcon>
+        {/* <ActionIcon pos="absolute" mt={100} size={40} onClick={toggle} bg="transparent"> */}
+        <Group pos="absolute" mt={50} pl={10}>
+          <ActionIcon radius="xl" p={20} onClick={toggle} color="green" variant="light">
+            {opened ? (
+              <IconLayoutSidebarLeftCollapse color="green" stroke={0.9} size={37} />
+            ) : (
+              <IconLayoutSidebarLeftExpand color="green" stroke={0.9} size={37} />
+            )}
+          </ActionIcon>
+        </Group>
       </AppShell.Header>
-      <AppShell.Navbar p="md" bg="gray">
-        <Button w="50" color="transparent" onClick={toggle}>
-          X
-        </Button>
+      <AppShell.Navbar p="md" bg="green">
+        <ActionIcon autoContrast color="green" radius="xl" size={40} onClick={toggle}>
+          <IconX />
+        </ActionIcon>
         <Text size="md" ta="center" fw={700}>
           Navbar
         </Text>
