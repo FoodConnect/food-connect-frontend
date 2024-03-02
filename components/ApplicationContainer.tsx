@@ -1,14 +1,18 @@
 import { AppShell, Group, Text, ActionIcon, Stack, NavLink } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import {
+  IconBell,
+  IconCarrot,
   IconChevronRight,
   IconLayoutDashboard,
   IconLayoutSidebarLeftCollapse,
   IconLayoutSidebarLeftExpand,
+  IconMap2,
   IconUserCircle,
   IconX,
 } from '@tabler/icons-react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 // TODO: Define Interface for 'children'
 // Reminder!!! Remove 'cdn.iconscout.com' from next.config.js
@@ -68,6 +72,42 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
             label="Profile"
             color="green"
             leftSection={<IconUserCircle size="1.3rem" stroke={1.5} />}
+            rightSection={
+              <IconChevronRight size="1rem" stroke={1.5} className="mantine-rotate-rtl" />
+            }
+            variant="filled"
+            active
+          />
+          <NavLink
+            href="/donor-donations"
+            label="Donations"
+            color="green"
+            fs="xs"
+            leftSection={<IconCarrot size="1.3rem" stroke={1.5} />}
+            rightSection={
+              <IconChevronRight size="1rem" stroke={1.5} className="mantine-rotate-rtl" />
+            }
+            variant="filled"
+            active
+          />
+          <NavLink
+            href="/"
+            label="Map View"
+            color="green"
+            fs="xs"
+            leftSection={<IconMap2 size="1.3rem" stroke={1.5} />}
+            rightSection={
+              <IconChevronRight size="1rem" stroke={1.5} className="mantine-rotate-rtl" />
+            }
+            variant="filled"
+            active
+          />
+          <NavLink
+            href="/"
+            label="Notifications"
+            color="green"
+            fs="xs"
+            leftSection={<IconBell size="1.3rem" stroke={1.5} />}
             rightSection={
               <IconChevronRight size="1rem" stroke={1.5} className="mantine-rotate-rtl" />
             }

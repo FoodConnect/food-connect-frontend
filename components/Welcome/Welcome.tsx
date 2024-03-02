@@ -5,18 +5,24 @@ export function Welcome() {
   return (
     <>
       <Title className={classes.title} ta="center" mt={100}>
-        Welcome to{' '}
-        <Text inherit variant="gradient" component="span" gradient={{ from: 'pink', to: 'yellow' }}>
-          Mantine
+        This Will Be a{' '}
+        <Text
+          inherit
+          variant="gradient"
+          component="span"
+          gradient={{ from: 'navy', to: 'chartreuse' }}
+        >
+          Landing{' '}
         </Text>
+        Page
       </Title>
       <Text c="dimmed" ta="center" size="lg" maw={580} mx="auto" mt="xl">
-        This starter Next.js project includes a minimal setup for server side rendering, if you want
-        to learn more on Mantine + Next.js integration follow{' '}
-        <Anchor href="https://mantine.dev/guides/next/" size="lg">
-          this guide
+        This will be a landing page with information on the site and data on donations
+        given/received.{' '}
+        <Anchor href="/" size="lg">
+          more coming soon
         </Anchor>
-        . To get started edit index.tsx file.
+        . Check back with us later...
       </Text>
       <Flex
         mih={50}
