@@ -1,8 +1,11 @@
-import { AppShell, Group, Skeleton, Text, Button, ActionIcon } from '@mantine/core';
-import { useDisclosure, useHover } from '@mantine/hooks';
+import { AppShell, Group, Text, ActionIcon, Stack, NavLink } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import {
+  IconChevronRight,
+  IconLayoutDashboard,
   IconLayoutSidebarLeftCollapse,
   IconLayoutSidebarLeftExpand,
+  IconUserCircle,
   IconX,
 } from '@tabler/icons-react';
 import Image from 'next/image';
@@ -11,7 +14,6 @@ import Image from 'next/image';
 // Reminder!!! Remove 'cdn.iconscout.com' from next.config.js
 export function ApplicationContainer({ children }: { children: React.ReactNode }) {
   const [opened, { toggle }] = useDisclosure();
-  const { hovered, ref } = useHover();
 
   return (
     <AppShell
@@ -47,18 +49,32 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
       </AppShell.Header>
       <AppShell.Navbar p="md" bg="green">
         <ActionIcon autoContrast color="green" radius="xl" size={40} onClick={toggle}>
-          <IconX />
+          <IconX color="white" />
         </ActionIcon>
-        <Text size="md" ta="center" fw={700}>
-          Navbar
-        </Text>
-        {/* TODO: LOOK AT SKELETON FOR NAV */}
-        <Skeleton h={28} mt="sm" animate />
-        {Array(15)
-          .fill(0)
-          .map((_, index) => (
-            <Skeleton key={index} h={28} mt="sm" animate={false} />
-          ))}
+        <Stack mt={30} gap="xs">
+          <NavLink
+            href="/"
+            label="Home"
+            color="green"
+            leftSection={<IconLayoutDashboard size="1.3rem" stroke={1.5} />}
+            rightSection={
+              <IconChevronRight size="1rem" stroke={1.5} className="mantine-rotate-rtl" />
+            }
+            variant="filled"
+            active
+          />
+          <NavLink
+            href="/signup"
+            label="Profile"
+            color="green"
+            leftSection={<IconUserCircle size="1.3rem" stroke={1.5} />}
+            rightSection={
+              <IconChevronRight size="1rem" stroke={1.5} className="mantine-rotate-rtl" />
+            }
+            variant="filled"
+            active
+          />
+        </Stack>
       </AppShell.Navbar>
       <AppShell.Main>{children}</AppShell.Main>
       <AppShell.Footer>
