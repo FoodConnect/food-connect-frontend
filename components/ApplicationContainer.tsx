@@ -1,5 +1,5 @@
-import { AppShell, Group, Burger, Skeleton, Text } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
+import { AppShell, Group, Burger, Skeleton, Text, Button } from '@mantine/core';
+import { useDisclosure, useHover, useToggle } from '@mantine/hooks';
 import Image from 'next/image';
 
 // TODO: Define Interface for 'children'
@@ -10,13 +10,14 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
   return (
     <AppShell
       header={{ height: 60 }}
-      navbar={{ width: 300, breakpoint: 'sm', collapsed: { mobile: !opened } }}
+      navbar={{ width: 200, breakpoint: 'sm', collapsed: { mobile: !opened, desktop: !opened } }}
       footer={{ height: 60 }}
       padding="md"
+      layout="alt"
     >
-      <AppShell.Header bg={{ base: 'blue.7', sm: 'red.7', lg: 'blue.9' }}>
+      <AppShell.Header>
         <Group h="100%" px="md">
-          <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
+          {/* <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" /> */}
           <Image
             src="https://cdn.iconscout.com/icon/free/png-256/free-google-160-189824.png"
             alt="Google 'G' Logo"
@@ -27,11 +28,24 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
             Header
           </Text>
         </Group>
+        {!opened ? (
+          <Button color="shrek" onClick={toggle}>
+            OPEN
+          </Button>
+        ) : (
+          ' '
+        )}
       </AppShell.Header>
-      <AppShell.Navbar p="md">
+      {/* TODO: SET COLOR based on color scheme */}
+      <AppShell.Navbar p="md" bg="gray">
+        <Button w="50" color="pink" onClick={toggle}>
+          X
+        </Button>
         <Text size="md" ta="center" fw={700}>
           Navbar
         </Text>
+        {/* TODO: LOOK AT SKELETON FOR NAV */}
+        <Skeleton h={28} mt="sm" animate />
         {Array(15)
           .fill(0)
           .map((_, index) => (

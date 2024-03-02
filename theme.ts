@@ -118,6 +118,7 @@ const navy: MantineColorsTuple = [
 ];
 
 export const theme = createTheme({
+  primaryShade: { light: 6, dark: 9 },
   colors: {
     chartreuse,
     shrek,
