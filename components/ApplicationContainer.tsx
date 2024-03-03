@@ -1,7 +1,10 @@
-import { AppShell, Group, Text, ActionIcon, Stack, NavLink } from '@mantine/core';
+import { AppShell, Group, Text, ActionIcon, Stack, NavLink, Anchor, rem, Box } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import {
   IconBell,
+  IconBrandGithub,
+  IconBrandInstagram,
+  IconBrandLinkedin,
   IconCarrot,
   IconChevronRight,
   IconLayoutDashboard,
@@ -12,11 +15,85 @@ import {
   IconX,
 } from '@tabler/icons-react';
 import Image from 'next/image';
+import Link from 'next/link';
+import classes from './FooterCentered.module.css';
 
 // Reminder!!! Remove 'cdn.iconscout.com' from next.config.js
 
 export function ApplicationContainer({ children }: { children: React.ReactNode }) {
   const [opened, { toggle }] = useDisclosure();
+
+  // Footer Link Features and Map Function
+  const links = [
+    { link: '#', label: 'Contact' },
+    { link: '#', label: 'Privacy' },
+    { link: '#', label: 'Blog' },
+    { link: '#', label: 'Store' },
+    { link: '#', label: 'Careers' },
+  ];
+
+  const items = links.map((link) => (
+    <Anchor
+      c="dimmed"
+      key={link.label}
+      href={link.link}
+      lh={1}
+      onClick={(event) => event.preventDefault()}
+      size="sm"
+    >
+      {link.label}
+    </Anchor>
+  ));
+  // End Footer item features and function
+
+  // Navbar Link Features and Map Function
+  const navLinks: any[] = [
+    {
+      icon: <IconLayoutDashboard size="1.3rem" stroke={1.5} />,
+      href: '/',
+      label: 'Home',
+    },
+    {
+      icon: <IconUserCircle size="1.3rem" stroke={1.5} />,
+      href: '/signup',
+      label: 'Profile',
+    },
+    {
+      icon: <IconCarrot size="1.3rem" stroke={1.5} />,
+      href: '/donor-donations',
+      label: 'Donations',
+    },
+    {
+      icon: <IconMap2 size="1.3rem" stroke={1.5} />,
+      href: '/',
+      label: 'Map View',
+    },
+    {
+      icon: <IconBell size="1.3rem" stroke={1.5} />,
+      href: '/',
+      label: 'Notifications',
+    },
+    {
+      icon: <IconBell size="1.3rem" stroke={1.5} />,
+      href: '/',
+      label: 'Notifications',
+    },
+  ];
+
+  const navItems = navLinks.map((navLink) => (
+    <NavLink
+      component={Link}
+      href={navLink.href}
+      label={navLink.label}
+      color="green"
+      leftSection={navLink.icon}
+      rightSection={<IconChevronRight size="1rem" stroke={1.5} className="mantine-rotate-rtl" />}
+      variant="filled"
+      active
+      onClick={toggle}
+    />
+  ));
+  // End Navbar item features and function
 
   return (
     <AppShell
@@ -55,71 +132,56 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
           <IconX color="white" />
         </ActionIcon>
         <Stack mt={30} gap="xs">
-          <NavLink
-            href="/"
-            label="Home"
-            color="green"
-            leftSection={<IconLayoutDashboard size="1.3rem" stroke={1.5} />}
-            rightSection={
-              <IconChevronRight size="1rem" stroke={1.5} className="mantine-rotate-rtl" />
-            }
-            variant="filled"
-            active
-          />
-          <NavLink
-            href="/signup"
-            label="Profile"
-            color="green"
-            leftSection={<IconUserCircle size="1.3rem" stroke={1.5} />}
-            rightSection={
-              <IconChevronRight size="1rem" stroke={1.5} className="mantine-rotate-rtl" />
-            }
-            variant="filled"
-            active
-          />
-          <NavLink
-            href="/donor-donations"
-            label="Donations"
-            color="green"
-            fs="xs"
-            leftSection={<IconCarrot size="1.3rem" stroke={1.5} />}
-            rightSection={
-              <IconChevronRight size="1rem" stroke={1.5} className="mantine-rotate-rtl" />
-            }
-            variant="filled"
-            active
-          />
-          <NavLink
-            href="/"
-            label="Map View"
-            color="green"
-            fs="xs"
-            leftSection={<IconMap2 size="1.3rem" stroke={1.5} />}
-            rightSection={
-              <IconChevronRight size="1rem" stroke={1.5} className="mantine-rotate-rtl" />
-            }
-            variant="filled"
-            active
-          />
-          <NavLink
-            href="/"
-            label="Notifications"
-            color="green"
-            fs="xs"
-            leftSection={<IconBell size="1.3rem" stroke={1.5} />}
-            rightSection={
-              <IconChevronRight size="1rem" stroke={1.5} className="mantine-rotate-rtl" />
-            }
-            variant="filled"
-            active
-          />
+          {navItems}
         </Stack>
       </AppShell.Navbar>
       <AppShell.Main>{children}</AppShell.Main>
       <AppShell.Footer>
-        <Text size="md" ta="center" fw={700} pt={15}>
-          Footer
-        </Text>
+        <div className={classes.inner}>
+          <Box />
+          <Group justify="center" pl="xl" className={classes.links}>
+            {items}
+          </Group>
+
+          <Group gap="xs" justify="flex-end" wrap="nowrap">
+            <ActionIcon
+              size="lg"
+              variant="gradient"
+              gradient={{ from: 'chartreuse', to: 'green', deg: 90 }}
+              radius="xl"
+              component={Link}
+              href="https://github.com/FoodConnect"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <IconBrandGithub style={{ width: rem(18), height: rem(18) }} stroke={1.5} />
+            </ActionIcon>
+            <ActionIcon
+              size="lg"
+              variant="gradient"
+              gradient={{ from: 'green', to: 'teal', deg: 90 }}
+              radius="xl"
+              component={Link}
+              href="https://www.linkedin.com/"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <IconBrandLinkedin style={{ width: rem(18), height: rem(18) }} stroke={1.5} />
+            </ActionIcon>
+            <ActionIcon
+              size="lg"
+              variant="gradient"
+              gradient={{ from: 'teal', to: 'navy', deg: 90 }}
+              radius="xl"
+              component={Link}
+              href="https://www.instagram.com/"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <IconBrandInstagram style={{ width: rem(18), height: rem(18) }} stroke={1.5} />
+            </ActionIcon>
+          </Group>
+        </div>
       </AppShell.Footer>
     </AppShell>
   );
