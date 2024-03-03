@@ -1,33 +1,80 @@
 import { Table, Progress, Anchor, Text, Group } from '@mantine/core';
+import { FC } from 'react';
 import classes from './DonationsTable.module.css';
 import DateFormat from '../DateFormat';
 
+// Dummy User ID and Data for feaux authorization
+// TO BE Removed upon call connection to Django API
 const data = [
   {
     description: 'Apples',
-    donor: 'Test User Business',
+    donor: { name: 'Test User Business', user: { id: 1 } },
     pick_up_deadline: '2024-03-09T09:47:00Z',
-
     inventory: { claimed: 90, remaining: 10 },
   },
   {
     description: 'Bananas',
-    donor: 'Test User Business',
+    donor: { name: 'Test User Business', user: { id: 1 } },
     pick_up_deadline: '2024-03-25T09:47:00Z',
-
     inventory: { claimed: 350, remaining: 756 },
   },
   {
     description: 'Oranges',
-    donor: 'Test User Business',
+    donor: { name: 'Test User Business', user: { id: 1 } },
     pick_up_deadline: '2024-04-15T09:47:00Z',
-
     inventory: { claimed: 2345, remaining: 812 },
+  },
+  {
+    description: 'Pears',
+    donor: { name: 'Test User Business', user: { id: 1 } },
+    pick_up_deadline: '2024-04-29T09:47:00Z',
+    inventory: { claimed: 0, remaining: 570 },
+  },
+  {
+    description: 'Chickens',
+    donor: { name: 'Test User Business', user: { id: 1 } },
+    pick_up_deadline: '2024-04-29T09:47:00Z',
+    inventory: { claimed: 215, remaining: 1587 },
+  },
+  {
+    description: 'Boxes of Crackers',
+    donor: { name: 'Marges Restaurant', user: { id: 2 } },
+    pick_up_deadline: '2024-05-12T09:47:00Z',
+    inventory: { claimed: 1121, remaining: 397 },
+  },
+  {
+    description: 'Eggs',
+    donor: { name: 'Marges Restaurant', user: { id: 2 } },
+    pick_up_deadline: '2024-03-20T09:47:00Z',
+    inventory: { claimed: 284, remaining: 1668 },
+  },
+  {
+    description: 'Potatoes',
+    donor: { name: 'Marges Restaurant', user: { id: 2 } },
+    pick_up_deadline: '2024-06-01T09:47:00Z',
+    inventory: { claimed: 744, remaining: 128 },
+  },
+  {
+    description: 'Maple Syrup Bottles',
+    donor: { name: 'Marges Restaurant', user: { id: 2 } },
+    pick_up_deadline: '2024-06-01T09:47:00Z',
+    inventory: { claimed: 51, remaining: 76 },
+  },
+  {
+    description: 'Carrots',
+    donor: { name: 'Marges Restaurant', user: { id: 2 } },
+    pick_up_deadline: '2024-03-05T09:47:00Z',
+    inventory: { claimed: 46, remaining: 10 },
   },
 ];
 
-export function DonationsTable() {
-  const rows = data.map((row) => {
+interface DonationsTableProps {
+  dummyUser: { id: number; role: string };
+}
+
+const DonationsTable: FC<DonationsTableProps> = (props) => {
+  const filtered = data.filter((row) => row.donor.user.id === props.dummyUser.id);
+  const rows = filtered.map((row) => {
     const totalInventory = row.inventory.remaining + row.inventory.claimed;
     const remainingInventory = (row.inventory.remaining / totalInventory) * 100;
     const claimedInventory = (row.inventory.claimed / totalInventory) * 100;
@@ -44,7 +91,7 @@ export function DonationsTable() {
         </Table.Td>
         <Table.Td>
           <Anchor component="button" fz="sm">
-            {row.donor}
+            {row.donor.name}
           </Anchor>
         </Table.Td>
         <Table.Td>{Intl.NumberFormat().format(totalInventory)}</Table.Td>
@@ -53,9 +100,6 @@ export function DonationsTable() {
             <Text fz="xs" c="teal" fw={700}>
               {claimedInventory.toFixed(0)}%
             </Text>
-            {/* <Text fz="xs" c="red" fw={700}>
-              {remainingInventory.toFixed(0)}%
-            </Text> */}
           </Group>
           <Progress.Root>
             <Progress.Section
@@ -91,4 +135,5 @@ export function DonationsTable() {
       </Table>
     </Table.ScrollContainer>
   );
-}
+};
+export default DonationsTable;

@@ -73,13 +73,7 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
       href: '/',
       label: 'Notifications',
     },
-    {
-      icon: <IconBell size="1.3rem" stroke={1.5} />,
-      href: '/',
-      label: 'Notifications',
-    },
   ];
-
   const navItems = navLinks.map((navLink) => (
     <NavLink
       component={Link}
