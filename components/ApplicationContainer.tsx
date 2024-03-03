@@ -105,18 +105,11 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
     >
       <AppShell.Header>
         <Group h="100%" px="md">
-          {/* <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" /> */}
-          <Image
-            src="https://cdn.iconscout.com/icon/free/png-256/free-google-160-189824.png"
-            alt="Google 'G' Logo"
-            width={20}
-            height={20}
-          />
+          <Image src="/favicon.svg" alt="Food Connect Favicon" width={60} height={60} />
           <Text size="md" ta="center" fw={700}>
-            Header
+            Food Connect
           </Text>
         </Group>
-        {/* <ActionIcon pos="absolute" mt={100} size={40} onClick={toggle} bg="transparent"> */}
         <Group pos="absolute" mt={50} pl={10}>
           <ActionIcon radius="xl" p={20} onClick={toggle} color="green" variant="light">
             {opened ? (
@@ -142,7 +135,6 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
           <Group justify="center" pl="xl" className={classes.links}>
             {items}
           </Group>
-
           <Group gap="xs" justify="flex-end" wrap="nowrap">
             <ActionIcon
               size="lg"
