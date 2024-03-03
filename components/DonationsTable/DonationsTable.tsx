@@ -1,11 +1,12 @@
 import { Table, Progress, Anchor, Text, Group } from '@mantine/core';
 import classes from './DonationsTable.module.css';
+import DateFormat from '../DateFormat';
 
 const data = [
   {
     description: 'A bunch of apples',
     donor: 'Test User Business',
-    pick_up_deadline: '3/9/24',
+    pick_up_deadline: '2024-03-09T09:47:00Z',
 
     inventory: { claimed: 90, remaining: 10 },
   },
@@ -24,7 +25,9 @@ export function DonationsTable() {
             {row.description}
           </Anchor>
         </Table.Td>
-        <Table.Td>{row.pick_up_deadline}</Table.Td>
+        <Table.Td>
+          <DateFormat dateString={row.pick_up_deadline} />
+        </Table.Td>
         <Table.Td>
           <Anchor component="button" fz="sm">
             {row.donor}
