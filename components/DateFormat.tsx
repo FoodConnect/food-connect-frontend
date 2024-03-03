@@ -7,6 +7,6 @@ export default function DateFormat({ dateString }: DateString) {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
-  }); //@ts-ignore
+  });
   return dateTime;
 }

@@ -4,11 +4,25 @@ import DateFormat from '../DateFormat';
 
 const data = [
   {
-    description: 'A bunch of apples',
+    description: 'Apples',
     donor: 'Test User Business',
     pick_up_deadline: '2024-03-09T09:47:00Z',
 
     inventory: { claimed: 90, remaining: 10 },
+  },
+  {
+    description: 'Bananas',
+    donor: 'Test User Business',
+    pick_up_deadline: '2024-03-25T09:47:00Z',
+
+    inventory: { claimed: 350, remaining: 756 },
+  },
+  {
+    description: 'Oranges',
+    donor: 'Test User Business',
+    pick_up_deadline: '2024-04-15T09:47:00Z',
+
+    inventory: { claimed: 2345, remaining: 812 },
   },
 ];
 
