@@ -12,10 +12,9 @@ import {
   IconX,
 } from '@tabler/icons-react';
 import Image from 'next/image';
-import Link from 'next/link';
 
-// TODO: Define Interface for 'children'
 // Reminder!!! Remove 'cdn.iconscout.com' from next.config.js
+
 export function ApplicationContainer({ children }: { children: React.ReactNode }) {
   const [opened, { toggle }] = useDisclosure();
 

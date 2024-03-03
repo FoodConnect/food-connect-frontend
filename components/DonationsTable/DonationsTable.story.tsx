@@ -1,7 +1,7 @@
 import { DonationsTable } from './DonationsTable';
 
 export default {
-  title: 'Donor Donations Table',
+  title: 'Donations Table',
 };
 
 export const Usage = () => <DonationsTable />;
