@@ -5,6 +5,8 @@ import { MantineProvider } from '@mantine/core';
 import { theme } from '../theme';
 import { ApplicationContainer } from '@/components/ApplicationContainer';
 
+// Dummy User ID and Role for feaux authorization
+const dummyUser = { id: 2, role: 'charity' };
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <MantineProvider theme={theme}>
@@ -17,7 +19,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <link rel="shortcut icon" href="/favicon.svg" />
       </Head>
       <ApplicationContainer>
-        <Component {...pageProps} />
+        <Component {...pageProps} dummyUser={dummyUser} />
       </ApplicationContainer>
     </MantineProvider>
   );

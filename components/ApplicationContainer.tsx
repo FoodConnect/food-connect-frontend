@@ -18,9 +18,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import classes from './FooterCentered.module.css';
 
-// Reminder!!! Remove 'cdn.iconscout.com' from next.config.js
+// REMINDER!!! Remove 'cdn.iconscout.com' from next.config.js
 
-export function ApplicationContainer({ children }: { children: React.ReactNode }) {
+export function ApplicationContainer({ children }: any) {
   const [opened, { toggle }] = useDisclosure();
 
   // Footer Link Features and Map Function
@@ -47,6 +47,15 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
   // End Footer item features and function
 
   // Navbar Link Features and Map Function
+  const checkUserType = () => {
+    if (children?.props?.dummyUser.role === 'donor') {
+      return '/donor-donations';
+    }
+    if (children?.props?.dummyUser.role === 'charity') {
+      return '/charity-donations';
+    }
+    return '/';
+  };
   const navLinks: any[] = [
     {
       icon: <IconLayoutDashboard size="1.3rem" stroke={1.5} />,
@@ -60,7 +69,7 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
     },
     {
       icon: <IconCarrot size="1.3rem" stroke={1.5} />,
-      href: '/donor-donations',
+      href: checkUserType(),
       label: 'Donations',
     },
     {

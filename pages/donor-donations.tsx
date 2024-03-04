@@ -3,15 +3,16 @@ import { FC } from 'react';
 import DonationsTable from '@/components/DonationsTable/DonationsTable';
 import DonationForm from '@/components/DonationForm/DonationForm';
 
-// Dummy User ID and Role for feaux authorization
-const dummyUser = { id: 2, role: 'donor' };
+interface DonationsTableProps {
+  dummyUser: { id: number; role: string };
+}
 
 const child = <Skeleton height={140} radius="md" animate={false} />;
-const DonorDonations: FC = () => (
+const DonorDonations: FC<DonationsTableProps> = (props) => (
   <Container my="md">
     <Grid>
       <Grid.Col span={{ base: 12, xs: 12 }}>
-        <DonationsTable dummyUser={dummyUser} />
+        <DonationsTable dummyUser={props.dummyUser} />
       </Grid.Col>
       <Grid.Col span={{ base: 12, xs: 4 }}>
         <DonationForm />
