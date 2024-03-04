@@ -1,0 +1,8 @@
+.mantine-DatePicker-day[data-selected]{
+  background-color: var(--mantine-color-shrek-filled);
+  background-image: linear-gradient(
+    to right,
+    var(--mantine-color-chartreuse-filled),
+    var(--mantine-color-navy-filled)
+  );
+}

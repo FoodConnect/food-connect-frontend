@@ -1,15 +1,16 @@
 import { Grid, NumberInput, ScrollArea, Skeleton, Text, Textarea } from '@mantine/core';
 import { useState } from 'react';
-import { DatePicker } from '@mantine/dates';
+import { DateValue } from '@mantine/dates';
 import GradientSegmentedControl from '../Inputs/GradientSegmentControl/GradientSegmentedControl';
 import TooltipIcon from '../Inputs/InputTooltips/TooltipIcon';
+import GradientDatePicker from '../Inputs/GradientDatePicker/GradientDatePicker';
 
 export default function DonationForm() {
   const tooltipText =
     'Write something that describes your donation concisely for charities to veiw.';
   const categoryOptions = ['Produce', 'Canned', 'Dairy', 'Dry'];
   const child = <Skeleton height={300} radius="md" animate={false} />;
-  const [value, setValue] = useState<Date | null>(null);
+  const [value, setValue] = useState<DateValue>(new Date());
   return (
     <Grid>
       <Grid.Col span={{ base: 12, xs: 4 }}>
@@ -34,7 +35,10 @@ export default function DonationForm() {
         </ScrollArea.Autosize>
       </Grid.Col>
       <Grid.Col span={{ base: 12, xs: 4 }}>
-        <DatePicker value={value} onChange={setValue} />
+        <Text size="sm" fw={500} mt={3}>
+          Pick-Up Deadline
+        </Text>
+        <GradientDatePicker value={value} setValue={setValue} />
       </Grid.Col>
       <Grid.Col span={{ base: 12, xs: 4 }}>{child}</Grid.Col>
     </Grid>
