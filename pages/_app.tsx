@@ -6,7 +6,6 @@ import { theme } from '../theme';
 import { ApplicationContainer } from '@/components/ApplicationContainer';
 
 export default function App({ Component, pageProps }: AppProps) {
-  const dummyUser = { id: 1, role: 'donor' };
   return (
     <MantineProvider theme={theme}>
       <Head>
@@ -18,7 +17,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <link rel="shortcut icon" href="/favicon.svg" />
       </Head>
       <ApplicationContainer>
-        <Component {...pageProps} dummyUser={dummyUser} />
+        <Component {...pageProps} />
       </ApplicationContainer>
     </MantineProvider>
   );

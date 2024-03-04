@@ -3,7 +3,8 @@ import { FC } from 'react';
 import DonationsTable from '@/components/DonationsTable/DonationsTable';
 import DonationForm from '@/components/DonationForm/DonationForm';
 
-const dummyUser = { id: 1, role: 'donor' };
+// Dummy User ID and Role for feaux authorization
+const dummyUser = { id: 2, role: 'donor' };
 
 const child = <Skeleton height={140} radius="md" animate={false} />;
 const DonorDonations: FC = () => (

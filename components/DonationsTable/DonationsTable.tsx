@@ -1,9 +1,10 @@
 import { Table, Progress, Anchor, Text, Group } from '@mantine/core';
 import { FC } from 'react';
+import { useRouter } from 'next/router';
 import classes from './DonationsTable.module.css';
 import DateFormat from '../DateFormat';
 
-// Dummy User ID and Data for feaux authorization
+// Dummy Data for feaux authorization
 // TO BE Removed upon call connection to Django API
 const data = [
   {
@@ -73,8 +74,18 @@ interface DonationsTableProps {
 }
 
 const DonationsTable: FC<DonationsTableProps> = (props) => {
-  const filtered = data.filter((row) => row.donor.user.id === props.dummyUser.id);
-  const rows = filtered.map((row) => {
+  const path = useRouter()?.asPath;
+  console.log('path', path);
+  let arr = [];
+
+  // Condition for Donor Donation Page filtered donation list
+  if (path === '/donor-donations') {
+    arr = data.filter((row) => row.donor.user.id === props.dummyUser.id);
+  } else {
+    arr = data;
+  }
+
+  const rows = arr.map((row) => {
     const totalInventory = row.inventory.remaining + row.inventory.claimed;
     const remainingInventory = (row.inventory.remaining / totalInventory) * 100;
     const claimedInventory = (row.inventory.claimed / totalInventory) * 100;
