@@ -5,12 +5,13 @@ import { FC } from 'react';
 interface TooltipIconProps {
   label: string;
   placeholder: string;
+  tooltipText: string;
 }
 
 const TooltipIcon: FC<TooltipIconProps> = (props) => {
   const rightSection = (
     <Tooltip
-      label="We store your data securely"
+      label={props.tooltipText}
       position="top-end"
       withArrow
       transitionProps={{ transition: 'pop-bottom-right' }}
@@ -27,11 +28,4 @@ const TooltipIcon: FC<TooltipIconProps> = (props) => {
     <TextInput rightSection={rightSection} label={props.label} placeholder={props.placeholder} />
   );
 };
-
-export default function InputTooltip() {
-  return (
-    <>
-      <TooltipIcon label="" placeholder="" />
-    </>
-  );
-}
+export default TooltipIcon;

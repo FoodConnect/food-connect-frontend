@@ -32,11 +32,4 @@ const TooltipFocus: FC<TooltipFocusProps> = (props) => {
     </Tooltip>
   );
 };
-
-export default function InputTooltip() {
-  return (
-    <>
-      <TooltipFocus label="" placeholder="" />
-    </>
-  );
-}
+export default TooltipFocus;
