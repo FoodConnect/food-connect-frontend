@@ -1,5 +1,4 @@
 import { Table, Progress, Anchor, Text, Group } from '@mantine/core';
-import { FC } from 'react';
 import { useRouter } from 'next/router';
 import classes from './DonationsTable.module.css';
 import DateFormat from '../DateFormat';
@@ -73,7 +72,7 @@ interface DonationsTableProps {
   dummyUser: { id: number; role: string };
 }
 
-const DonationsTable: FC<DonationsTableProps> = (props) => {
+const DonationsTable = (props: DonationsTableProps) => {
   const path = useRouter()?.asPath;
   let arr = [];
 

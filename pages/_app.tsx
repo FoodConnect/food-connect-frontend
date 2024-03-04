@@ -1,4 +1,5 @@
 import '@mantine/core/styles.css';
+import '@mantine/dates/styles.css';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { MantineProvider } from '@mantine/core';
@@ -18,7 +19,7 @@ export default function App({ Component, pageProps }: AppProps) {
         />
         <link rel="shortcut icon" href="/favicon.svg" />
       </Head>
-      <ApplicationContainer>
+      <ApplicationContainer dummyUser={dummyUser}>
         <Component {...pageProps} dummyUser={dummyUser} />
       </ApplicationContainer>
     </MantineProvider>

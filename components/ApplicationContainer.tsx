@@ -20,9 +20,14 @@ import classes from './FooterCentered.module.css';
 
 // REMINDER!!! Remove 'cdn.iconscout.com' from next.config.js
 
-export function ApplicationContainer({ children }: any) {
+export function ApplicationContainer({
+  children,
+  dummyUser,
+}: {
+  children: React.ReactNode;
+  dummyUser: { id: number; role: string };
+}) {
   const [opened, { toggle }] = useDisclosure();
-
   // Footer Link Features and Map Function
   const links = [
     { link: '#', label: 'Contact' },
@@ -48,10 +53,10 @@ export function ApplicationContainer({ children }: any) {
 
   // Navbar Link Features and Map Function
   const checkUserType = () => {
-    if (children?.props?.dummyUser.role === 'donor') {
+    if (dummyUser.role === 'donor') {
       return '/donor-donations';
     }
-    if (children?.props?.dummyUser.role === 'charity') {
+    if (dummyUser.role === 'charity') {
       return '/charity-donations';
     }
     return '/';
@@ -114,7 +119,14 @@ export function ApplicationContainer({ children }: any) {
           </Text>
         </Group>
         <Group pos="absolute" mt={50} pl={10}>
-          <ActionIcon radius="xl" p={20} onClick={toggle} color="green" variant="light">
+          <ActionIcon
+            radius="xl"
+            size="xl"
+            onClick={toggle}
+            color="green"
+            variant="light"
+            aria-label="Open or close navbar drawer"
+          >
             {opened ? (
               <IconLayoutSidebarLeftCollapse color="green" stroke={0.9} size={37} />
             ) : (
