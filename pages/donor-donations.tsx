@@ -16,7 +16,6 @@ const DonorDonations: FC<DonationsTableProps> = (props) => (
       </Grid.Col>
       <Grid.Col span={{ base: 12, xs: 8 }}>
         <DonationForm />
-        {child}
       </Grid.Col>
 
       <Grid.Col span={{ base: 12, xs: 4 }}>{child}</Grid.Col>
