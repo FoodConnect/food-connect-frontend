@@ -75,7 +75,6 @@ interface DonationsTableProps {
 
 const DonationsTable: FC<DonationsTableProps> = (props) => {
   const path = useRouter()?.asPath;
-  console.log('path', path);
   let arr = [];
 
   // Condition for Donor Donation Page filtered donation list

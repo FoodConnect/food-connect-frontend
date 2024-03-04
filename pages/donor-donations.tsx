@@ -14,12 +14,12 @@ const DonorDonations: FC<DonationsTableProps> = (props) => (
       <Grid.Col span={{ base: 12, xs: 12 }}>
         <DonationsTable dummyUser={props.dummyUser} />
       </Grid.Col>
-      <Grid.Col span={{ base: 12, xs: 4 }}>
+      <Grid.Col span={{ base: 12, xs: 8 }}>
         <DonationForm />
         {child}
       </Grid.Col>
 
-      <Grid.Col span={{ base: 12, xs: 8 }}>{child}</Grid.Col>
+      <Grid.Col span={{ base: 12, xs: 4 }}>{child}</Grid.Col>
       <Grid.Col span={{ base: 12, xs: 4 }}>{child}</Grid.Col>
       <Grid.Col span={{ base: 12, xs: 3 }}>{child}</Grid.Col>
       <Grid.Col span={{ base: 12, xs: 3 }}>{child}</Grid.Col>

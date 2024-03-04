@@ -1,5 +1,10 @@
-import { Title } from '@mantine/core';
+import { Group } from '@mantine/core';
+import { GradientSegmentedControl } from '../Inputs/GradientSegmentControl/GradientSegmentedControl';
 
 export default function DonationForm() {
-  return <Title order={2}>Donation Form</Title>;
+  return (
+    <Group>
+      <GradientSegmentedControl />
+    </Group>
+  );
 }

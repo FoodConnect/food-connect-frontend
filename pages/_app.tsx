@@ -6,7 +6,7 @@ import { theme } from '../theme';
 import { ApplicationContainer } from '@/components/ApplicationContainer';
 
 // Dummy User ID and Role for feaux authorization
-const dummyUser = { id: 2, role: 'charity' };
+const dummyUser = { id: 2, role: 'donor' };
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <MantineProvider theme={theme}>
