@@ -1,13 +1,18 @@
 import { Welcome } from '../components/Welcome/Welcome';
 import { ColorSchemeToggle } from '../components/ColorSchemeToggle/ColorSchemeToggle';
-import { AuthenticationForm } from '@/components/AuthenticationForm/AuthenticationForm';
+import DonationsTable from '@/components/DonationsTable/DonationsTable';
 
 export default function HomePage() {
   return (
     <>
       <Welcome />
       <ColorSchemeToggle />
-      <AuthenticationForm />
+      <DonationsTable
+        dummyUser={{
+          id: 0,
+          role: '',
+        }}
+      />
     </>
   );
 }

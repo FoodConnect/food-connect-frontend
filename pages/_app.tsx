@@ -1,10 +1,13 @@
 import '@mantine/core/styles.css';
+import '@mantine/dates/styles.css';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { MantineProvider } from '@mantine/core';
 import { theme } from '../theme';
 import { ApplicationContainer } from '@/components/ApplicationContainer';
 
+// Dummy User ID and Role for feaux authorization
+const dummyUser = { id: 2, role: 'donor' };
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <MantineProvider theme={theme}>
@@ -16,8 +19,8 @@ export default function App({ Component, pageProps }: AppProps) {
         />
         <link rel="shortcut icon" href="/favicon.svg" />
       </Head>
-      <ApplicationContainer>
-        <Component {...pageProps} />
+      <ApplicationContainer dummyUser={dummyUser}>
+        <Component {...pageProps} dummyUser={dummyUser} />
       </ApplicationContainer>
     </MantineProvider>
   );

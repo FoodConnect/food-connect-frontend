@@ -17,8 +17,8 @@
     "incremental": true,
     "paths": {
       "@/*": ["./*"]
-    }
+    },
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "components/Date.jsx"],
   "exclude": ["node_modules"]
 }
