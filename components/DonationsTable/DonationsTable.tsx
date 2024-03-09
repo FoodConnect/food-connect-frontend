@@ -7,60 +7,70 @@ import DateFormat from '../DateFormat';
 // TO BE Removed upon call connection to Django API
 const data = [
   {
+    id: 1,
     description: 'Apples',
     donor: { name: 'Test User Business', user: { id: 1 } },
     pick_up_deadline: '2024-03-09T09:47:00Z',
     inventory: { claimed: 90, remaining: 10 },
   },
   {
+    id: 2,
     description: 'Bananas',
     donor: { name: 'Test User Business', user: { id: 1 } },
     pick_up_deadline: '2024-03-25T09:47:00Z',
     inventory: { claimed: 350, remaining: 756 },
   },
   {
+    id: 3,
     description: 'Oranges',
     donor: { name: 'Test User Business', user: { id: 1 } },
     pick_up_deadline: '2024-04-15T09:47:00Z',
     inventory: { claimed: 2345, remaining: 812 },
   },
   {
+    id: 4,
     description: 'Pears',
     donor: { name: 'Test User Business', user: { id: 1 } },
     pick_up_deadline: '2024-04-29T09:47:00Z',
     inventory: { claimed: 0, remaining: 570 },
   },
   {
+    id: 5,
     description: 'Chickens',
     donor: { name: 'Test User Business', user: { id: 1 } },
     pick_up_deadline: '2024-04-29T09:47:00Z',
     inventory: { claimed: 215, remaining: 1587 },
   },
   {
+    id: 6,
     description: 'Boxes of Crackers',
     donor: { name: 'Marges Restaurant', user: { id: 2 } },
     pick_up_deadline: '2024-05-12T09:47:00Z',
     inventory: { claimed: 1121, remaining: 397 },
   },
   {
+    id: 7,
     description: 'Eggs',
     donor: { name: 'Marges Restaurant', user: { id: 2 } },
     pick_up_deadline: '2024-03-20T09:47:00Z',
     inventory: { claimed: 284, remaining: 1668 },
   },
   {
+    id: 8,
     description: 'Potatoes',
     donor: { name: 'Marges Restaurant', user: { id: 2 } },
     pick_up_deadline: '2024-06-01T09:47:00Z',
     inventory: { claimed: 744, remaining: 128 },
   },
   {
+    id: 9,
     description: 'Maple Syrup Bottles',
     donor: { name: 'Marges Restaurant', user: { id: 2 } },
     pick_up_deadline: '2024-06-01T09:47:00Z',
     inventory: { claimed: 51, remaining: 76 },
   },
   {
+    id: 10,
     description: 'Carrots',
     donor: { name: 'Marges Restaurant', user: { id: 2 } },
     pick_up_deadline: '2024-03-05T09:47:00Z',
@@ -89,7 +99,7 @@ const DonationsTable = (props: DonationsTableProps) => {
     const claimedInventory = (row.inventory.claimed / totalInventory) * 100;
 
     return (
-      <Table.Tr key={row.description}>
+      <Table.Tr key={row.id}>
         <Table.Td>
           <Anchor component="button" fz="sm">
             {row.description}

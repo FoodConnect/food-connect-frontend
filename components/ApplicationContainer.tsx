@@ -11,6 +11,7 @@ import {
   IconLayoutSidebarLeftCollapse,
   IconLayoutSidebarLeftExpand,
   IconMap2,
+  IconSearch,
   IconUserCircle,
   IconX,
 } from '@tabler/icons-react';
@@ -68,14 +69,19 @@ export function ApplicationContainer({
       label: 'Home',
     },
     {
-      icon: <IconUserCircle size="1.3rem" stroke={1.5} />,
-      href: '/signup',
-      label: 'Profile',
+      icon: <IconSearch size="1.3rem" stroke={1.5} />,
+      href: '/',
+      label: 'Search',
     },
     {
       icon: <IconCarrot size="1.3rem" stroke={1.5} />,
       href: checkUserType(),
       label: 'Donations',
+    },
+    {
+      icon: <IconUserCircle size="1.3rem" stroke={1.5} />,
+      href: '/signup',
+      label: 'Profile',
     },
     {
       icon: <IconMap2 size="1.3rem" stroke={1.5} />,
@@ -90,6 +96,7 @@ export function ApplicationContainer({
   ];
   const navItems = navLinks.map((navLink) => (
     <NavLink
+      key={navLink.label}
       component={Link}
       href={navLink.href}
       label={navLink.label}
