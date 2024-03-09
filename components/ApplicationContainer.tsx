@@ -12,6 +12,7 @@ import {
   IconLayoutSidebarLeftExpand,
   IconMap2,
   IconSearch,
+  IconShoppingCart,
   IconUserCircle,
   IconX,
 } from '@tabler/icons-react';
@@ -55,10 +56,10 @@ export function ApplicationContainer({
   // Navbar Link Features and Map Function
   const checkUserType = () => {
     if (dummyUser.role === 'donor') {
-      return '/donor-donations';
+      return '/Donations/donor-donations';
     }
     if (dummyUser.role === 'charity') {
-      return '/charity-donations';
+      return '/Donations/charity-donations';
     }
     return '/';
   };
@@ -92,6 +93,11 @@ export function ApplicationContainer({
       icon: <IconBell size="1.3rem" stroke={1.5} />,
       href: '/',
       label: 'Notifications',
+    },
+    {
+      icon: <IconShoppingCart size="1.3rem" stroke={1.5} />,
+      href: '/',
+      label: 'Cart',
     },
   ];
   const navItems = navLinks.map((navLink) => (

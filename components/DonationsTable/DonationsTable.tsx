@@ -1,5 +1,6 @@
 import { Table, Progress, Anchor, Text, Group } from '@mantine/core';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import classes from './DonationsTable.module.css';
 import DateFormat from '../DateFormat';
 
@@ -87,7 +88,7 @@ const DonationsTable = (props: DonationsTableProps) => {
   let arr = [];
 
   // Condition for Donor Donation Page filtered donation list
-  if (path === '/donor-donations') {
+  if (path === '/Donations/donor-donations') {
     arr = data.filter((row) => row.donor.user.id === props.dummyUser.id);
   } else {
     arr = data;
@@ -101,7 +102,7 @@ const DonationsTable = (props: DonationsTableProps) => {
     return (
       <Table.Tr key={row.id}>
         <Table.Td>
-          <Anchor component="button" fz="sm">
+          <Anchor component={Link} href={`/Donations/${encodeURIComponent(row.id)}`} fz="sm">
             {row.description}
           </Anchor>
         </Table.Td>
@@ -109,7 +110,7 @@ const DonationsTable = (props: DonationsTableProps) => {
           <DateFormat dateString={row.pick_up_deadline} />
         </Table.Td>
         <Table.Td>
-          <Anchor component="button" fz="sm">
+          <Anchor component={Link} href="/" fz="sm">
             {row.donor.name}
           </Anchor>
         </Table.Td>
