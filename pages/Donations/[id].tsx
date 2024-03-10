@@ -1,4 +1,4 @@
-import { Container, Grid, Image, Skeleton } from '@mantine/core';
+import { Card, Container, Grid, Image, Skeleton, Text, Title } from '@mantine/core';
 import { useRouter } from 'next/router';
 // import { FC } from 'react';
 // import DonationsTable from '@/components/DonationsTable/DonationsTable';
@@ -9,7 +9,8 @@ const data = [
   {
     id: 1,
     title: 'Apples',
-    description: 'Apples',
+    description:
+      'Locally sourced apples, freshly picked, are readied for donation. Soon to reach food banks and shelters, they offer nourishment and comfort, symbolizing the spirit of community care and support.',
     donor: { name: 'Test User Business', user: { id: 1 } },
     pick_up_deadline: '2024-03-09T09:47:00Z',
     inventory: { claimed: 90, remaining: 10 },
@@ -81,7 +82,8 @@ const data = [
   {
     id: 7,
     title: 'Eggs',
-    description: 'Eggs',
+    description:
+      'Local farms donate fresh eggs, packed with care. Destined for food banks and shelters, these eggs offer comfort and sustenance to those in need, symbolizing the power of kindness in our community.',
     donor: { name: 'Marges Restaurant', user: { id: 2 } },
     pick_up_deadline: '2024-03-20T09:47:00Z',
     inventory: { claimed: 284, remaining: 1668 },
@@ -143,30 +145,35 @@ const CharityDonations = () => {
 
   return (
     <Container my="md">
-      a
       <Grid>
-        <Grid.Col span={{ base: 12, xs: 4 }}>DONATION ID: {id}</Grid.Col>
-        <Grid.Col span={{ base: 12, xs: 4 }}>DONATION TITLE: {donation?.title}</Grid.Col>
-        <Grid.Col span={{ base: 12, xs: 4 }}>DONATION DESRIPTION: {donation?.description}</Grid.Col>
-        <Grid.Col span={{ base: 12, xs: 4 }}>
-          DONATION INVENTORY: CLAIMED-{parseInt(donation?.inventory.claimed, 10)} REMAINING-
-          {parseInt(donation?.inventory.remaining, 10)}
+        <Grid.Col span={{ base: 12, xs: 12 }}>{child}</Grid.Col>
+        <Grid.Col span={{ base: 12, xs: 12 }}>
+          <Card shadow="none" padding="lg" radius="md" withBorder={false}>
+            <Grid>
+              <Grid.Col span={{ base: 12, xs: 12 }}>
+                <Title order={2}>Donation Details</Title>
+              </Grid.Col>
+              <Grid.Col span={{ base: 12, xs: 3 }}>
+                <Title order={5}>{donation?.title}</Title>
+                <Text c="dimmed">{donation?.description}</Text>
+                CLAIMED-{parseInt(donation?.inventory.claimed, 10)} REMAINING-
+                {parseInt(donation?.inventory.remaining, 10)}
+                <Grid.Col span={{ base: 12, xs: 12 }}>{child}</Grid.Col>
+                <Grid.Col span={{ base: 12, xs: 4 }}>CREATED_AT: {donation?.created_at}</Grid.Col>
+              </Grid.Col>
+              <Grid.Col span={{ base: 12, xs: 4 }}>
+                DONATION DEADLINE: {donation?.deadline}
+                <Grid.Col span={{ base: 12, xs: 12 }}>{child}</Grid.Col>
+                DONATION IS_AVAILABLE: {donation?.is_available ? 'YES' : 'NO'}
+                <Grid.Col span={{ base: 12, xs: 12 }}>{child}</Grid.Col>
+              </Grid.Col>
+              <Grid.Col span={{ base: 12, xs: 5 }}>
+                <Image height="500rem" src={donation?.image_data} radius="md" />
+              </Grid.Col>
+            </Grid>
+          </Card>
         </Grid.Col>
-        <Grid.Col span={{ base: 12, xs: 4 }}>DONATION DEADLINE: {donation?.deadline}</Grid.Col>
-        <Grid.Col span={{ base: 12, xs: 4 }}>
-          DONATION IS_AVAILABLE: {donation?.is_available}
-        </Grid.Col>
-        <Grid.Col span={{ base: 12, xs: 4 }}>CREATED_AT: {donation?.created_at}</Grid.Col>
-        <Grid.Col span={{ base: 12, xs: 4 }}>
-          <Image src={donation?.image_data} radius="md" h={200} />
-        </Grid.Col>
-        <Grid.Col span={{ base: 12, xs: 4 }}>{child}</Grid.Col>
-
-        <Grid.Col span={{ base: 12, xs: 8 }}>{child}</Grid.Col>
-        <Grid.Col span={{ base: 12, xs: 4 }}>{child}</Grid.Col>
-        <Grid.Col span={{ base: 12, xs: 3 }}>{child}</Grid.Col>
-        <Grid.Col span={{ base: 12, xs: 3 }}>{child}</Grid.Col>
-        <Grid.Col span={{ base: 12, xs: 6 }}>{child}</Grid.Col>
+        <Grid.Col span={{ base: 12, xs: 12 }}>{child}</Grid.Col>
       </Grid>
     </Container>
   );
