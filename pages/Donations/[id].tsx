@@ -1,5 +1,6 @@
 import { Card, Container, Grid, Image, Skeleton, Text, Title } from '@mantine/core';
 import { useRouter } from 'next/router';
+import GradientHeaderImage from '@/components/Inputs/GradientHeaderImage/GradientHeaderImage';
 // import { FC } from 'react';
 // import DonationsTable from '@/components/DonationsTable/DonationsTable';
 
@@ -146,9 +147,22 @@ const CharityDonations = () => {
   return (
     <Container my="md">
       <Grid>
-        <Grid.Col span={{ base: 12, xs: 12 }}>{child}</Grid.Col>
         <Grid.Col span={{ base: 12, xs: 12 }}>
-          <Card shadow="none" padding="lg" radius="md" withBorder={false}>
+          <GradientHeaderImage />
+          <Card
+            style={{ zIndex: 1000 }}
+            pos="relative"
+            mt={-80}
+            ml={24}
+            mr={24}
+            mx={3}
+            py={2}
+            px={2}
+            shadow="none"
+            padding="lg"
+            radius="md"
+            withBorder={false}
+          >
             <Grid>
               <Grid.Col span={{ base: 12, xs: 12 }}>
                 <Title order={2}>Donation Details</Title>
