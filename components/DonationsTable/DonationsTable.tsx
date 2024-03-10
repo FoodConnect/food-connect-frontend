@@ -13,6 +13,8 @@ const data = [
     donor: { name: 'Test User Business', user: { id: 1 } },
     pick_up_deadline: '2024-03-09T09:47:00Z',
     inventory: { claimed: 90, remaining: 10 },
+    is_available: true,
+    created_at: '2024-03-01T09:47:00Z',
   },
   {
     id: 2,
@@ -20,6 +22,8 @@ const data = [
     donor: { name: 'Test User Business', user: { id: 1 } },
     pick_up_deadline: '2024-03-25T09:47:00Z',
     inventory: { claimed: 350, remaining: 756 },
+    is_available: true,
+    created_at: '2024-03-01T09:47:00Z',
   },
   {
     id: 3,
@@ -27,6 +31,8 @@ const data = [
     donor: { name: 'Test User Business', user: { id: 1 } },
     pick_up_deadline: '2024-04-15T09:47:00Z',
     inventory: { claimed: 2345, remaining: 812 },
+    is_available: true,
+    created_at: '2024-03-01T09:47:00Z',
   },
   {
     id: 4,
@@ -34,6 +40,8 @@ const data = [
     donor: { name: 'Test User Business', user: { id: 1 } },
     pick_up_deadline: '2024-04-29T09:47:00Z',
     inventory: { claimed: 0, remaining: 570 },
+    is_available: true,
+    created_at: '2024-03-01T09:47:00Z',
   },
   {
     id: 5,
@@ -41,6 +49,8 @@ const data = [
     donor: { name: 'Test User Business', user: { id: 1 } },
     pick_up_deadline: '2024-04-29T09:47:00Z',
     inventory: { claimed: 215, remaining: 1587 },
+    is_available: true,
+    created_at: '2024-03-01T09:47:00Z',
   },
   {
     id: 6,
@@ -48,6 +58,8 @@ const data = [
     donor: { name: 'Marges Restaurant', user: { id: 2 } },
     pick_up_deadline: '2024-05-12T09:47:00Z',
     inventory: { claimed: 1121, remaining: 397 },
+    is_available: true,
+    created_at: '2024-03-01T09:47:00Z',
   },
   {
     id: 7,
@@ -55,6 +67,8 @@ const data = [
     donor: { name: 'Marges Restaurant', user: { id: 2 } },
     pick_up_deadline: '2024-03-20T09:47:00Z',
     inventory: { claimed: 284, remaining: 1668 },
+    is_available: true,
+    created_at: '2024-03-01T09:47:00Z',
   },
   {
     id: 8,
@@ -62,6 +76,8 @@ const data = [
     donor: { name: 'Marges Restaurant', user: { id: 2 } },
     pick_up_deadline: '2024-06-01T09:47:00Z',
     inventory: { claimed: 744, remaining: 128 },
+    is_available: true,
+    created_at: '2024-03-01T09:47:00Z',
   },
   {
     id: 9,
@@ -69,6 +85,8 @@ const data = [
     donor: { name: 'Marges Restaurant', user: { id: 2 } },
     pick_up_deadline: '2024-06-01T09:47:00Z',
     inventory: { claimed: 51, remaining: 76 },
+    is_available: true,
+    created_at: '2024-03-01T09:47:00Z',
   },
   {
     id: 10,
@@ -76,6 +94,8 @@ const data = [
     donor: { name: 'Marges Restaurant', user: { id: 2 } },
     pick_up_deadline: '2024-03-05T09:47:00Z',
     inventory: { claimed: 46, remaining: 10 },
+    is_available: true,
+    created_at: '2024-03-01T09:47:00Z',
   },
 ];
 
