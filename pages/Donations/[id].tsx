@@ -19,6 +19,7 @@ const data = [
     image_data:
       'https://thumbs.dreamstime.com/b/fresh-carrots-farmer-s-market-pile-freshly-harvested-carrots-arranged-wooden-crate-sitting-burlap-sack-276909252.jpg',
     created_at: '2024-03-01T09:47:00Z',
+    category: 'Produce',
   },
   {
     id: 2,
@@ -31,6 +32,7 @@ const data = [
     image_data:
       'https://thumbs.dreamstime.com/b/fresh-carrots-farmer-s-market-pile-freshly-harvested-carrots-arranged-wooden-crate-sitting-burlap-sack-276909252.jpg',
     created_at: '2024-03-01T09:47:00Z',
+    category: 'Produce',
   },
   {
     id: 3,
@@ -43,6 +45,7 @@ const data = [
     image_data:
       'https://thumbs.dreamstime.com/b/fresh-carrots-farmer-s-market-pile-freshly-harvested-carrots-arranged-wooden-crate-sitting-burlap-sack-276909252.jpg',
     created_at: '2024-03-01T09:47:00Z',
+    category: 'Produce',
   },
   {
     id: 4,
@@ -55,11 +58,12 @@ const data = [
     image_data:
       'https://thumbs.dreamstime.com/b/fresh-carrots-farmer-s-market-pile-freshly-harvested-carrots-arranged-wooden-crate-sitting-burlap-sack-276909252.jpg',
     created_at: '2024-03-01T09:47:00Z',
+    category: 'Produce',
   },
   {
     id: 5,
-    title: 'Chickens',
-    description: 'Chickens',
+    title: 'Canned Chickens',
+    description: 'Canned Chickens',
     donor: { name: 'Test User Business', user: { id: 1 } },
     pick_up_deadline: '2024-04-29T09:47:00Z',
     inventory: { claimed: 215, remaining: 1587 },
@@ -67,6 +71,7 @@ const data = [
     image_data:
       'https://thumbs.dreamstime.com/b/fresh-carrots-farmer-s-market-pile-freshly-harvested-carrots-arranged-wooden-crate-sitting-burlap-sack-276909252.jpg',
     created_at: '2024-03-01T09:47:00Z',
+    category: 'Canned',
   },
   {
     id: 6,
@@ -79,6 +84,7 @@ const data = [
     image_data:
       'https://thumbs.dreamstime.com/b/fresh-carrots-farmer-s-market-pile-freshly-harvested-carrots-arranged-wooden-crate-sitting-burlap-sack-276909252.jpg',
     created_at: '2024-03-01T09:47:00Z',
+    category: 'Dry',
   },
   {
     id: 7,
@@ -92,6 +98,7 @@ const data = [
     image_data:
       'https://thumbs.dreamstime.com/b/fresh-carrots-farmer-s-market-pile-freshly-harvested-carrots-arranged-wooden-crate-sitting-burlap-sack-276909252.jpg',
     created_at: '2024-03-01T09:47:00Z',
+    category: 'Produce',
   },
   {
     id: 8,
@@ -104,6 +111,7 @@ const data = [
     image_data:
       'https://thumbs.dreamstime.com/b/fresh-carrots-farmer-s-market-pile-freshly-harvested-carrots-arranged-wooden-crate-sitting-burlap-sack-276909252.jpg',
     created_at: '2024-03-01T09:47:00Z',
+    category: 'Produce',
   },
   {
     id: 9,
@@ -116,6 +124,7 @@ const data = [
     image_data:
       'https://thumbs.dreamstime.com/b/fresh-carrots-farmer-s-market-pile-freshly-harvested-carrots-arranged-wooden-crate-sitting-burlap-sack-276909252.jpg',
     created_at: '2024-03-01T09:47:00Z',
+    category: 'Canned',
   },
   {
     id: 10,
@@ -128,6 +137,33 @@ const data = [
     image_data:
       'https://thumbs.dreamstime.com/b/fresh-carrots-farmer-s-market-pile-freshly-harvested-carrots-arranged-wooden-crate-sitting-burlap-sack-276909252.jpg',
     created_at: '2024-03-01T09:47:00Z',
+    category: 'Produce',
+  },
+  {
+    id: 11,
+    title: 'Salt Packets',
+    description: 'Salt Packets',
+    donor: { name: 'Marges Restaurant', user: { id: 2 } },
+    pick_up_deadline: '2024-03-05T09:47:00Z',
+    inventory: { claimed: 100, remaining: 3568 },
+    is_available: true,
+    image_data:
+      'https://thumbs.dreamstime.com/b/fresh-carrots-farmer-s-market-pile-freshly-harvested-carrots-arranged-wooden-crate-sitting-burlap-sack-276909252.jpg',
+    created_at: '2024-03-01T09:47:00Z',
+    category: 'Dry',
+  },
+  {
+    id: 12,
+    title: 'Cartons of Milk',
+    description: 'Cartons of Milk',
+    donor: { name: 'Test User Business', user: { id: 1 } },
+    pick_up_deadline: '2024-03-05T09:47:00Z',
+    inventory: { claimed: 365, remaining: 789 },
+    is_available: true,
+    image_data:
+      'https://thumbs.dreamstime.com/b/fresh-carrots-farmer-s-market-pile-freshly-harvested-carrots-arranged-wooden-crate-sitting-burlap-sack-276909252.jpg',
+    created_at: '2024-03-01T09:47:00Z',
+    category: 'Dairy',
   },
 ];
 
@@ -149,21 +185,20 @@ const CharityDonations = () => {
       <Grid>
         <Grid.Col span={{ base: 12, xs: 12 }}>
           <GradientHeaderImage />
+          {/* <GradientHeaderImage category={donation?.category} /> */}
           <Card
-            style={{ zIndex: 1000 }}
+            style={{ zIndex: 2 }}
             pos="relative"
             mt={-80}
-            ml={24}
-            mr={24}
-            mx={3}
-            py={2}
-            px={2}
-            shadow="none"
-            padding="lg"
+            ml={{ base: 0, lg: 50, md: 24, sm: 24, xs: 0 }}
+            mr={{ base: 0, lg: 50, md: 24, sm: 24, xs: 0 }}
+            p={{ base: 0, lg: 2, md: 0, sm: 0, xs: 0 }}
+            // px={{ base: 0, lg: 2, md: 0, sm: 0, xs: 0 }}
+            shadow="sm"
             radius="md"
             withBorder={false}
           >
-            <Grid>
+            <Grid p={{ base: 0, lg: 25, md: 25, sm: 15, xs: 10 }}>
               <Grid.Col span={{ base: 12, xs: 12 }}>
                 <Title order={2}>Donation Details</Title>
               </Grid.Col>

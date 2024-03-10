@@ -131,7 +131,7 @@ export function ApplicationContainer({
             Food Connect
           </Text>
         </Group>
-        <Group pos="absolute" mt={50} pl={10}>
+        <Group pos="absolute" mt={50} pl={10} style={{ zIndex: 700 }}>
           <ActionIcon
             radius="xl"
             size="xl"
@@ -148,7 +148,7 @@ export function ApplicationContainer({
           </ActionIcon>
         </Group>
       </AppShell.Header>
-      <AppShell.Navbar p="md" bg="green">
+      <AppShell.Navbar p="md" bg="green" style={{ zIndex: 1000 }}>
         <ActionIcon autoContrast color="green" radius="xl" size={40} onClick={toggle}>
           <IconX color="white" />
         </ActionIcon>
