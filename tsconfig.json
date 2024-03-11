@@ -18,6 +18,7 @@
     "paths": {
       "@/*": ["./*"]
     },
+    "noUncheckedIndexedAccess": false,
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "components/Date.jsx"],
   "exclude": ["node_modules"]

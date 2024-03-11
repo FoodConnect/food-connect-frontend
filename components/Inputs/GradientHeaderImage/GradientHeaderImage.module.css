@@ -1,0 +1,15 @@
+.root {
+  height: 600px;
+  width: 100vw;
+  background: var(--mantine-color-navy);
+  overflow: hidden;
+  background: #C33764;  /* fallback colour. Make sure this is just one solid colour. */
+  background: -webkit-linear-gradient(rgba(29, 38, 113, 0.8), rgba(195, 55, 100, 0.8)), url("https://bit.ly/2rlzaXi");
+  background: linear-gradient( to right,
+  var(--mantine-color-chartreuse),
+  var(--mantine-color-navy)); /* The least supported option. */
+}
+
+.img {
+ object-fit: cover;
+}

@@ -14,6 +14,7 @@ export default function DonationForm() {
     'This field will eventually go away. It exists to save Image URLs until the above dropzone is functioning.';
   const categoryOptions = ['Produce', 'Canned', 'Dairy', 'Dry'];
   const [value, setValue] = useState<DateValue>(new Date());
+
   return (
     <Grid>
       <Grid.Col span={{ base: 12, xs: 4 }}>

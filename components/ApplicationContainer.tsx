@@ -11,6 +11,8 @@ import {
   IconLayoutSidebarLeftCollapse,
   IconLayoutSidebarLeftExpand,
   IconMap2,
+  IconSearch,
+  IconShoppingCart,
   IconUserCircle,
   IconX,
 } from '@tabler/icons-react';
@@ -54,10 +56,10 @@ export function ApplicationContainer({
   // Navbar Link Features and Map Function
   const checkUserType = () => {
     if (dummyUser.role === 'donor') {
-      return '/donor-donations';
+      return '/Donations/donor-donations';
     }
     if (dummyUser.role === 'charity') {
-      return '/charity-donations';
+      return '/Donations/charity-donations';
     }
     return '/';
   };
@@ -68,14 +70,19 @@ export function ApplicationContainer({
       label: 'Home',
     },
     {
-      icon: <IconUserCircle size="1.3rem" stroke={1.5} />,
-      href: '/signup',
-      label: 'Profile',
+      icon: <IconSearch size="1.3rem" stroke={1.5} />,
+      href: '/',
+      label: 'Search',
     },
     {
       icon: <IconCarrot size="1.3rem" stroke={1.5} />,
       href: checkUserType(),
       label: 'Donations',
+    },
+    {
+      icon: <IconUserCircle size="1.3rem" stroke={1.5} />,
+      href: '/signup',
+      label: 'Profile',
     },
     {
       icon: <IconMap2 size="1.3rem" stroke={1.5} />,
@@ -87,9 +94,15 @@ export function ApplicationContainer({
       href: '/',
       label: 'Notifications',
     },
+    {
+      icon: <IconShoppingCart size="1.3rem" stroke={1.5} />,
+      href: '/',
+      label: 'Cart',
+    },
   ];
   const navItems = navLinks.map((navLink) => (
     <NavLink
+      key={navLink.label}
       component={Link}
       href={navLink.href}
       label={navLink.label}
@@ -118,7 +131,7 @@ export function ApplicationContainer({
             Food Connect
           </Text>
         </Group>
-        <Group pos="absolute" mt={50} pl={10}>
+        <Group pos="absolute" mt={50} pl={10} style={{ zIndex: 700 }}>
           <ActionIcon
             radius="xl"
             size="xl"
@@ -135,7 +148,7 @@ export function ApplicationContainer({
           </ActionIcon>
         </Group>
       </AppShell.Header>
-      <AppShell.Navbar p="md" bg="green">
+      <AppShell.Navbar p="md" bg="green" style={{ zIndex: 1000 }}>
         <ActionIcon autoContrast color="green" radius="xl" size={40} onClick={toggle}>
           <IconX color="white" />
         </ActionIcon>

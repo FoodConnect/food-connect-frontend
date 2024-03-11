@@ -1,8 +1,21 @@
-import { Table, Progress, Anchor, Text, Group } from '@mantine/core';
+import {
+  Card,
+  Container,
+  Flex,
+  Grid,
+  Image,
+  ScrollArea,
+  Skeleton,
+  Text,
+  Title,
+} from '@mantine/core';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
-import classes from './DonationsTable.module.css';
-import DateFormat from '../DateFormat';
+import GradientHeaderImage from '@/components/Inputs/GradientHeaderImage/GradientHeaderImage';
+import DateFormat from '@/components/DateFormat';
+import StatsSegments from '@/components/StatsSegments/StatsSegments';
+import DonationForm from '@/components/DonationForm/DonationForm';
+// import { FC } from 'react';
+// import DonationsTable from '@/components/DonationsTable/DonationsTable';
 
 // Dummy Data for feaux authorization
 // TO BE Removed upon call connection to Django API
@@ -83,7 +96,7 @@ const data = [
     is_available: true,
     image_data:
       'https://thumbs.dreamstime.com/b/fresh-carrots-farmer-s-market-pile-freshly-harvested-carrots-arranged-wooden-crate-sitting-burlap-sack-276909252.jpg',
-    created_at: '2024-03-01T09:47:00Z',
+    created_at: '2024-05-01T09:47:00Z',
     category: 'Dry',
   },
   {
@@ -167,81 +180,98 @@ const data = [
   },
 ];
 
-interface DonationsTableProps {
-  dummyUser: { id: number; role: string };
-}
+// // INTERFACE FOR PROPS...
+// interface DonationProps {
+//   id: number;
+// }
 
-const DonationsTable = (props: DonationsTableProps) => {
-  const path = useRouter()?.asPath;
-  let arr = [];
-
-  // Condition for Donor Donation Page filtered donation list
-  if (path === '/Donations/donor-donations') {
-    arr = data.filter((row) => row.donor.user.id === props.dummyUser.id);
-  } else {
-    arr = data;
-  }
-
-  const rows = arr.map((row) => {
-    const totalInventory = row.inventory.remaining + row.inventory.claimed;
-    const remainingInventory = (row.inventory.remaining / totalInventory) * 100;
-    const claimedInventory = (row.inventory.claimed / totalInventory) * 100;
-
-    return (
-      <Table.Tr key={row.id}>
-        <Table.Td>
-          <Anchor component={Link} href={`/Donations/${encodeURIComponent(row.id)}`} fz="sm">
-            {row.title}
-          </Anchor>
-        </Table.Td>
-        <Table.Td>
-          <DateFormat dateString={row.pick_up_deadline} />
-        </Table.Td>
-        <Table.Td>
-          <Anchor component={Link} href="/" fz="sm">
-            {row.donor.name}
-          </Anchor>
-        </Table.Td>
-        <Table.Td>{Intl.NumberFormat().format(totalInventory)}</Table.Td>
-        <Table.Td>
-          <Group justify="space-between">
-            <Text fz="xs" c="teal" fw={700}>
-              {claimedInventory.toFixed(0)}%
-            </Text>
-          </Group>
-          <Progress.Root>
-            <Progress.Section
-              className={classes.progressSection}
-              value={claimedInventory}
-              color="shrek"
-            />
-
-            <Progress.Section
-              className={classes.progressSection}
-              value={remainingInventory}
-              color="teal"
-            />
-          </Progress.Root>
-        </Table.Td>
-      </Table.Tr>
-    );
-  });
+const child = <Skeleton height={140} radius="md" animate={false} color="navy" />;
+// WITHOUT PROPS
+const CharityDonations = () => {
+  const router = useRouter();
+  const { id }: any = router.query;
+  // // TO BE Removed: Extract item from Static Data
+  const donation: any = data.filter((row) => row.id === parseInt(id, 10))[0];
 
   return (
-    <Table.ScrollContainer minWidth={800}>
-      <Table verticalSpacing="xs">
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th>Title</Table.Th>
-            <Table.Th>Deadline</Table.Th>
-            <Table.Th>Author</Table.Th>
-            <Table.Th>Total Donated</Table.Th>
-            <Table.Th>Inventory Claimed</Table.Th>
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody>{rows}</Table.Tbody>
-      </Table>
-    </Table.ScrollContainer>
+    <Container my="md">
+      <Grid>
+        <Grid.Col span={{ base: 12, xs: 12 }}>
+          <GradientHeaderImage />
+          {/* <GradientHeaderImage category={donation?.category} /> */}
+          <Card
+            style={{ zIndex: 2 }}
+            pos="relative"
+            mt={-80}
+            ml={{ base: 0, lg: 50, md: 24, sm: 24, xs: 0 }}
+            mr={{ base: 0, lg: 50, md: 24, sm: 24, xs: 0 }}
+            p={{ base: 0, lg: 2, md: 0, sm: 0, xs: 0 }}
+            // px={{ base: 0, lg: 2, md: 0, sm: 0, xs: 0 }}
+            shadow="sm"
+            radius="md"
+            withBorder={false}
+          >
+            <Grid p={{ base: 0, lg: 25, md: 25, sm: 15, xs: 10 }}>
+              <Grid.Col span={{ base: 12, xs: 12 }}>
+                <Title order={2}>Donation Details</Title>
+              </Grid.Col>
+              <Grid.Col span={{ base: 12, xs: 3 }}>
+                <Flex my="lg" direction="column" gap={0}>
+                  <Title order={5}>{donation?.title}</Title>
+                  <ScrollArea h={200} scrollbarSize={7} c="dimmed">
+                    {donation?.description}
+                  </ScrollArea>
+                </Flex>
+                <Flex my="lg" direction="column" gap={0}>
+                  <Title order={5}>Donation Available</Title>
+                  <Text c="dimmed">
+                    <Text c="dimmed">{donation?.is_available ? 'Yes' : 'No'}</Text>
+                  </Text>
+                </Flex>
+                <Flex my="lg" direction="column" gap={0}>
+                  <Title order={5}>Donated On</Title>
+                  <Text c="dimmed">
+                    <DateFormat dateString={donation?.created_at} />
+                  </Text>
+                </Flex>
+              </Grid.Col>
+              <Grid.Col span={{ base: 12, xs: 4 }}>
+                <StatsSegments
+                  claimed={donation?.inventory.claimed}
+                  remaining={donation?.inventory.remaining}
+                />
+                <Flex my="lg" direction="column" gap={0}>
+                  <Title order={5}>Donation Pickup Deadline</Title>
+                  <Text c="dimmed">
+                    <DateFormat dateString={donation?.pick_up_deadline} />
+                  </Text>
+                </Flex>
+              </Grid.Col>
+              <Grid.Col span={{ base: 12, xs: 5 }}>
+                <Image height="500rem" src={donation?.image_data} radius="md" />
+              </Grid.Col>
+            </Grid>
+          </Card>
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, xs: 12 }}>{child}</Grid.Col>
+      </Grid>
+      <DonationForm />
+    </Container>
   );
 };
-export default DonationsTable;
+// // WITH PROPS...
+// const CharityDonations: FC<DonationProps> = () => (
+//   <Container my="md">
+//     <Grid>
+//       <Grid.Col span={{ base: 12, xs: 4 }}>DONATION ID: {id}</Grid.Col>
+//       <Grid.Col span={{ base: 12, xs: 4 }}>{child}</Grid.Col>
+
+//       <Grid.Col span={{ base: 12, xs: 8 }}>{child}</Grid.Col>
+//       <Grid.Col span={{ base: 12, xs: 4 }}>{child}</Grid.Col>
+//       <Grid.Col span={{ base: 12, xs: 3 }}>{child}</Grid.Col>
+//       <Grid.Col span={{ base: 12, xs: 3 }}>{child}</Grid.Col>
+//       <Grid.Col span={{ base: 12, xs: 6 }}>{child}</Grid.Col>
+//     </Grid>
+//   </Container>
+// );
+export default CharityDonations;
