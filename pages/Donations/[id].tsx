@@ -1,6 +1,8 @@
 import { Card, Container, Grid, Image, Skeleton, Text, Title } from '@mantine/core';
 import { useRouter } from 'next/router';
 import GradientHeaderImage from '@/components/Inputs/GradientHeaderImage/GradientHeaderImage';
+import DateFormat from '@/components/DateFormat';
+import StatsSegments from '@/components/StatsSegemtns/StatsSegments';
 // import { FC } from 'react';
 // import DonationsTable from '@/components/DonationsTable/DonationsTable';
 
@@ -83,7 +85,7 @@ const data = [
     is_available: true,
     image_data:
       'https://thumbs.dreamstime.com/b/fresh-carrots-farmer-s-market-pile-freshly-harvested-carrots-arranged-wooden-crate-sitting-burlap-sack-276909252.jpg',
-    created_at: '2024-03-01T09:47:00Z',
+    created_at: '2024-05-01T09:47:00Z',
     category: 'Dry',
   },
   {
@@ -211,9 +213,15 @@ const CharityDonations = () => {
                 <Grid.Col span={{ base: 12, xs: 4 }}>CREATED_AT: {donation?.created_at}</Grid.Col>
               </Grid.Col>
               <Grid.Col span={{ base: 12, xs: 4 }}>
-                DONATION DEADLINE: {donation?.deadline}
-                <Grid.Col span={{ base: 12, xs: 12 }}>{child}</Grid.Col>
+                <Title order={5}>Donation Pickup Deadline</Title>
+                <Text c="dimmed">
+                  <DateFormat dateString={donation?.pick_up_deadline} />
+                </Text>
                 DONATION IS_AVAILABLE: {donation?.is_available ? 'YES' : 'NO'}
+                <StatsSegments
+                  claimed={donation?.inventory.claimed}
+                  remaining={donation?.inventory.remaining}
+                />
                 <Grid.Col span={{ base: 12, xs: 12 }}>{child}</Grid.Col>
               </Grid.Col>
               <Grid.Col span={{ base: 12, xs: 5 }}>
