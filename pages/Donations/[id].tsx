@@ -3,7 +3,6 @@ import {
   Container,
   Flex,
   Grid,
-  Group,
   Image,
   ScrollArea,
   Skeleton,
@@ -13,7 +12,7 @@ import {
 import { useRouter } from 'next/router';
 import GradientHeaderImage from '@/components/Inputs/GradientHeaderImage/GradientHeaderImage';
 import DateFormat from '@/components/DateFormat';
-import StatsSegments from '@/components/StatsSegemtns/StatsSegments';
+import StatsSegments from '@/components/StatsSegments/StatsSegments';
 // import { FC } from 'react';
 // import DonationsTable from '@/components/DonationsTable/DonationsTable';
 

@@ -49,7 +49,7 @@ const StatsSegments: FC<StatsSegmentsProps> = (props) => {
             Claimed
           </Text>
           <Flex justify="space-between" direction="column" align="flex-start" gap={0}>
-            <Text fw={700}>{totalInventory}</Text>
+            <Text fw={700}>{props.claimed}</Text>
             <Text c="shrek" fw={700} size="sm" className={classes.statCount}>
               {claimedInventory}%
             </Text>
