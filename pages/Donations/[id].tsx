@@ -13,6 +13,7 @@ import { useRouter } from 'next/router';
 import GradientHeaderImage from '@/components/Inputs/GradientHeaderImage/GradientHeaderImage';
 import DateFormat from '@/components/DateFormat';
 import StatsSegments from '@/components/StatsSegments/StatsSegments';
+import DonationForm from '@/components/DonationForm/DonationForm';
 // import { FC } from 'react';
 // import DonationsTable from '@/components/DonationsTable/DonationsTable';
 
@@ -184,7 +185,7 @@ const data = [
 //   id: number;
 // }
 
-const child = <Skeleton height={140} radius="md" animate={false} />;
+const child = <Skeleton height={140} radius="md" animate={false} color="navy" />;
 // WITHOUT PROPS
 const CharityDonations = () => {
   const router = useRouter();
@@ -254,6 +255,7 @@ const CharityDonations = () => {
         </Grid.Col>
         <Grid.Col span={{ base: 12, xs: 12 }}>{child}</Grid.Col>
       </Grid>
+      <DonationForm />
     </Container>
   );
 };
