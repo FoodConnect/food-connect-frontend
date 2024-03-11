@@ -1,4 +1,15 @@
-import { Card, Container, Grid, Image, Skeleton, Text, Title } from '@mantine/core';
+import {
+  Card,
+  Container,
+  Flex,
+  Grid,
+  Group,
+  Image,
+  ScrollArea,
+  Skeleton,
+  Text,
+  Title,
+} from '@mantine/core';
 import { useRouter } from 'next/router';
 import GradientHeaderImage from '@/components/Inputs/GradientHeaderImage/GradientHeaderImage';
 import DateFormat from '@/components/DateFormat';
@@ -205,24 +216,36 @@ const CharityDonations = () => {
                 <Title order={2}>Donation Details</Title>
               </Grid.Col>
               <Grid.Col span={{ base: 12, xs: 3 }}>
-                <Title order={5}>{donation?.title}</Title>
-                <Text c="dimmed">{donation?.description}</Text>
-                CLAIMED-{parseInt(donation?.inventory.claimed, 10)} REMAINING-
-                {parseInt(donation?.inventory.remaining, 10)}
-                <Grid.Col span={{ base: 12, xs: 12 }}>{child}</Grid.Col>
-                <Grid.Col span={{ base: 12, xs: 4 }}>CREATED_AT: {donation?.created_at}</Grid.Col>
+                <Flex my="lg" direction="column" gap={0}>
+                  <Title order={5}>{donation?.title}</Title>
+                  <ScrollArea h={200} scrollbarSize={7} c="dimmed">
+                    {donation?.description}
+                  </ScrollArea>
+                </Flex>
+                <Flex my="lg" direction="column" gap={0}>
+                  <Title order={5}>Donation Available</Title>
+                  <Text c="dimmed">
+                    <Text c="dimmed">{donation?.is_available ? 'Yes' : 'No'}</Text>
+                  </Text>
+                </Flex>
+                <Flex my="lg" direction="column" gap={0}>
+                  <Title order={5}>Donated On</Title>
+                  <Text c="dimmed">
+                    <DateFormat dateString={donation?.created_at} />
+                  </Text>
+                </Flex>
               </Grid.Col>
               <Grid.Col span={{ base: 12, xs: 4 }}>
-                <Title order={5}>Donation Pickup Deadline</Title>
-                <Text c="dimmed">
-                  <DateFormat dateString={donation?.pick_up_deadline} />
-                </Text>
-                DONATION IS_AVAILABLE: {donation?.is_available ? 'YES' : 'NO'}
                 <StatsSegments
                   claimed={donation?.inventory.claimed}
                   remaining={donation?.inventory.remaining}
                 />
-                <Grid.Col span={{ base: 12, xs: 12 }}>{child}</Grid.Col>
+                <Flex my="lg" direction="column" gap={0}>
+                  <Title order={5}>Donation Pickup Deadline</Title>
+                  <Text c="dimmed">
+                    <DateFormat dateString={donation?.pick_up_deadline} />
+                  </Text>
+                </Flex>
               </Grid.Col>
               <Grid.Col span={{ base: 12, xs: 5 }}>
                 <Image height="500rem" src={donation?.image_data} radius="md" />
