@@ -1,16 +1,7 @@
 import { Table, Progress, Anchor, Text, Group } from '@mantine/core';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import {
-  JSXElementConstructor,
-  Key,
-  PromiseLikeOfReactNode,
-  ReactElement,
-  ReactNode,
-  ReactPortal,
-  useEffect,
-  useState,
-} from 'react';
+import { useEffect, useState } from 'react';
 import classes from './DonationsTable.module.css';
 import DateFormat from '../DateFormat';
 
@@ -185,17 +176,8 @@ interface TableData {
   claimed_inventory: number;
   remaining_inventory: number;
   total_inventory: number;
-  id: Key | null | undefined;
-  title:
-    | string
-    | number
-    | boolean
-    | ReactElement<any, string | JSXElementConstructor<any>>
-    | Iterable<ReactNode>
-    | ReactPortal
-    | PromiseLikeOfReactNode
-    | null
-    | undefined;
+  id: string;
+  title: string;
   pick_up_deadline: string;
   donor: number;
 }
@@ -206,9 +188,6 @@ const DonationsTable = (props: DonationsTableProps) => {
   const path = useRouter().asPath;
   const filterData = (data: TableData[]) => {
     let arr = [];
-    console.log(data[0].donor);
-    console.log(props.dummyUser.id);
-
     if (path === '/Donations/donor-donations') {
       arr = data.filter((row) => row.donor === props.dummyUser.id);
     } else {
@@ -230,7 +209,6 @@ const DonationsTable = (props: DonationsTableProps) => {
       let data = await getData();
       data = filterData(data);
       setTableItems(data);
-      console.log(data);
     };
     // eslint-disable-next-line no-console
     fetchData().catch(console.error);
@@ -244,11 +222,7 @@ const DonationsTable = (props: DonationsTableProps) => {
     return (
       <Table.Tr key={row.id}>
         <Table.Td>
-          <Anchor
-            component={Link}
-            href={`/Donations/${encodeURIComponent(row.id as string)}`}
-            fz="sm"
-          >
+          <Anchor component={Link} href={`/Donations/${encodeURIComponent(row.id)}`} fz="sm">
             {row.title}
           </Anchor>
         </Table.Td>

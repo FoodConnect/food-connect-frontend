@@ -32,7 +32,7 @@ const data = [
     image_data:
       'https://thumbs.dreamstime.com/b/fresh-carrots-farmer-s-market-pile-freshly-harvested-carrots-arranged-wooden-crate-sitting-burlap-sack-276909252.jpg',
     created_at: '2024-03-01T09:47:00Z',
-    category: 'Produce',
+    category: 'produce',
   },
   {
     id: 2,
@@ -45,7 +45,7 @@ const data = [
     image_data:
       'https://thumbs.dreamstime.com/b/fresh-carrots-farmer-s-market-pile-freshly-harvested-carrots-arranged-wooden-crate-sitting-burlap-sack-276909252.jpg',
     created_at: '2024-03-01T09:47:00Z',
-    category: 'Produce',
+    category: 'produce',
   },
   {
     id: 3,
@@ -197,7 +197,7 @@ const CharityDonations = () => {
     <Container my="md">
       <Grid>
         <Grid.Col span={{ base: 12, xs: 12 }}>
-          <GradientHeaderImage />
+          <GradientHeaderImage category="dairy" />
           {/* <GradientHeaderImage category={donation?.category} /> */}
           <Card
             style={{ zIndex: 2 }}
