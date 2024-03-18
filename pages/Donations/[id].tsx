@@ -14,6 +14,7 @@ import GradientHeaderImage from '@/components/Inputs/GradientHeaderImage/Gradien
 import DateFormat from '@/components/DateFormat';
 import StatsSegments from '@/components/StatsSegments/StatsSegments';
 import DonationForm from '@/components/DonationForm/DonationForm';
+import { DonationData } from '@/components/Interfaces/DonationData';
 // import { FC } from 'react';
 // import DonationsTable from '@/components/DonationsTable/DonationsTable';
 

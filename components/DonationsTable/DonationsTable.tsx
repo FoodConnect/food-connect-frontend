@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import classes from './DonationsTable.module.css';
 import DateFormat from '../DateFormat';
+import { DonationData } from '@/components/Interfaces/DonationData';
 
 // Dummy Data for feaux authorization
 // TO BE Removed upon call connection to Django API
@@ -172,21 +173,11 @@ interface DonationsTableProps {
   dummyUser: { id: number; role: string };
 }
 
-interface TableData {
-  claimed_inventory: number;
-  remaining_inventory: number;
-  total_inventory: number;
-  id: string;
-  title: string;
-  pick_up_deadline: string;
-  donor: number;
-}
-
 const DonationsTable = (props: DonationsTableProps) => {
-  const [tableItems, setTableItems] = useState<TableData[]>();
+  const [tableItems, setTableItems] = useState<DonationData[]>();
   // Condition for Donor Donation Page filtered donation list
   const path = useRouter().asPath;
-  const filterData = (data: TableData[]) => {
+  const filterData = (data: DonationData[]) => {
     let arr = [];
     if (path === '/Donations/donor-donations') {
       arr = data.filter((row) => row.donor === props.dummyUser.id);
@@ -214,7 +205,7 @@ const DonationsTable = (props: DonationsTableProps) => {
     fetchData().catch(console.error);
   }, []);
 
-  const rows = tableItems?.map((row: TableData) => {
+  const rows = tableItems?.map((row: DonationData) => {
     const totalInventory = row.remaining_inventory + row.claimed_inventory;
     const remainingInventory = (row.remaining_inventory / totalInventory) * 100;
     const claimedInventory = (row.claimed_inventory / totalInventory) * 100;
