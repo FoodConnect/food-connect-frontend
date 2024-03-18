@@ -1,5 +1,5 @@
 type DateString = {
-  dateString: string;
+  dateString: string | number | Date;
 };
 
 export default function DateFormat({ dateString }: DateString) {

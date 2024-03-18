@@ -1,18 +1,17 @@
 import { Progress, Box, Text, Group, Paper, SimpleGrid, Flex } from '@mantine/core';
 import { IconCarrot, IconDeviceAnalytics } from '@tabler/icons-react';
-import { FC } from 'react';
 import classes from './StatsSegments.module.css';
 import { theme } from '@/theme';
 
 interface StatsSegmentsProps {
-  claimed: number;
-  remaining: number;
+  claimed?: number;
+  remaining?: number;
 }
 
-const StatsSegments: FC<StatsSegmentsProps> = (props) => {
-  const totalInventory = props.remaining + props.claimed;
-  const remainingInventory = Math.round((props.remaining / totalInventory) * 100);
-  const claimedInventory = Math.round((props.claimed / totalInventory) * 100);
+const StatsSegments = (props: StatsSegmentsProps) => {
+  const totalInventory = props.remaining! + props.claimed!;
+  const remainingInventory = Math.round((props.remaining! / totalInventory) * 100);
+  const claimedInventory = Math.round((props.claimed! / totalInventory) * 100);
 
   return (
     <Paper withBorder p="md" radius="md">
@@ -25,7 +24,6 @@ const StatsSegments: FC<StatsSegmentsProps> = (props) => {
             <span>
               <IconCarrot />
             </span>
-            {/* <IconCarrot size="1rem" style={{ marginBottom: rem(4) }} stroke={1.5} /> */}
           </Text>
         </Group>
         <IconDeviceAnalytics size="1.4rem" className={classes.icon} stroke={1.5} />
