@@ -58,22 +58,35 @@ export default function DonationForm(props: DonationFormProps) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(values),
-    });
-    const result = await request.json();
-
-    if (result.data !== 'ok') {
-      showNotification({
-        title: 'Error Submitting',
-        color: 'red',
-        message: 'Sorry, there was an error submitting your request.',
+    })
+      .then((response) => {
+        if (response.status >= 400 && response.status < 600) {
+          showNotification({
+            title: 'Error Submitting',
+            color: 'red',
+            message: 'Sorry, there was an error submitting your request.',
+          });
+          return response.json();
+        }
+        showNotification({
+          title: 'Success Submitting',
+          color: 'green',
+          message: 'Your request has been successfully submitted.',
+        });
+        return response.json();
+      })
+      .catch((error) => {
+        if (error !== null) {
+          console.log(error);
+        }
       });
-      return;
-    }
-    showNotification({
-      title: 'Success Submitting',
-      color: 'green',
-      message: 'Your request has been successfully submitted.',
-    });
+
+    // showNotification({
+    //   title: 'Success Submitting',
+    //   color: 'green',
+    //   message: 'Your request has been successfully submitted.',
+    // });
+
     form.setValues({
       title: '',
       image_data: '',
