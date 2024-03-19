@@ -1,5 +1,3 @@
-'use client';
-
 import {
   Card,
   Container,
@@ -19,8 +17,12 @@ import StatsSegments from '@/components/StatsSegments/StatsSegments';
 import DonationForm from '@/components/DonationForm/DonationForm';
 import { DonationData } from '@/components/Interfaces/DonationData';
 
+interface DonationProps {
+  dummyUser: { id: number; role: string };
+}
+
 const child = <Skeleton height={140} radius="md" animate={false} color="navy" />;
-const Donation = () => {
+const Donation = (props: DonationProps) => {
   const [domLoaded, setDomLoaded] = useState(false);
   const [donation, setDonation] = useState<DonationData>();
   const router = useRouter();
@@ -116,7 +118,7 @@ const Donation = () => {
             </Grid.Col>
             <Grid.Col span={{ base: 12, xs: 12 }}>{child}</Grid.Col>
           </Grid>
-          <DonationForm />
+          <DonationForm dummyUser={props.dummyUser} />
         </Container>
       )}
     </>

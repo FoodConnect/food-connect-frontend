@@ -39,7 +39,7 @@ const DonorDonations = (props: DonationsTableProps) => (
         <Title order={2}>Add Donation</Title>
       </Grid.Col>
       <Grid.Col span={{ base: 12, xs: 12 }}>
-        <DonationForm />
+        <DonationForm dummyUser={props.dummyUser} />
       </Grid.Col>
 
       <Grid.Col span={{ base: 12, xs: 3 }}>{child}</Grid.Col>

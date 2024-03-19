@@ -1,6 +1,4 @@
 import { Button, Grid, NumberInput, ScrollArea, Text, Textarea } from '@mantine/core';
-import { useState } from 'react';
-import { DateValue } from '@mantine/dates';
 import { IconCircleArrowUpRight } from '@tabler/icons-react';
 import { showNotification } from '@mantine/notifications';
 import GradientSegmentedControl from '../Inputs/GradientSegmentControl/GradientSegmentedControl';
@@ -9,6 +7,10 @@ import GradientDatePicker from '../Inputs/GradientDatePicker/GradientDatePicker'
 import CheckboxCard from '../Inputs/CheckboxCard/CheckboxCard';
 import { DropzoneButton } from '../Inputs/DopzoneButton/DropzoneButton';
 import { DonationFormProvider, useDonationForm } from './DonationFormContext';
+
+interface DonationFormProps {
+  dummyUser: { id: number; role: string };
+}
 
 interface FormValues {
   title: string;
@@ -26,8 +28,7 @@ interface FormValues {
   donor: number;
 }
 
-export default function DonationForm() {
-  const [dateValue, setDateValue] = useState<DateValue>(new Date());
+export default function DonationForm(props: DonationFormProps) {
   const form = useDonationForm({
     initialValues: {
       title: '',
@@ -42,7 +43,7 @@ export default function DonationForm() {
       state: '',
       zipcode: '',
       is_available: false,
-      donor: 1,
+      donor: props?.dummyUser?.id,
     },
     validate: {
       title: (value) => (value !== '' ? null : 'Please enter a title'),
@@ -86,7 +87,7 @@ export default function DonationForm() {
       state: '',
       zipcode: '',
       is_available: true,
-      donor: 1,
+      donor: props.dummyUser.id,
     });
   };
 
@@ -135,7 +136,7 @@ export default function DonationForm() {
             <Text size="sm" fw={500} mt={3}>
               Pick-Up Deadline
             </Text>
-            <GradientDatePicker value={dateValue} setValue={setDateValue} />
+            <GradientDatePicker />
             <CheckboxCard
               label="Currently Available"
               description="You can change this at any point in your donation's settings"

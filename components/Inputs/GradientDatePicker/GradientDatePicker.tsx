@@ -1,6 +1,7 @@
-import { DatePicker, DatePickerProps, DateValue } from '@mantine/dates';
+import { DatePicker, DatePickerProps } from '@mantine/dates';
 import { Indicator } from '@mantine/core';
 import classes from './GradientDatePicker.module.css';
+import { useDonationFormContext } from '@/components/DonationForm/DonationFormContext';
 
 const dayRenderer: DatePickerProps['renderDay'] = (date) => {
   const day = date.getDate();
@@ -13,15 +14,14 @@ const dayRenderer: DatePickerProps['renderDay'] = (date) => {
   );
 };
 
-const GradientSegmentedControl = (props: {
-  value: DateValue | undefined;
-  setValue: ((value: DateValue) => void) | undefined;
-}) => (
-  <DatePicker
-    renderDay={dayRenderer}
-    value={props.value}
-    onChange={props.setValue}
-    classNames={{ day: classes.day }}
-  />
-);
-export default GradientSegmentedControl;
+const GradientDatePicker = () => {
+  const form = useDonationFormContext();
+  return (
+    <DatePicker
+      renderDay={dayRenderer}
+      classNames={{ day: classes.day }}
+      {...form.getInputProps('pick_up_deadline')}
+    />
+  );
+};
+export default GradientDatePicker;
