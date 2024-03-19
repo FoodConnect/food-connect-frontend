@@ -23,6 +23,7 @@ interface FormValues {
   state: string;
   zipcode: string;
   is_available: boolean;
+  donor: number;
 }
 
 export default function DonationForm() {
@@ -41,6 +42,7 @@ export default function DonationForm() {
       state: '',
       zipcode: '',
       is_available: false,
+      donor: 1,
     },
     validate: {
       title: (value) => (value !== '' ? null : 'Please enter a title'),
@@ -84,6 +86,7 @@ export default function DonationForm() {
       state: '',
       zipcode: '',
       is_available: true,
+      donor: 1,
     });
   };
 
@@ -103,6 +106,7 @@ export default function DonationForm() {
               tooltipText={donationTooltipText}
               label="Title"
               placeholder="Donation title..."
+              inputRole="title"
             />
             <Textarea
               label="Description"

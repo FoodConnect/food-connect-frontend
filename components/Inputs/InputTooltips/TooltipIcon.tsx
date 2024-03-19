@@ -32,7 +32,7 @@ const TooltipIcon = (props: TooltipIconProps) => {
       label={props.label}
       placeholder={props.placeholder}
       required
-      {...(props.inputRole === 'image-text'
+      {...(props.inputRole === 'image-address'
         ? { ...form.getInputProps('image_data') }
         : { ...form.getInputProps('title') })}
     />

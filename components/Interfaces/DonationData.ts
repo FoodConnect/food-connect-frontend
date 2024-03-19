@@ -11,4 +11,5 @@ export interface DonationData {
   description: string;
   is_available: boolean;
   image_data: string;
+  donor: number;
 }
