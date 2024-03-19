@@ -1,6 +1,7 @@
 import { TextInput, Tooltip, Center, Text, rem } from '@mantine/core';
 import { IconInfoCircle } from '@tabler/icons-react';
 import { FC } from 'react';
+import { useDonationFormContext } from '@/components/DonationForm/form-context';
 
 interface TooltipIconProps {
   label: string;
@@ -9,6 +10,7 @@ interface TooltipIconProps {
 }
 
 const TooltipIcon: FC<TooltipIconProps> = (props) => {
+  const form = useDonationFormContext();
   const rightSection = (
     <Tooltip
       label={props.tooltipText}
@@ -25,7 +27,13 @@ const TooltipIcon: FC<TooltipIconProps> = (props) => {
   );
 
   return (
-    <TextInput rightSection={rightSection} label={props.label} placeholder={props.placeholder} />
+    <TextInput
+      rightSection={rightSection}
+      label={props.label}
+      placeholder={props.placeholder}
+      required
+      {...form.getInputProps('title')}
+    />
   );
 };
 export default TooltipIcon;

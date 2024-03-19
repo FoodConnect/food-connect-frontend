@@ -13,7 +13,7 @@ import {
 } from '@mantine/core';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import GradientHeaderImage from '@/components/Inputs/GradientHeaderImage/GradientHeaderImage';
+import GradientHeaderImage from '@/components/GradientHeaderImage/GradientHeaderImage';
 import DateFormat from '@/components/DateFormat';
 import StatsSegments from '@/components/StatsSegments/StatsSegments';
 import DonationForm from '@/components/DonationForm/DonationForm';
@@ -28,7 +28,6 @@ const Donation = () => {
 
   // API Call and useEffect Functions to hydrate table
   async function getData() {
-    console.log(id);
     const res = await fetch(`http://localhost:8080/donations/${id}/`);
     if (!res.ok) {
       throw new Error('Failed to fetch data');
@@ -41,9 +40,7 @@ const Donation = () => {
     if (!id) return;
     const fetchData = async () => {
       const data = await getData();
-      // data = filterData(data);
       setDonation(data);
-      console.log(data);
     };
     // eslint-disable-next-line no-console
     fetchData().catch(console.error);
@@ -56,7 +53,7 @@ const Donation = () => {
         <Container my="md">
           <Grid>
             <Grid.Col span={{ base: 12, xs: 12 }}>
-              <GradientHeaderImage category="dairy" />
+              <GradientHeaderImage category="produce" />
               <Card
                 style={{ zIndex: 2 }}
                 pos="relative"
@@ -102,6 +99,12 @@ const Donation = () => {
                       <Title order={5}>Donation Pickup Deadline</Title>
                       <Text c="dimmed">
                         <DateFormat dateString={donation?.pick_up_deadline!} />
+                      </Text>
+                    </Flex>
+                    <Flex my="lg" direction="column" gap={0}>
+                      <Title order={5}>Category</Title>
+                      <Text c="dimmed">
+                        <Text c="dimmed">Produce</Text>
                       </Text>
                     </Flex>
                   </Grid.Col>
