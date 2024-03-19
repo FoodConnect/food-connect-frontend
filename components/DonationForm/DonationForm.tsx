@@ -52,7 +52,7 @@ export default function DonationForm(props: DonationFormProps) {
 
   // Form Submission Methods
   const handleSubmit = async (values: FormValues) => {
-    const request = await fetch('http://localhost:8080/donations/', {
+    await fetch('http://localhost:8080/donations/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
