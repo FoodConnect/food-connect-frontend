@@ -143,6 +143,7 @@ export default function DonationForm() {
               tooltipText={imageUrlTooltipText}
               label="Image URL"
               placeholder="Image Address..."
+              inputRole="image-address"
             />
             <Button
               type="submit"

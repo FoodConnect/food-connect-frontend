@@ -4,6 +4,7 @@ import { Dropzone, MIME_TYPES } from '@mantine/dropzone';
 import { IconCloudUpload, IconX, IconDownload } from '@tabler/icons-react';
 import classes from './DropzoneButton.module.css';
 
+// TODO: Add form submission with form context when API can receive files...
 export function DropzoneButton() {
   const theme = useMantineTheme();
   const openRef = useRef<() => void>(null);
