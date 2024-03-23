@@ -16,24 +16,10 @@ interface DonationsTableProps {
 
 const child = <Skeleton height={140} radius="md" animate={false} />;
 const DonorDonations = (props: DonationsTableProps) => {
-  // Form for Create Action
+  // Form Instantiation and Submission Method for CREATE Action
   const form = useDonationForm({
     name: 'donation-CREATE-Form',
-    initialValues: {
-      title: '',
-      image_data: '',
-      description: '',
-      total_inventory: 0,
-      claimed_inventory: 0,
-      remaining_inventory: 0,
-      pick_up_deadline: '',
-      address: '',
-      city: '',
-      state: '',
-      zipcode: '',
-      is_available: false,
-      donor: 2,
-    },
+    initialValues: DonationFormDefaultValues,
     validate: {
       title: (value) => (value !== '' ? null : 'Please enter a title'),
       image_data: (value) => (value !== '' ? null : 'Please enter an image URL'),

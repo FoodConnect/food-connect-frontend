@@ -31,8 +31,9 @@ const Donation = () => {
   const router = useRouter();
   const { id }: any = router.query;
 
-  // Form Instantiation and Submission Method
+  // Form Instantiation and Submission Method for UPDATE Action
   const form = useDonationForm({
+    name: 'donation-CREATE-Form',
     initialValues: DonationFormDefaultValues,
     validate: {
       title: (value) => (value !== '' ? null : 'Please enter a title'),
@@ -42,7 +43,7 @@ const Donation = () => {
       pick_up_deadline: (value) => (value ? null : 'Please enter a Pick-Up Deadline'),
     },
   });
-
+  // Form submission method
   const handleSubmit = async (values: DonationFormValues) => {
     await fetch(`http://localhost:8080/donations/${id}`, {
       method: 'PUT',
@@ -75,7 +76,7 @@ const Donation = () => {
       });
   };
 
-  // API Call and useEffect Functions to hydrate table
+  // API Call and useEffect Functions to populate donation profile
   async function getData() {
     const res = await fetch(`http://localhost:8080/donations/${id}/`);
     if (!res.ok) {
