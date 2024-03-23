@@ -1,6 +1,6 @@
+// donor-donations.tsx
 import { Container, Grid, Skeleton, Title } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
-
 import DonationsTable from '@/components/DonationsTable/DonationsTable';
 import DonationForm from '@/components/DonationForm/DonationForm';
 import { DonationFormValues } from '@/components/Interfaces/DonationFormValues';
@@ -29,7 +29,7 @@ const DonorDonations = (props: DonationsTableProps) => {
     },
   });
   // Form Submission Method
-  const handleSubmit = async (values: DonationFormValues) => {
+  const handleFormSubmit = async (values: DonationFormValues) => {
     await fetch('http://localhost:8080/donations/', {
       method: 'POST',
       headers: {
@@ -75,7 +75,7 @@ const DonorDonations = (props: DonationsTableProps) => {
         </Grid.Col>
         <Grid.Col span={{ base: 12, xs: 12 }}>
           <DonationFormProvider form={form}>
-            <DonationForm handleSubmit={handleSubmit} />
+            <DonationForm handleFormSubmit={handleFormSubmit} />
           </DonationFormProvider>
         </Grid.Col>
 

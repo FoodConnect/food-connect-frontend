@@ -1,3 +1,4 @@
+// DonationForm.tsx
 import { Button, Grid, NumberInput, ScrollArea, Text, Textarea } from '@mantine/core';
 import { IconCircleArrowUpRight } from '@tabler/icons-react';
 import GradientSegmentedControl from '../Inputs/GradientSegmentControl/GradientSegmentedControl';
@@ -9,21 +10,21 @@ import { DonationFormValues } from '../Interfaces/DonationFormValues';
 import { useDonationFormContext } from './DonationFormContext';
 
 interface DonationFormProps {
-  // dummyUser: { id: number; role: string };
-  handleSubmit: (values: DonationFormValues) => void;
+  handleFormSubmit: (values: DonationFormValues) => Promise<void>;
 }
 
 export default function DonationForm(props: DonationFormProps) {
   // Text and Option Variables
   const donationTooltipText =
-    'Write something that describr donation concisely for charities to veiw.';
+    'Write something that describes your donation concisely for charities to veiw.';
   const imageUrlTooltipText =
     'This field will eventually go away. It exists to save Image URLs until the above dropzone is functioning.';
   const categoryOptions = ['Produce', 'Canned', 'Dairy', 'Dry'];
+
   const form = useDonationFormContext();
 
   return (
-    <form onSubmit={form.onSubmit(props.handleSubmit)}>
+    <form onSubmit={form.onSubmit(props.handleFormSubmit)}>
       <Grid>
         <Grid.Col span={{ base: 12, xs: 4 }}>
           <TooltipIcon

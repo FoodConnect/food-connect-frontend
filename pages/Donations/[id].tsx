@@ -44,7 +44,7 @@ const Donation = () => {
     },
   });
   // Form submission method
-  const handleSubmit = async (values: DonationFormValues) => {
+  const handleFormSubmit = async (values: DonationFormValues) => {
     await fetch(`http://localhost:8080/donations/${id}`, {
       method: 'PUT',
       headers: {
@@ -170,7 +170,7 @@ const Donation = () => {
             <Grid.Col span={{ base: 12, xs: 12 }}>{child}</Grid.Col>
           </Grid>
           <DonationFormProvider form={form}>
-            <DonationForm handleSubmit={handleSubmit} />
+            <DonationForm handleFormSubmit={handleFormSubmit} />
           </DonationFormProvider>
         </Container>
       )}
