@@ -75,7 +75,9 @@ const DonorDonations = (props: DonationsTableProps) => {
         </Grid.Col>
         <Grid.Col span={{ base: 12, xs: 12 }}>
           <DonationFormProvider form={form}>
-            <DonationForm handleFormSubmit={handleFormSubmit} />
+            <form onSubmit={form.onSubmit(handleFormSubmit)}>
+              <DonationForm />
+            </form>
           </DonationFormProvider>
         </Grid.Col>
 

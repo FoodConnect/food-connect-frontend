@@ -1270,6 +1270,11 @@
   resolved "https://registry.npmjs.org/@mantine/hooks/-/hooks-7.6.1.tgz"
   integrity sha512-zsOGzFRcQZuER2rzAjfrAqp98W7WCFA43nF1QZUKV7AHTq8q1mtr3DOhFfO3/CA+t1lai68gp1guVcIhP4lrwQ==
 
+"@mantine/modals@^7.6.1":
+  version "7.6.1"
+  resolved "https://registry.npmjs.org/@mantine/modals/-/modals-7.6.1.tgz"
+  integrity sha512-bXCViyQpXEbPGaq/UjCqe/jExku6I6i93okayN54diKZEKbjKAQjQVCowP7axUzMQNhhVRCVtSZPYbkiiEh3Ug==
+
 "@mantine/next@^6.0.21":
   version "6.0.21"
   resolved "https://registry.npmjs.org/@mantine/next/-/next-6.0.21.tgz"

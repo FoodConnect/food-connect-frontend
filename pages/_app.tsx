@@ -5,6 +5,7 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
+import { ModalsProvider } from '@mantine/modals';
 import { theme } from '../theme';
 import { ApplicationContainer } from '@/components/ApplicationContainer';
 
@@ -13,18 +14,20 @@ const dummyUser = { id: 2, role: 'donor' };
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <MantineProvider theme={theme}>
-      <Notifications />
-      <Head>
-        <title>Mantine Template</title>
-        <meta
-          name="viewport"
-          content="minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no"
-        />
-        <link rel="shortcut icon" href="/favicon.svg" />
-      </Head>
-      <ApplicationContainer dummyUser={dummyUser}>
-        <Component {...pageProps} dummyUser={dummyUser} />
-      </ApplicationContainer>
+      <ModalsProvider>
+        <Notifications />
+        <Head>
+          <title>Mantine Template</title>
+          <meta
+            name="viewport"
+            content="minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no"
+          />
+          <link rel="shortcut icon" href="/favicon.svg" />
+        </Head>
+        <ApplicationContainer dummyUser={dummyUser}>
+          <Component {...pageProps} dummyUser={dummyUser} />
+        </ApplicationContainer>
+      </ModalsProvider>
     </MantineProvider>
   );
 }

@@ -1,4 +1,5 @@
 import {
+  Button,
   Card,
   Container,
   Flex,
@@ -12,6 +13,7 @@ import {
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { showNotification } from '@mantine/notifications';
+import { modals } from '@mantine/modals';
 import GradientHeaderImage from '@/components/GradientHeaderImage/GradientHeaderImage';
 import DateFormat from '@/components/DateFormat';
 import StatsSegments from '@/components/StatsSegments/StatsSegments';
@@ -76,13 +78,13 @@ const Donation = () => {
       });
   };
 
-  // API Call and useEffect Functions to populate donation profile
+  // API Request and useEffect Functions to populate donation profile
   async function getData() {
-    const res = await fetch(`http://localhost:8080/donations/${id}/`);
-    if (!res.ok) {
+    const response = await fetch(`http://localhost:8080/donations/${id}/`);
+    if (!response.ok) {
       throw new Error('Failed to fetch data');
     }
-    return res.json();
+    return response.json();
   }
 
   useEffect(() => {
@@ -99,6 +101,50 @@ const Donation = () => {
     fetchData().catch(console.error);
   }, [id]);
 
+  // API Request to Delete Donation
+  async function handleDeleteDonation() {
+    const response = await fetch(`http://localhost:8080/donations/${id}/`, {
+      method: 'DELETE',
+    });
+    if (!response.ok) {
+      showNotification({
+        title: 'Error Deleting',
+        color: 'red',
+        message: 'Sorry, there was an error deleting this donation.',
+      });
+      return response.json();
+    }
+    showNotification({
+      title: 'Deleted',
+      color: 'green',
+      message: 'Your donation has been successfully deleted.',
+    });
+    router.push('/');
+    return null;
+  }
+  // Delete Confirm and Cancel Modal Functions
+  function cancelDeleteDonation() {
+    showNotification({
+      title: 'Cancel',
+      color: 'teal',
+      message: 'Delete Donation was cancelled.',
+    });
+  }
+  const openDeleteModal = () =>
+    modals.openConfirmModal({
+      title: 'Delete Donation',
+      centered: true,
+      children: (
+        <Text size="sm">
+          Are you sure you want to delete this donation? This action is destructive and you will not
+          be able to retreive it again.
+        </Text>
+      ),
+      labels: { confirm: 'Delete Donation', cancel: "No don't delete it" },
+      confirmProps: { color: 'red' },
+      onCancel: () => cancelDeleteDonation(),
+      onConfirm: () => handleDeleteDonation(),
+    });
   return (
     <>
       {' '}
@@ -170,8 +216,17 @@ const Donation = () => {
             <Grid.Col span={{ base: 12, xs: 12 }}>{child}</Grid.Col>
           </Grid>
           <DonationFormProvider form={form}>
-            <DonationForm handleFormSubmit={handleFormSubmit} />
+            <form onSubmit={form.onSubmit(handleFormSubmit)}>
+              <DonationForm />
+            </form>
           </DonationFormProvider>
+          <Grid>
+            <Grid.Col span={{ base: 12, xs: 4 }}>
+              <Button onClick={openDeleteModal} color="red">
+                Delete Donation
+              </Button>
+            </Grid.Col>
+          </Grid>
         </Container>
       )}
     </>
