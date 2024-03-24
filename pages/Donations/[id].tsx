@@ -26,8 +26,12 @@ import {
 } from '@/components/DonationForm/DonationFormContext';
 import { DonationFormDefaultValues } from '@/components/DonationForm/DonationFormDefaultValues';
 
+interface DonationProps {
+  dummyUser: { id: number; role: string };
+}
+
 const child = <Skeleton height={140} radius="md" animate={false} color="navy" />;
-const Donation = () => {
+const Donation = (props: DonationProps) => {
   const [domLoaded, setDomLoaded] = useState(false);
   const [donation, setDonation] = useState<DonationData>();
   const router = useRouter();
@@ -101,6 +105,9 @@ const Donation = () => {
     fetchData().catch(console.error);
   }, [id]);
 
+  // Delete Feaux Authorization Check (To be ammended upon official Auth setup)
+  const isAuthorized = () => donation?.donor === props.dummyUser.id;
+
   // API Request to Delete Donation
   async function handleDeleteDonation() {
     const response = await fetch(`http://localhost:8080/donations/${id}/`, {
@@ -119,9 +126,10 @@ const Donation = () => {
       color: 'green',
       message: 'Your donation has been successfully deleted.',
     });
-    router.push('/');
+    router.push('/Donations/donor-donations');
     return null;
   }
+
   // Delete Confirm and Cancel Modal Functions
   function cancelDeleteDonation() {
     showNotification({
@@ -215,18 +223,22 @@ const Donation = () => {
             </Grid.Col>
             <Grid.Col span={{ base: 12, xs: 12 }}>{child}</Grid.Col>
           </Grid>
-          <DonationFormProvider form={form}>
-            <form onSubmit={form.onSubmit(handleFormSubmit)}>
-              <DonationForm />
-            </form>
-          </DonationFormProvider>
-          <Grid>
-            <Grid.Col span={{ base: 12, xs: 4 }}>
-              <Button onClick={openDeleteModal} color="red">
-                Delete Donation
-              </Button>
-            </Grid.Col>
-          </Grid>
+          {isAuthorized() ? (
+            <>
+              <DonationFormProvider form={form}>
+                <form onSubmit={form.onSubmit(handleFormSubmit)}>
+                  <DonationForm />
+                </form>
+              </DonationFormProvider>
+              <Grid>
+                <Grid.Col span={{ base: 12, xs: 4 }}>
+                  <Button onClick={openDeleteModal} color="red">
+                    Delete Donation
+                  </Button>
+                </Grid.Col>
+              </Grid>
+            </>
+          ) : null}
         </Container>
       )}
     </>
