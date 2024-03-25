@@ -206,14 +206,14 @@ const DonationsTable = (props: DonationsTableProps) => {
   }, []);
 
   const rows = tableItems?.map((row: DonationData) => {
-    const totalInventory = row.remaining_inventory + row.claimed_inventory;
-    const remainingInventory = (row.remaining_inventory / totalInventory) * 100;
-    const claimedInventory = (row.claimed_inventory / totalInventory) * 100;
+    const totalInventory = row.remaining_inventory! + row.claimed_inventory!;
+    const remainingInventory = (row.remaining_inventory! / totalInventory) * 100;
+    const claimedInventory = (row.claimed_inventory! / totalInventory) * 100;
 
     return (
       <Table.Tr key={row.id}>
         <Table.Td>
-          <Anchor component={Link} href={`/Donations/${encodeURIComponent(row.id)}`} fz="sm">
+          <Anchor component={Link} href={`/Donations/${encodeURIComponent(row.id!)}`} fz="sm">
             {row.title}
           </Anchor>
         </Table.Td>

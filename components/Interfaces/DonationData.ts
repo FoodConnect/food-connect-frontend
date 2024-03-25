@@ -1,4 +1,5 @@
 export interface DonationData {
+  id?: number;
   claimed_inventory?: number;
   remaining_inventory?: number;
   total_inventory?: number;
@@ -14,3 +15,9 @@ export interface DonationData {
   donor?: number;
   created_at?: string;
 }
+
+export type DonationsContextType = {
+  donationsTableData: DonationData[];
+  saveDonation: (donation: DonationData) => void;
+  updateDonation: (id: number) => void;
+};

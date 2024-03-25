@@ -31,7 +31,7 @@ const DonorDonations = (props: DonationsTableProps) => {
       state: '',
       zipcode: '',
       is_available: true,
-      donor: 2,
+      donor: props.dummyUser.id,
     },
     validate: {
       title: (value) => (value !== '' ? null : 'Please enter a title'),

@@ -51,8 +51,8 @@ const Donation = (props: DonationProps) => {
       city: '',
       state: '',
       zipcode: '',
-      is_available: true,
-      donor: 2,
+      is_available: donation?.is_available!,
+      donor: props.dummyUser.id,
     },
     validate: {
       title: (value) => (value !== '' ? null : 'Please enter a title'),
@@ -82,6 +82,7 @@ const Donation = (props: DonationProps) => {
           color: 'green',
           message: 'Your update has been successfully submitted.',
         });
+        setDonation(values);
         return response.json();
       })
       .catch((error) => {
@@ -106,6 +107,7 @@ const Donation = (props: DonationProps) => {
     const fetchData = async () => {
       const data = await getData();
       setDonation(data);
+      console.log(data);
       if (data) {
         form.initialize(data);
       }
@@ -142,7 +144,7 @@ const Donation = (props: DonationProps) => {
   // Delete Confirm and Cancel Modal Functions
   function cancelDeleteDonation() {
     showNotification({
-      title: 'Cancel',
+      title: 'Cancelled',
       color: 'teal',
       message: 'Delete Donation was cancelled.',
     });
@@ -196,7 +198,7 @@ const Donation = (props: DonationProps) => {
                     <Flex my="lg" direction="column" gap={0}>
                       <Title order={5}>Donation Available</Title>
                       <Text c="dimmed">
-                        <Text c="dimmed">{donation?.is_available ? 'Yes' : 'No'}</Text>
+                        <Text c="dimmed">{donation?.is_available === true ? 'Yes' : 'No'}</Text>
                       </Text>
                     </Flex>
                     <Flex my="lg" direction="column" gap={0}>
