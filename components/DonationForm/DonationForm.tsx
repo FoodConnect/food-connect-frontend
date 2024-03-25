@@ -8,19 +8,16 @@ import CheckboxCard from '../Inputs/CheckboxCard/CheckboxCard';
 import { DropzoneButton } from '../Inputs/DopzoneButton/DropzoneButton';
 import { useDonationFormContext } from './DonationFormContext';
 
-// interface DonationFormProps {
-//   handleFormSubmit: (values: DonationFormValues) => void;
-// }
-
 export default function DonationForm() {
+  // Form Instantiation
+  const form = useDonationFormContext();
+
   // Text and Option Variables
   const donationTooltipText =
     'Write something that describes your donation concisely for charities to veiw.';
   const imageUrlTooltipText =
     'This field will eventually go away. It exists to save Image URLs until the above dropzone is functioning.';
   const categoryOptions = ['Produce', 'Canned', 'Dairy', 'Dry'];
-
-  const form = useDonationFormContext();
 
   return (
     <Grid>

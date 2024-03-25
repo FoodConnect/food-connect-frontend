@@ -14,6 +14,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { showNotification } from '@mantine/notifications';
 import { modals } from '@mantine/modals';
+import { IconCircleArrowUpRight } from '@tabler/icons-react';
 import GradientHeaderImage from '@/components/GradientHeaderImage/GradientHeaderImage';
 import DateFormat from '@/components/DateFormat';
 import StatsSegments from '@/components/StatsSegments/StatsSegments';
@@ -38,49 +39,49 @@ const Donation = (props: DonationProps) => {
   const { id }: any = router.query;
 
   // Form Instantiation and Submission Method for UPDATE Action
-  const form = useDonationForm({
-    name: 'donation-CREATE-Form',
-    initialValues: DonationFormDefaultValues,
-    validate: {
-      title: (value) => (value !== '' ? null : 'Please enter a title'),
-      image_data: (value) => (value !== '' ? null : 'Please enter an image URL'),
-      description: (value) => (value !== '' ? null : 'Please enter a description'),
-      total_inventory: (value) => (value ? null : 'Please enter a quantity'),
-      pick_up_deadline: (value) => (value ? null : 'Please enter a Pick-Up Deadline'),
-    },
-  });
+  // const form = useDonationForm({
+  //   name: 'donation-UPDATE-Form',
+  //   initialValues: DonationFormDefaultValues,
+  //   validate: {
+  //     title: (value) => (value !== '' ? null : 'Please enter a title'),
+  //     image_data: (value) => (value !== '' ? null : 'Please enter an image URL'),
+  //     description: (value) => (value !== '' ? null : 'Please enter a description'),
+  //     total_inventory: (value) => (value ? null : 'Please enter a quantity'),
+  //     pick_up_deadline: (value) => (value ? null : 'Please enter a Pick-Up Deadline'),
+  //   },
+  // });
   // Form submission method
-  const handleFormSubmit = async (values: DonationFormValues) => {
-    await fetch(`http://localhost:8080/donations/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(values),
-    })
-      .then((response) => {
-        if (response.status >= 400 && response.status < 600) {
-          showNotification({
-            title: 'Error Updating',
-            color: 'red',
-            message: 'Sorry, there was an error submitting your update.',
-          });
-          return response.json();
-        }
-        // form.setValues(formResetValues);
-        showNotification({
-          title: 'Update Successful',
-          color: 'green',
-          message: 'Your update has been successfully submitted.',
-        });
-        return response.json();
-      })
-      .catch((error) => {
-        if (error !== null) {
-          console.log(error);
-        }
-      });
-  };
+  // const handleFormSubmit = async (values: DonationFormValues) => {
+  //   await fetch(`http://localhost:8080/donations/${id}`, {
+  //     method: 'PUT',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify(values),
+  //   })
+  //     .then((response) => {
+  //       if (response.status >= 400 && response.status < 600) {
+  //         showNotification({
+  //           title: 'Error Updating',
+  //           color: 'red',
+  //           message: 'Sorry, there was an error submitting your update.',
+  //         });
+  //         return response.json();
+  //       }
+  //       // form.setValues(formResetValues);
+  //       showNotification({
+  //         title: 'Update Successful',
+  //         color: 'green',
+  //         message: 'Your update has been successfully submitted.',
+  //       });
+  //       return response.json();
+  //     })
+  //     .catch((error) => {
+  //       if (error !== null) {
+  //         console.log(error);
+  //       }
+  //     });
+  // };
 
   // API Request and useEffect Functions to populate donation profile
   async function getData() {
@@ -97,9 +98,9 @@ const Donation = (props: DonationProps) => {
     const fetchData = async () => {
       const data = await getData();
       setDonation(data);
-      if (data) {
-        form.initialize(data);
-      }
+      // if (data) {
+      //   form.initialize(data);
+      // }
     };
     // eslint-disable-next-line no-console
     fetchData().catch(console.error);
@@ -225,11 +226,21 @@ const Donation = (props: DonationProps) => {
           </Grid>
           {isAuthorized() ? (
             <>
-              <DonationFormProvider form={form}>
-                <form onSubmit={form.onSubmit(handleFormSubmit)}>
+              {/* <DonationFormProvider form={form}>
+                <form onSubmit={form.onSubmit((values) => handleFormSubmit(values))}>
                   <DonationForm />
+                  <Button
+                    type="submit"
+                    justify="center"
+                    m="lg"
+                    variant="filled"
+                    color="navy"
+                    rightSection={<IconCircleArrowUpRight />}
+                  >
+                    Submit
+                  </Button>
                 </form>
-              </DonationFormProvider>
+              </DonationFormProvider> */}
               <Grid>
                 <Grid.Col span={{ base: 12, xs: 4 }}>
                   <Button onClick={openDeleteModal} color="red">

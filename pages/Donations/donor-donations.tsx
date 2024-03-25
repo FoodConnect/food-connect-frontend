@@ -3,11 +3,11 @@ import { Container, Grid, Skeleton, Title } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import DonationsTable from '@/components/DonationsTable/DonationsTable';
 import DonationForm from '@/components/DonationForm/DonationForm';
-import { DonationFormValues } from '@/components/Interfaces/DonationFormValues';
 import {
   DonationFormProvider,
   useDonationForm,
 } from '@/components/DonationForm/DonationFormContext';
+import { DonationFormValues } from '@/components/Interfaces/DonationFormValues';
 import { DonationFormDefaultValues } from '@/components/DonationForm/DonationFormDefaultValues';
 
 interface DonationsTableProps {
@@ -18,18 +18,27 @@ const child = <Skeleton height={140} radius="md" animate={false} />;
 const DonorDonations = (props: DonationsTableProps) => {
   // Form Instantiation and Submission Method for CREATE Action
   const form = useDonationForm({
-    name: 'donation-CREATE-Form',
-    initialValues: DonationFormDefaultValues,
+    initialValues: {
+      title: '',
+      image_data: '',
+      description: '',
+      total_inventory: 0,
+      claimed_inventory: 0,
+      remaining_inventory: 0,
+      pick_up_deadline: '',
+      address: '',
+      city: '',
+      state: '',
+      zipcode: '',
+      is_available: true,
+      donor: 2,
+    },
     validate: {
       title: (value) => (value !== '' ? null : 'Please enter a title'),
-      image_data: (value) => (value !== '' ? null : 'Please enter an image URL'),
-      description: (value) => (value !== '' ? null : 'Please enter a description'),
-      total_inventory: (value) => (value ? null : 'Please enter a quantity'),
-      pick_up_deadline: (value) => (value ? null : 'Please enter a Pick-Up Deadline'),
     },
   });
   // Form Submission Method
-  const handleFormSubmit = async (values: DonationFormValues) => {
+  const handleSubmit = async (values: DonationFormValues) => {
     await fetch('http://localhost:8080/donations/', {
       method: 'POST',
       headers: {
@@ -60,7 +69,6 @@ const DonorDonations = (props: DonationsTableProps) => {
         }
       });
   };
-
   return (
     <Container my="md">
       <Grid>
@@ -75,12 +83,11 @@ const DonorDonations = (props: DonationsTableProps) => {
         </Grid.Col>
         <Grid.Col span={{ base: 12, xs: 12 }}>
           <DonationFormProvider form={form}>
-            <form onSubmit={form.onSubmit(handleFormSubmit)}>
+            <form onSubmit={form.onSubmit(handleSubmit)}>
               <DonationForm />
             </form>
           </DonationFormProvider>
         </Grid.Col>
-
         <Grid.Col span={{ base: 12, xs: 3 }}>{child}</Grid.Col>
         <Grid.Col span={{ base: 12, xs: 3 }}>{child}</Grid.Col>
         <Grid.Col span={{ base: 12, xs: 6 }}>{child}</Grid.Col>
