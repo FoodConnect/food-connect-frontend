@@ -2,8 +2,10 @@ import {
   Button,
   Card,
   Container,
+  Drawer,
   Flex,
   Grid,
+  Group,
   Image,
   ScrollArea,
   Skeleton,
@@ -14,6 +16,8 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { showNotification } from '@mantine/notifications';
 import { modals } from '@mantine/modals';
+import { useDisclosure, useViewportSize } from '@mantine/hooks';
+import { IconEdit, IconTrash } from '@tabler/icons-react';
 import GradientHeaderImage from '@/components/GradientHeaderImage/GradientHeaderImage';
 import DateFormat from '@/components/DateFormat';
 import StatsSegments from '@/components/StatsSegments/StatsSegments';
@@ -35,6 +39,16 @@ const Donation = (props: DonationProps) => {
   const [donation, setDonation] = useState<DonationData>();
   const router = useRouter();
   const { id }: any = router.query;
+
+  // Update Donation Drawer Variables
+  const [opened, { open, close }] = useDisclosure(false);
+  const { width } = useViewportSize();
+  const setPosition = () => {
+    if (width > 720) {
+      return 'bottom';
+    }
+    return 'right';
+  };
 
   // Form Instantiation and Submission Method for UPDATE Action
   const form = useDonationForm({
@@ -82,6 +96,7 @@ const Donation = (props: DonationProps) => {
           color: 'green',
           message: 'Your update has been successfully submitted.',
         });
+        close();
         setDonation(values);
         return response.json();
       })
@@ -153,6 +168,7 @@ const Donation = (props: DonationProps) => {
     modals.openConfirmModal({
       title: 'Delete Donation',
       centered: true,
+      overlayProps: { backgroundOpacity: 0.3, blur: 2 },
       children: (
         <Text size="sm">
           Are you sure you want to delete this donation? This action is destructive and you will not
@@ -236,16 +252,32 @@ const Donation = (props: DonationProps) => {
           </Grid>
           {isAuthorized() ? (
             <>
-              <DonationFormProvider form={form}>
-                <form onSubmit={form.onSubmit(handleSubmit)}>
-                  <DonationForm />
-                </form>
-              </DonationFormProvider>
+              <Drawer
+                offset={8}
+                radius="md"
+                position={setPosition()}
+                size="lg"
+                opened={opened}
+                onClose={close}
+                title="Update Donation"
+                overlayProps={{ backgroundOpacity: 0.3, blur: 2 }}
+              >
+                <DonationFormProvider form={form}>
+                  <form onSubmit={form.onSubmit(handleSubmit)}>
+                    <DonationForm />
+                  </form>
+                </DonationFormProvider>
+              </Drawer>
               <Grid>
-                <Grid.Col span={{ base: 12, xs: 4 }}>
-                  <Button onClick={openDeleteModal} color="red">
-                    Delete Donation
-                  </Button>
+                <Grid.Col span={{ base: 12, xs: 12 }}>
+                  <Group>
+                    <Button onClick={open} color="teal" rightSection={<IconEdit />}>
+                      Update Donation
+                    </Button>
+                    <Button onClick={openDeleteModal} color="red" rightSection={<IconTrash />}>
+                      Delete Donation
+                    </Button>
+                  </Group>
                 </Grid.Col>
               </Grid>
             </>
