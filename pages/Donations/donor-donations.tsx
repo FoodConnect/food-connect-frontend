@@ -70,7 +70,7 @@ const DonorDonations = (props: DonationsTableProps) => {
       })
       .catch((error) => {
         if (error !== null) {
-          console.log(error);
+          null;
         }
       });
   };

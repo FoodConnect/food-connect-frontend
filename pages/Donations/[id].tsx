@@ -112,7 +112,6 @@ const Donation = (props: DonationProps) => {
   };
 
   // *REMOVE* DELAY FUNCTION for Development Presentation of Loading State
-
   function timeout(delay: number) {
     return new Promise((res) => {
       setTimeout(res, delay);

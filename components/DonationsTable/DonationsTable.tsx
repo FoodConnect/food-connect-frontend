@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import classes from './DonationsTable.module.css';
 import DateFormat from '../DateFormat';
 import { DonationData } from '@/components/Interfaces/DonationData';
+import DonationsTableLoading from '../Loading/DonationsTableLoading';
 
 // *REMOVE* Dummy Data for feaux authorization
 // TO BE Removed upon call connection to Django API
@@ -175,6 +176,7 @@ interface DonationsTableProps {
 
 const DonationsTable = (props: DonationsTableProps) => {
   const [tableItems, setTableItems] = useState<DonationData[]>();
+  const [loading, setLoading] = useState(true);
   // Condition for Donor Donation Page filtered donation list
   const path = useRouter().asPath;
   const filterData = (data: DonationData[]) => {
@@ -186,9 +188,18 @@ const DonationsTable = (props: DonationsTableProps) => {
     }
     return arr;
   };
+
+  // *REMOVE* DELAY FUNCTION for Development Presentation of Loading State
+  function timeout(delay: number) {
+    return new Promise((res) => {
+      setTimeout(res, delay);
+    });
+  }
   // API Call and useEffect Functions to hydrate table
   async function getData() {
     const res = await fetch('http://localhost:8080/donations/');
+    await timeout(1000);
+    setLoading(false);
     if (!res.ok) {
       throw new Error('Failed to fetch data');
     }
@@ -251,20 +262,26 @@ const DonationsTable = (props: DonationsTableProps) => {
   });
 
   return (
-    <Table.ScrollContainer minWidth={800}>
-      <Table verticalSpacing="xs">
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th>Title</Table.Th>
-            <Table.Th>Deadline</Table.Th>
-            <Table.Th>Donor</Table.Th>
-            <Table.Th>Total Donated</Table.Th>
-            <Table.Th>Inventory Claimed</Table.Th>
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody>{rows}</Table.Tbody>
-      </Table>
-    </Table.ScrollContainer>
+    <>
+      {loading ? (
+        <DonationsTableLoading />
+      ) : (
+        <Table.ScrollContainer minWidth={800}>
+          <Table verticalSpacing="xs">
+            <Table.Thead>
+              <Table.Tr>
+                <Table.Th>Title</Table.Th>
+                <Table.Th>Deadline</Table.Th>
+                <Table.Th>Donor</Table.Th>
+                <Table.Th>Total Donated</Table.Th>
+                <Table.Th>Inventory Claimed</Table.Th>
+              </Table.Tr>
+            </Table.Thead>
+            <Table.Tbody>{rows}</Table.Tbody>
+          </Table>
+        </Table.ScrollContainer>
+      )}
+    </>
   );
 };
 export default DonationsTable;
