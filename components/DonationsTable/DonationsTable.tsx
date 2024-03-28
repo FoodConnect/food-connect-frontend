@@ -6,7 +6,7 @@ import classes from './DonationsTable.module.css';
 import DateFormat from '../DateFormat';
 import { DonationData } from '@/components/Interfaces/DonationData';
 
-// Dummy Data for feaux authorization
+// *REMOVE* Dummy Data for feaux authorization
 // TO BE Removed upon call connection to Django API
 // const data = [
 //   {

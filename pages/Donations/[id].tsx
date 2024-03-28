@@ -8,7 +8,6 @@ import {
   Group,
   Image,
   ScrollArea,
-  Skeleton,
   Text,
   Title,
 } from '@mantine/core';
@@ -28,14 +27,14 @@ import {
   DonationFormProvider,
   useDonationForm,
 } from '@/components/DonationForm/DonationFormContext';
+import DonationInfoLoading from '@/components/Loading/DonationInfoLoading';
 
 interface DonationProps {
   dummyUser: { id: number; role: string };
 }
-
-const child = <Skeleton height={140} radius="md" animate={false} color="navy" />;
 const Donation = (props: DonationProps) => {
   const [domLoaded, setDomLoaded] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [donation, setDonation] = useState<DonationData>();
   const router = useRouter();
   const { id }: any = router.query;
@@ -107,14 +106,23 @@ const Donation = (props: DonationProps) => {
       })
       .catch((error) => {
         if (error !== null) {
-          console.log(error);
+          null;
         }
       });
   };
 
+  // *REMOVE* DELAY FUNCTION for Development Presentation of Loading State
+
+  function timeout(delay: number) {
+    return new Promise((res) => {
+      setTimeout(res, delay);
+    });
+  }
   // API Request and useEffect Functions to populate donation profile
   async function getData() {
     const response = await fetch(`http://localhost:8080/donations/${id}/`);
+    await timeout(1000);
+    setLoading(false);
     if (!response.ok) {
       throw new Error('Failed to fetch data');
     }
@@ -122,12 +130,11 @@ const Donation = (props: DonationProps) => {
   }
 
   useEffect(() => {
-    setDomLoaded(true);
     if (!id) return;
+    setDomLoaded(true);
     const fetchData = async () => {
       const data = await getData();
       setDonation(data);
-      console.log(data);
       if (data) {
         form.initialize(data);
       }
@@ -136,7 +143,7 @@ const Donation = (props: DonationProps) => {
     fetchData().catch(console.error);
   }, [id]);
 
-  // Delete Feaux Authorization Check (To be ammended upon official Auth setup)
+  // *REMOVE* Delete Feaux Authorization Check (To be ammended upon official Auth setup)
   const isAuthorized = () => donation?.donor === props.dummyUser.id;
 
   // API Request to Delete Donation
@@ -205,55 +212,61 @@ const Donation = (props: DonationProps) => {
                 radius="md"
                 withBorder={false}
               >
-                <Grid p={{ base: 0, lg: 25, md: 25, sm: 15, xs: 10 }}>
-                  <Grid.Col span={{ base: 12, xs: 12 }}>
-                    <Title order={2}>Donation Details</Title>
-                  </Grid.Col>
-                  <Grid.Col span={{ base: 12, xs: 3 }}>
-                    <Flex my="lg" direction="column" gap={0}>
-                      <Title order={5}>{donation?.title}</Title>
-                      <ScrollArea h={200} scrollbarSize={7} c="dimmed">
-                        {donation?.description}
-                      </ScrollArea>
-                    </Flex>
-                    <Flex my="lg" direction="column" gap={0}>
-                      <Title order={5}>Donation Available</Title>
-                      <Text c="dimmed">
-                        <Text c="dimmed">{donation?.is_available === true ? 'Yes' : 'No'}</Text>
-                      </Text>
-                    </Flex>
-                    <Flex my="lg" direction="column" gap={0}>
-                      <Title order={5}>Donated On</Title>
-                      <Text c="dimmed">
-                        <DateFormat dateString={donation?.created_at!} />
-                      </Text>
-                    </Flex>
-                  </Grid.Col>
-                  <Grid.Col span={{ base: 12, xs: 4 }}>
-                    <StatsSegments
-                      claimed={donation?.claimed_inventory}
-                      remaining={donation?.remaining_inventory}
-                    />
-                    <Flex my="lg" direction="column" gap={0}>
-                      <Title order={5}>Donation Pickup Deadline</Title>
-                      <Text c="dimmed">
-                        <DateFormat dateString={donation?.pick_up_deadline!} />
-                      </Text>
-                    </Flex>
-                    <Flex my="lg" direction="column" gap={0}>
-                      <Title order={5}>Category</Title>
-                      <Text c="dimmed">
-                        <Text c="dimmed">Produce</Text>
-                      </Text>
-                    </Flex>
-                  </Grid.Col>
-                  <Grid.Col span={{ base: 12, xs: 5 }}>
-                    <Image height="500rem" src={donation?.image_data} radius="md" />
-                  </Grid.Col>
-                </Grid>
+                {loading ? (
+                  <DonationInfoLoading />
+                ) : (
+                  <Grid p={{ base: 0, lg: 25, md: 25, sm: 15, xs: 10 }}>
+                    <Grid.Col span={{ base: 12, xs: 12 }}>
+                      <Title order={2}>Donation Details</Title>
+                    </Grid.Col>
+                    <Grid.Col span={{ base: 12, xs: 3 }}>
+                      <Flex my="lg" direction="column" gap={0}>
+                        <Title order={5}>{donation?.title}</Title>
+                        <ScrollArea h={200} scrollbarSize={7} c="dimmed">
+                          {donation?.description}
+                        </ScrollArea>
+                      </Flex>
+                      <Flex my="lg" direction="column" gap={0}>
+                        <Title order={5}>Donation Available</Title>
+                        <Text c="dimmed">
+                          <Text c="dimmed">{donation?.is_available === true ? 'Yes' : 'No'}</Text>
+                        </Text>
+                      </Flex>
+                      <Flex my="lg" direction="column" gap={0}>
+                        <Title order={5}>Donated On</Title>
+                        <Text c="dimmed">
+                          <DateFormat dateString={donation?.created_at!} />
+                        </Text>
+                      </Flex>
+                    </Grid.Col>
+                    <Grid.Col span={{ base: 12, xs: 4 }}>
+                      <StatsSegments
+                        claimed={donation?.claimed_inventory}
+                        remaining={donation?.remaining_inventory}
+                      />
+                      <Flex my="lg" direction="column" gap={0}>
+                        <Title order={5}>Donation Pickup Deadline</Title>
+                        <Text c="dimmed">
+                          <DateFormat dateString={donation?.pick_up_deadline!} />
+                        </Text>
+                      </Flex>
+                      <Flex my="lg" direction="column" gap={0}>
+                        <Title order={5}>Category</Title>
+                        <Text c="dimmed">
+                          <Text c="dimmed">Produce</Text>
+                        </Text>
+                      </Flex>
+                    </Grid.Col>
+                    <Grid.Col span={{ base: 12, xs: 5 }}>
+                      <Image height="500rem" src={donation?.image_data} radius="md" />
+                    </Grid.Col>
+                  </Grid>
+                )}
               </Card>
             </Grid.Col>
-            <Grid.Col span={{ base: 12, xs: 12 }}>{child}</Grid.Col>
+            <Grid.Col span={{ base: 12, xs: 12 }}>
+              <Card h={140} radius="md" bg="teal.2" />
+            </Grid.Col>
           </Grid>
           {isAuthorized() ? (
             <>
