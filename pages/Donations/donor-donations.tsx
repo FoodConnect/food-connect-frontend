@@ -56,7 +56,8 @@ const DonorDonations = (props: DonationsTableProps) => {
           showNotification({
             title: 'Error Submitting',
             color: 'red',
-            message: 'Sorry, there was an error submitting your request.',
+            message:
+              'Sorry, there was an error submitting your request. Be sure to select a date before submmitting.',
           });
           return response.json();
         }
