@@ -69,7 +69,12 @@ const Donation = (props: DonationProps) => {
       donor: props.dummyUser.id,
     },
     validate: {
-      title: (value) => (value !== '' ? null : 'Please enter a title'),
+      title: (value) =>
+        value === '' || value.length > 30
+          ? 'Please enter a title and ensure that its length does not exceed 30 characters.'
+          : null,
+      image_data: (value) =>
+        value.length > 255 ? 'Image URL may not excede 255 characters' : null,
     },
   });
   // Form submission method
