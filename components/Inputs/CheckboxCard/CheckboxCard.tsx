@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { UnstyledButton, Checkbox, Text } from '@mantine/core';
 import classes from './CheckboxCard.module.css';
+import { useDonationFormContext } from '@/components/DonationForm/DonationFormContext';
 
 interface CheckboxCard {
   label: string;
@@ -9,18 +10,19 @@ interface CheckboxCard {
 
 const CheckboxCard = (props: CheckboxCard) => {
   const [value, onChange] = useState(true);
+  const form = useDonationFormContext();
 
   return (
     <UnstyledButton onClick={() => onChange(!value)} className={classes.button}>
       <Checkbox
         checked={value}
-        onChange={() => {}}
         tabIndex={-1}
         size="md"
         mr="xl"
         color="shrek"
         styles={{ input: { cursor: 'pointer' } }}
         aria-hidden
+        {...form.getInputProps('is_available')}
       />
 
       <div>

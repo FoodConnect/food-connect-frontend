@@ -1,277 +1,307 @@
 import {
+  Button,
   Card,
   Container,
+  Drawer,
   Flex,
   Grid,
+  Group,
   Image,
   ScrollArea,
-  Skeleton,
   Text,
   Title,
 } from '@mantine/core';
 import { useRouter } from 'next/router';
-import GradientHeaderImage from '@/components/Inputs/GradientHeaderImage/GradientHeaderImage';
+import { useEffect, useState } from 'react';
+import { showNotification } from '@mantine/notifications';
+import { modals } from '@mantine/modals';
+import { useDisclosure, useViewportSize } from '@mantine/hooks';
+import { IconEdit, IconTrash } from '@tabler/icons-react';
+import GradientHeaderImage from '@/components/GradientHeaderImage/GradientHeaderImage';
 import DateFormat from '@/components/DateFormat';
 import StatsSegments from '@/components/StatsSegments/StatsSegments';
 import DonationForm from '@/components/DonationForm/DonationForm';
-// import { FC } from 'react';
-// import DonationsTable from '@/components/DonationsTable/DonationsTable';
+import { DonationData } from '@/components/Interfaces/DonationData';
+import { DonationFormValues } from '@/components/Interfaces/DonationFormValues';
+import {
+  DonationFormProvider,
+  useDonationForm,
+} from '@/components/DonationForm/DonationFormContext';
+import DonationInfoLoading from '@/components/Loading/DonationInfoLoading';
 
-// Dummy Data for feaux authorization
-// TO BE Removed upon call connection to Django API
-const data = [
-  {
-    id: 1,
-    title: 'Apples',
-    description:
-      'Locally sourced apples, freshly picked, are readied for donation. Soon to reach food banks and shelters, they offer nourishment and comfort, symbolizing the spirit of community care and support.',
-    donor: { name: 'Test User Business', user: { id: 1 } },
-    pick_up_deadline: '2024-03-09T09:47:00Z',
-    inventory: { claimed: 90, remaining: 10 },
-    is_available: true,
-    image_data:
-      'https://thumbs.dreamstime.com/b/fresh-carrots-farmer-s-market-pile-freshly-harvested-carrots-arranged-wooden-crate-sitting-burlap-sack-276909252.jpg',
-    created_at: '2024-03-01T09:47:00Z',
-    category: 'Produce',
-  },
-  {
-    id: 2,
-    title: 'Bananas',
-    description: 'Bananas',
-    donor: { name: 'Test User Business', user: { id: 1 } },
-    pick_up_deadline: '2024-03-25T09:47:00Z',
-    inventory: { claimed: 350, remaining: 756 },
-    is_available: true,
-    image_data:
-      'https://thumbs.dreamstime.com/b/fresh-carrots-farmer-s-market-pile-freshly-harvested-carrots-arranged-wooden-crate-sitting-burlap-sack-276909252.jpg',
-    created_at: '2024-03-01T09:47:00Z',
-    category: 'Produce',
-  },
-  {
-    id: 3,
-    title: 'Oranges',
-    description: 'Oranges',
-    donor: { name: 'Test User Business', user: { id: 1 } },
-    pick_up_deadline: '2024-04-15T09:47:00Z',
-    inventory: { claimed: 2345, remaining: 812 },
-    is_available: true,
-    image_data:
-      'https://thumbs.dreamstime.com/b/fresh-carrots-farmer-s-market-pile-freshly-harvested-carrots-arranged-wooden-crate-sitting-burlap-sack-276909252.jpg',
-    created_at: '2024-03-01T09:47:00Z',
-    category: 'Produce',
-  },
-  {
-    id: 4,
-    title: 'Pears',
-    description: 'Pears',
-    donor: { name: 'Test User Business', user: { id: 1 } },
-    pick_up_deadline: '2024-04-29T09:47:00Z',
-    inventory: { claimed: 0, remaining: 570 },
-    is_available: true,
-    image_data:
-      'https://thumbs.dreamstime.com/b/fresh-carrots-farmer-s-market-pile-freshly-harvested-carrots-arranged-wooden-crate-sitting-burlap-sack-276909252.jpg',
-    created_at: '2024-03-01T09:47:00Z',
-    category: 'Produce',
-  },
-  {
-    id: 5,
-    title: 'Canned Chickens',
-    description: 'Canned Chickens',
-    donor: { name: 'Test User Business', user: { id: 1 } },
-    pick_up_deadline: '2024-04-29T09:47:00Z',
-    inventory: { claimed: 215, remaining: 1587 },
-    is_available: true,
-    image_data:
-      'https://thumbs.dreamstime.com/b/fresh-carrots-farmer-s-market-pile-freshly-harvested-carrots-arranged-wooden-crate-sitting-burlap-sack-276909252.jpg',
-    created_at: '2024-03-01T09:47:00Z',
-    category: 'Canned',
-  },
-  {
-    id: 6,
-    title: 'Boxes of Crackers',
-    description: 'Boxes of Crackers',
-    donor: { name: 'Marges Restaurant', user: { id: 2 } },
-    pick_up_deadline: '2024-05-12T09:47:00Z',
-    inventory: { claimed: 1121, remaining: 397 },
-    is_available: true,
-    image_data:
-      'https://thumbs.dreamstime.com/b/fresh-carrots-farmer-s-market-pile-freshly-harvested-carrots-arranged-wooden-crate-sitting-burlap-sack-276909252.jpg',
-    created_at: '2024-05-01T09:47:00Z',
-    category: 'Dry',
-  },
-  {
-    id: 7,
-    title: 'Eggs',
-    description:
-      'Local farms donate fresh eggs, packed with care. Destined for food banks and shelters, these eggs offer comfort and sustenance to those in need, symbolizing the power of kindness in our community.',
-    donor: { name: 'Marges Restaurant', user: { id: 2 } },
-    pick_up_deadline: '2024-03-20T09:47:00Z',
-    inventory: { claimed: 284, remaining: 1668 },
-    is_available: true,
-    image_data:
-      'https://thumbs.dreamstime.com/b/fresh-carrots-farmer-s-market-pile-freshly-harvested-carrots-arranged-wooden-crate-sitting-burlap-sack-276909252.jpg',
-    created_at: '2024-03-01T09:47:00Z',
-    category: 'Produce',
-  },
-  {
-    id: 8,
-    title: 'Potatoes',
-    description: 'Potatoes',
-    donor: { name: 'Marges Restaurant', user: { id: 2 } },
-    pick_up_deadline: '2024-06-01T09:47:00Z',
-    inventory: { claimed: 744, remaining: 128 },
-    is_available: true,
-    image_data:
-      'https://thumbs.dreamstime.com/b/fresh-carrots-farmer-s-market-pile-freshly-harvested-carrots-arranged-wooden-crate-sitting-burlap-sack-276909252.jpg',
-    created_at: '2024-03-01T09:47:00Z',
-    category: 'Produce',
-  },
-  {
-    id: 9,
-    title: 'Maple Syrup Bottles',
-    description: 'Maple Syrup Bottles',
-    donor: { name: 'Marges Restaurant', user: { id: 2 } },
-    pick_up_deadline: '2024-06-01T09:47:00Z',
-    inventory: { claimed: 51, remaining: 76 },
-    is_available: true,
-    image_data:
-      'https://thumbs.dreamstime.com/b/fresh-carrots-farmer-s-market-pile-freshly-harvested-carrots-arranged-wooden-crate-sitting-burlap-sack-276909252.jpg',
-    created_at: '2024-03-01T09:47:00Z',
-    category: 'Canned',
-  },
-  {
-    id: 10,
-    title: 'Carrots',
-    description: 'Carrots',
-    donor: { name: 'Marges Restaurant', user: { id: 2 } },
-    pick_up_deadline: '2024-03-05T09:47:00Z',
-    inventory: { claimed: 46, remaining: 10 },
-    is_available: true,
-    image_data:
-      'https://thumbs.dreamstime.com/b/fresh-carrots-farmer-s-market-pile-freshly-harvested-carrots-arranged-wooden-crate-sitting-burlap-sack-276909252.jpg',
-    created_at: '2024-03-01T09:47:00Z',
-    category: 'Produce',
-  },
-  {
-    id: 11,
-    title: 'Salt Packets',
-    description: 'Salt Packets',
-    donor: { name: 'Marges Restaurant', user: { id: 2 } },
-    pick_up_deadline: '2024-03-05T09:47:00Z',
-    inventory: { claimed: 100, remaining: 3568 },
-    is_available: true,
-    image_data:
-      'https://thumbs.dreamstime.com/b/fresh-carrots-farmer-s-market-pile-freshly-harvested-carrots-arranged-wooden-crate-sitting-burlap-sack-276909252.jpg',
-    created_at: '2024-03-01T09:47:00Z',
-    category: 'Dry',
-  },
-  {
-    id: 12,
-    title: 'Cartons of Milk',
-    description: 'Cartons of Milk',
-    donor: { name: 'Test User Business', user: { id: 1 } },
-    pick_up_deadline: '2024-03-05T09:47:00Z',
-    inventory: { claimed: 365, remaining: 789 },
-    is_available: true,
-    image_data:
-      'https://thumbs.dreamstime.com/b/fresh-carrots-farmer-s-market-pile-freshly-harvested-carrots-arranged-wooden-crate-sitting-burlap-sack-276909252.jpg',
-    created_at: '2024-03-01T09:47:00Z',
-    category: 'Dairy',
-  },
-];
-
-// // INTERFACE FOR PROPS...
-// interface DonationProps {
-//   id: number;
-// }
-
-const child = <Skeleton height={140} radius="md" animate={false} color="navy" />;
-// WITHOUT PROPS
-const CharityDonations = () => {
+interface DonationProps {
+  dummyUser: { id: number; role: string };
+}
+const Donation = (props: DonationProps) => {
+  const [domLoaded, setDomLoaded] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [donation, setDonation] = useState<DonationData>();
   const router = useRouter();
   const { id }: any = router.query;
-  // // TO BE Removed: Extract item from Static Data
-  const donation: any = data.filter((row) => row.id === parseInt(id, 10))[0];
 
+  // Update Donation Drawer Variables
+  const [opened, { open, close }] = useDisclosure(false);
+  const { width } = useViewportSize();
+  const setPosition = () => {
+    if (width > 720) {
+      return 'bottom';
+    }
+    return 'right';
+  };
+
+  // Form Instantiation and Submission Method for UPDATE Action
+  const form = useDonationForm({
+    name: 'donation-UPDATE-Form',
+    initialValues: {
+      title: '',
+      image_data: '',
+      description: '',
+      total_inventory: 0,
+      claimed_inventory: 0,
+      remaining_inventory: 0,
+      pick_up_deadline: '',
+      address: '',
+      city: '',
+      state: '',
+      zipcode: '',
+      is_available: donation?.is_available!,
+      donor: props.dummyUser.id,
+    },
+    validate: {
+      title: (value) =>
+        value === '' || value.length > 30
+          ? 'Please enter a title and ensure that its length does not exceed 30 characters.'
+          : null,
+      image_data: (value) =>
+        value.length > 255 ? 'Image URL may not excede 255 characters' : null,
+    },
+  });
+  // Form submission method
+  const handleSubmit = async (values: DonationFormValues) => {
+    await fetch(`http://localhost:8080/donations/${id}/`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(values),
+    })
+      .then((response) => {
+        if (response.status >= 400 && response.status < 600) {
+          showNotification({
+            title: 'Error Updating',
+            color: 'red',
+            message: 'Sorry, there was an error submitting your update.',
+          });
+          return response.json();
+        }
+        // form.setValues(formResetValues);
+        showNotification({
+          title: 'Update Successful',
+          color: 'green',
+          message: 'Your update has been successfully submitted.',
+        });
+        close();
+        setDonation(values);
+        return response.json();
+      })
+      .catch((error) => {
+        if (error !== null) {
+          null;
+        }
+      });
+  };
+
+  // *REMOVE* DELAY FUNCTION for Development Presentation of Loading State
+  function timeout(delay: number) {
+    return new Promise((res) => {
+      setTimeout(res, delay);
+    });
+  }
+  // API Request and useEffect Functions to populate donation profile
+  async function getData() {
+    const response = await fetch(`http://localhost:8080/donations/${id}/`);
+    await timeout(1000);
+    setLoading(false);
+    if (!response.ok) {
+      throw new Error('Failed to fetch data');
+    }
+    return response.json();
+  }
+
+  useEffect(() => {
+    if (!id) return;
+    setDomLoaded(true);
+    const fetchData = async () => {
+      const data = await getData();
+      setDonation(data);
+      if (data) {
+        form.initialize(data);
+      }
+    };
+    // eslint-disable-next-line no-console
+    fetchData().catch(console.error);
+  }, [id]);
+
+  // *REMOVE* Delete Feaux Authorization Check (To be ammended upon official Auth setup)
+  const isAuthorized = () => donation?.donor === props.dummyUser.id;
+
+  // API Request to Delete Donation
+  async function handleDeleteDonation() {
+    const response = await fetch(`http://localhost:8080/donations/${id}/`, {
+      method: 'DELETE',
+    });
+    if (!response.ok) {
+      showNotification({
+        title: 'Error Deleting',
+        color: 'red',
+        message: 'Sorry, there was an error deleting this donation.',
+      });
+      return response.json();
+    }
+    showNotification({
+      title: 'Deleted',
+      color: 'green',
+      message: 'Your donation has been successfully deleted.',
+    });
+    router.push('/Donations/donor-donations');
+    return null;
+  }
+
+  // Delete Confirm and Cancel Modal Functions
+  function cancelDeleteDonation() {
+    showNotification({
+      title: 'Cancelled',
+      color: 'teal',
+      message: 'Delete Donation was cancelled.',
+    });
+  }
+  const openDeleteModal = () =>
+    modals.openConfirmModal({
+      title: 'Delete Donation',
+      centered: true,
+      overlayProps: { backgroundOpacity: 0.3, blur: 2 },
+      children: (
+        <Text size="sm">
+          Are you sure you want to delete this donation? This action is destructive and you will not
+          be able to retreive it again.
+        </Text>
+      ),
+      labels: { confirm: 'Delete Donation', cancel: "No don't delete it" },
+      confirmProps: { color: 'red' },
+      onCancel: () => cancelDeleteDonation(),
+      onConfirm: () => handleDeleteDonation(),
+    });
   return (
-    <Container my="md">
-      <Grid>
-        <Grid.Col span={{ base: 12, xs: 12 }}>
-          <GradientHeaderImage />
-          {/* <GradientHeaderImage category={donation?.category} /> */}
-          <Card
-            style={{ zIndex: 2 }}
-            pos="relative"
-            mt={-80}
-            ml={{ base: 0, lg: 50, md: 24, sm: 24, xs: 0 }}
-            mr={{ base: 0, lg: 50, md: 24, sm: 24, xs: 0 }}
-            p={{ base: 0, lg: 2, md: 0, sm: 0, xs: 0 }}
-            // px={{ base: 0, lg: 2, md: 0, sm: 0, xs: 0 }}
-            shadow="sm"
-            radius="md"
-            withBorder={false}
-          >
-            <Grid p={{ base: 0, lg: 25, md: 25, sm: 15, xs: 10 }}>
-              <Grid.Col span={{ base: 12, xs: 12 }}>
-                <Title order={2}>Donation Details</Title>
-              </Grid.Col>
-              <Grid.Col span={{ base: 12, xs: 3 }}>
-                <Flex my="lg" direction="column" gap={0}>
-                  <Title order={5}>{donation?.title}</Title>
-                  <ScrollArea h={200} scrollbarSize={7} c="dimmed">
-                    {donation?.description}
-                  </ScrollArea>
-                </Flex>
-                <Flex my="lg" direction="column" gap={0}>
-                  <Title order={5}>Donation Available</Title>
-                  <Text c="dimmed">
-                    <Text c="dimmed">{donation?.is_available ? 'Yes' : 'No'}</Text>
-                  </Text>
-                </Flex>
-                <Flex my="lg" direction="column" gap={0}>
-                  <Title order={5}>Donated On</Title>
-                  <Text c="dimmed">
-                    <DateFormat dateString={donation?.created_at} />
-                  </Text>
-                </Flex>
-              </Grid.Col>
-              <Grid.Col span={{ base: 12, xs: 4 }}>
-                <StatsSegments
-                  claimed={donation?.inventory.claimed}
-                  remaining={donation?.inventory.remaining}
-                />
-                <Flex my="lg" direction="column" gap={0}>
-                  <Title order={5}>Donation Pickup Deadline</Title>
-                  <Text c="dimmed">
-                    <DateFormat dateString={donation?.pick_up_deadline} />
-                  </Text>
-                </Flex>
-              </Grid.Col>
-              <Grid.Col span={{ base: 12, xs: 5 }}>
-                <Image height="500rem" src={donation?.image_data} radius="md" />
-              </Grid.Col>
-            </Grid>
-          </Card>
-        </Grid.Col>
-        <Grid.Col span={{ base: 12, xs: 12 }}>{child}</Grid.Col>
-      </Grid>
-      <DonationForm />
-    </Container>
+    <>
+      {' '}
+      {domLoaded && (
+        <Container my="md">
+          <Grid>
+            <Grid.Col span={{ base: 12, xs: 12 }}>
+              <GradientHeaderImage category="produce" />
+              <Card
+                style={{ zIndex: 2 }}
+                pos="relative"
+                mt={-80}
+                ml={{ base: 0, lg: 50, md: 24, sm: 24, xs: 0 }}
+                mr={{ base: 0, lg: 50, md: 24, sm: 24, xs: 0 }}
+                p={{ base: 0, lg: 2, md: 0, sm: 0, xs: 0 }}
+                // px={{ base: 0, lg: 2, md: 0, sm: 0, xs: 0 }}
+                shadow="sm"
+                radius="md"
+                withBorder={false}
+              >
+                {loading ? (
+                  <DonationInfoLoading />
+                ) : (
+                  <Grid p={{ base: 0, lg: 25, md: 25, sm: 15, xs: 10 }}>
+                    <Grid.Col span={{ base: 12, xs: 12 }}>
+                      <Title order={2}>Donation Details</Title>
+                    </Grid.Col>
+                    <Grid.Col span={{ base: 12, xs: 3 }}>
+                      <Flex my="lg" direction="column" gap={0}>
+                        <Title order={5}>{donation?.title}</Title>
+                        <ScrollArea h={200} scrollbarSize={7} c="dimmed">
+                          {donation?.description}
+                        </ScrollArea>
+                      </Flex>
+                      <Flex my="lg" direction="column" gap={0}>
+                        <Title order={5}>Donation Available</Title>
+                        <Text c="dimmed">
+                          <Text c="dimmed">{donation?.is_available === true ? 'Yes' : 'No'}</Text>
+                        </Text>
+                      </Flex>
+                      <Flex my="lg" direction="column" gap={0}>
+                        <Title order={5}>Donated On</Title>
+                        <Text c="dimmed">
+                          <DateFormat dateString={donation?.created_at!} />
+                        </Text>
+                      </Flex>
+                    </Grid.Col>
+                    <Grid.Col span={{ base: 12, xs: 4 }}>
+                      <StatsSegments
+                        claimed={donation?.claimed_inventory}
+                        remaining={donation?.remaining_inventory}
+                      />
+                      <Flex my="lg" direction="column" gap={0}>
+                        <Title order={5}>Donation Pickup Deadline</Title>
+                        <Text c="dimmed">
+                          <DateFormat dateString={donation?.pick_up_deadline!} />
+                        </Text>
+                      </Flex>
+                      <Flex my="lg" direction="column" gap={0}>
+                        <Title order={5}>Category</Title>
+                        <Text c="dimmed">
+                          <Text c="dimmed">Produce</Text>
+                        </Text>
+                      </Flex>
+                    </Grid.Col>
+                    <Grid.Col span={{ base: 12, xs: 5 }}>
+                      <Image height="500rem" src={donation?.image_data} radius="md" />
+                    </Grid.Col>
+                  </Grid>
+                )}
+              </Card>
+            </Grid.Col>
+            <Grid.Col span={{ base: 12, xs: 12 }}>
+              <Card h={140} radius="md" bg="teal.2" />
+            </Grid.Col>
+          </Grid>
+          {isAuthorized() ? (
+            <>
+              <Drawer
+                offset={8}
+                radius="md"
+                position={setPosition()}
+                size="lg"
+                opened={opened}
+                onClose={close}
+                title="Update Donation"
+                overlayProps={{ backgroundOpacity: 0.3, blur: 2 }}
+              >
+                <DonationFormProvider form={form}>
+                  <form onSubmit={form.onSubmit(handleSubmit)}>
+                    <DonationForm />
+                  </form>
+                </DonationFormProvider>
+              </Drawer>
+              <Grid>
+                <Grid.Col span={{ base: 12, xs: 12 }}>
+                  <Group>
+                    <Button onClick={open} color="teal" rightSection={<IconEdit />}>
+                      Update Donation
+                    </Button>
+                    <Button onClick={openDeleteModal} color="red" rightSection={<IconTrash />}>
+                      Delete Donation
+                    </Button>
+                  </Group>
+                </Grid.Col>
+              </Grid>
+            </>
+          ) : null}
+        </Container>
+      )}
+    </>
   );
 };
-// // WITH PROPS...
-// const CharityDonations: FC<DonationProps> = () => (
-//   <Container my="md">
-//     <Grid>
-//       <Grid.Col span={{ base: 12, xs: 4 }}>DONATION ID: {id}</Grid.Col>
-//       <Grid.Col span={{ base: 12, xs: 4 }}>{child}</Grid.Col>
-
-//       <Grid.Col span={{ base: 12, xs: 8 }}>{child}</Grid.Col>
-//       <Grid.Col span={{ base: 12, xs: 4 }}>{child}</Grid.Col>
-//       <Grid.Col span={{ base: 12, xs: 3 }}>{child}</Grid.Col>
-//       <Grid.Col span={{ base: 12, xs: 3 }}>{child}</Grid.Col>
-//       <Grid.Col span={{ base: 12, xs: 6 }}>{child}</Grid.Col>
-//     </Grid>
-//   </Container>
-// );
-export default CharityDonations;
+export default Donation;

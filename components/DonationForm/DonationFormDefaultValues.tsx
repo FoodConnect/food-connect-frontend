@@ -1,0 +1,15 @@
+export const DonationFormDefaultValues = {
+  title: '',
+  image_data: '',
+  description: '',
+  total_inventory: 0,
+  claimed_inventory: 0,
+  remaining_inventory: 0,
+  pick_up_deadline: '',
+  address: '',
+  city: '',
+  state: '',
+  zipcode: '',
+  is_available: true,
+  donor: 2,
+};
