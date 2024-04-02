@@ -17,6 +17,7 @@ import { showNotification } from '@mantine/notifications';
 import { modals } from '@mantine/modals';
 import { useDisclosure, useViewportSize } from '@mantine/hooks';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
+import { useSession } from 'next-auth/react';
 import GradientHeaderImage from '@/components/GradientHeaderImage/GradientHeaderImage';
 import DateFormat from '@/components/DateFormat';
 import StatsSegments from '@/components/StatsSegments/StatsSegments';
@@ -29,15 +30,13 @@ import {
 } from '@/components/DonationForm/DonationFormContext';
 import DonationInfoLoading from '@/components/Loading/DonationInfoLoading';
 
-interface DonationProps {
-  dummyUser: { id: number; role: string };
-}
-const Donation = (props: DonationProps) => {
+const Donation = () => {
   const [domLoaded, setDomLoaded] = useState(false);
   const [loading, setLoading] = useState(true);
   const [donation, setDonation] = useState<DonationData>();
   const router = useRouter();
   const { id }: any = router.query;
+  const { data: session } = useSession();
 
   // Update Donation Drawer Variables
   const [opened, { open, close }] = useDisclosure(false);
@@ -65,7 +64,7 @@ const Donation = (props: DonationProps) => {
       state: '',
       zipcode: '',
       is_available: donation?.is_available!,
-      donor: props.dummyUser.id,
+      donor: session?.user.pk!,
     },
     validate: {
       title: (value) =>
@@ -143,7 +142,7 @@ const Donation = (props: DonationProps) => {
   }, [id]);
 
   // *REMOVE* Delete Feaux Authorization Check (To be ammended upon official Auth setup)
-  const isAuthorized = () => donation?.donor === props.dummyUser.id;
+  const isAuthorized = () => donation?.donor === session?.user.pk;
 
   // API Request to Delete Donation
   async function handleDeleteDonation() {

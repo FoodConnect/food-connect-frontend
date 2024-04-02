@@ -1,6 +1,7 @@
 // donor-donations.tsx
 import { Container, Grid, Skeleton, Title } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
+import { useSession } from 'next-auth/react';
 import DonationsTable from '@/components/DonationsTable/DonationsTable';
 import DonationForm from '@/components/DonationForm/DonationForm';
 import {
@@ -10,12 +11,9 @@ import {
 import { DonationFormValues } from '@/components/Interfaces/DonationFormValues';
 import { DonationFormDefaultValues } from '@/components/DonationForm/DonationFormDefaultValues';
 
-interface DonationsTableProps {
-  dummyUser: { id: number; role: string };
-}
-
 const child = <Skeleton height={140} radius="md" animate={false} />;
-const DonorDonations = (props: DonationsTableProps) => {
+const DonorDonations = () => {
+  const { data: session } = useSession();
   // Form Instantiation and Submission Method for CREATE Action
   const form = useDonationForm({
     initialValues: {
@@ -31,7 +29,7 @@ const DonorDonations = (props: DonationsTableProps) => {
       state: '',
       zipcode: '',
       is_available: true,
-      donor: props.dummyUser.id,
+      donor: session?.user.pk!,
     },
     validate: {
       title: (value) =>
@@ -82,7 +80,7 @@ const DonorDonations = (props: DonationsTableProps) => {
           <Title order={2}>My Donations</Title>
         </Grid.Col>
         <Grid.Col span={{ base: 12, xs: 12 }}>
-          <DonationsTable dummyUser={props.dummyUser} />
+          <DonationsTable />
         </Grid.Col>
         <Grid.Col span={{ base: 12, xs: 12 }}>
           <Title order={2}>Add Donation</Title>

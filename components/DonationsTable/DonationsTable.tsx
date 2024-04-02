@@ -2,6 +2,7 @@ import { Table, Progress, Anchor, Text, Group } from '@mantine/core';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
 import classes from './DonationsTable.module.css';
 import DateFormat from '../DateFormat';
 import { DonationData } from '@/components/Interfaces/DonationData';
@@ -170,19 +171,16 @@ import DonationsTableLoading from '../Loading/DonationsTableLoading';
 //   },
 // ];
 
-interface DonationsTableProps {
-  dummyUser: { id: number; role: string };
-}
-
-const DonationsTable = (props: DonationsTableProps) => {
+const DonationsTable = () => {
   const [tableItems, setTableItems] = useState<DonationData[]>();
   const [loading, setLoading] = useState(true);
   // Condition for Donor Donation Page filtered donation list
+  const { data: session } = useSession();
   const path = useRouter().asPath;
   const filterData = (data: DonationData[]) => {
     let arr = [];
     if (path === '/Donations/donor-donations') {
-      arr = data.filter((row) => row.donor === props.dummyUser.id);
+      arr = data.filter((row) => row.donor === session?.user.pk);
     } else {
       arr = data;
     }
@@ -205,7 +203,6 @@ const DonationsTable = (props: DonationsTableProps) => {
     }
     return res.json();
   }
-
   useEffect(() => {
     const fetchData = async () => {
       let data = await getData();

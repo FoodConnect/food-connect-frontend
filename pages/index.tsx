@@ -7,12 +7,7 @@ export default function HomePage() {
     <>
       <Welcome />
       <ColorSchemeToggle />
-      <DonationsTable
-        dummyUser={{
-          id: 0,
-          role: '',
-        }}
-      />
+      <DonationsTable />
     </>
   );
 }

@@ -58,6 +58,8 @@ export function AuthenticationForm(
   });
 
   const handleSubmit = async (values: AuthenticationFormProps) => {
+    console.log('SUBMITTED');
+
     await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/login/`, {
       method: 'POST',
       headers: {
@@ -68,7 +70,7 @@ export function AuthenticationForm(
       .then((response) => {
         if (response.status >= 400 && response.status < 600) {
           showNotification({
-            title: 'Error Signing In',
+            title: 'Error Logging In',
             color: 'red',
             message: 'Sorry, there was an error submitting your request.',
           });
@@ -93,14 +95,14 @@ export function AuthenticationForm(
   return (
     <Paper radius="md" p="xl" withBorder {...props}>
       <Text size="lg" fw={500}>
-        Welcome to Mantine, {type} with
+        {type} with
       </Text>
 
       <Group grow mb="md" mt="md">
         <GoogleButton radius="xl">Google</GoogleButton>
       </Group>
 
-      <Divider label="Or continue with email" labelPosition="center" my="lg" />
+      <Divider label="Or continue with username" labelPosition="center" my="lg" />
 
       <form onSubmit={form.onSubmit(() => handleSubmit)}>
         <Stack>
