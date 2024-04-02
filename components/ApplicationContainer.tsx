@@ -10,6 +10,7 @@ import {
   IconLayoutDashboard,
   IconLayoutSidebarLeftCollapse,
   IconLayoutSidebarLeftExpand,
+  IconLogin,
   IconMap2,
   IconSearch,
   IconShoppingCart,
@@ -81,7 +82,7 @@ export function ApplicationContainer({
     },
     {
       icon: <IconUserCircle size="1.3rem" stroke={1.5} />,
-      href: '/signup',
+      href: '/profile',
       label: 'Profile',
     },
     {
@@ -98,6 +99,11 @@ export function ApplicationContainer({
       icon: <IconShoppingCart size="1.3rem" stroke={1.5} />,
       href: '/',
       label: 'Cart',
+    },
+    {
+      icon: <IconLogin size="1.3rem" stroke={1.5} />,
+      href: '/login',
+      label: 'Log In',
     },
   ];
   const navItems = navLinks.map((navLink) => (

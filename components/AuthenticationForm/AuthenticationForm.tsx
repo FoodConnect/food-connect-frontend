@@ -21,6 +21,7 @@ export function AuthenticationForm(props: PaperProps) {
   const form = useForm({
     initialValues: {
       email: '',
+      username: '',
       name: '',
       password: '',
       terms: true,
@@ -28,6 +29,10 @@ export function AuthenticationForm(props: PaperProps) {
 
     validate: {
       email: (val) => (/^\S+@\S+$/.test(val) ? null : 'Invalid email'),
+      username: (val) =>
+        val.length <= 150
+          ? null
+          : 'Username invalid. Must not exceed 150 characters and be unique.',
       password: (val) => (val.length <= 6 ? 'Password should include at least 6 characters' : null),
     },
   });
@@ -56,6 +61,16 @@ export function AuthenticationForm(props: PaperProps) {
               radius="md"
             />
           )}
+
+          <TextInput
+            required
+            label="Username"
+            placeholder="Your Username"
+            value={form.values.username}
+            onChange={(event) => form.setFieldValue('username', event.currentTarget.value)}
+            error={form.errors.email && 'Invalid username'}
+            radius="md"
+          />
 
           <TextInput
             required
@@ -92,7 +107,7 @@ export function AuthenticationForm(props: PaperProps) {
               ? 'Already have an account? Login'
               : "Don't have an account? Register"}
           </Anchor>
-          <Button type="submit" radius="xl">
+          <Button type="submit" color="green" radius="xl">
             {upperFirst(type)}
           </Button>
         </Group>
