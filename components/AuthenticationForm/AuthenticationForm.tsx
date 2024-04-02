@@ -13,11 +13,31 @@ import {
   Anchor,
   Stack,
 } from '@mantine/core';
+import { showNotification } from '@mantine/notifications';
+import { getCsrfToken, useSession } from 'next-auth/react';
+import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+import router from 'next/router';
 import { GoogleButton } from './GoogleButton';
-import { TwitterButton } from './TwitterButton';
 
-export function AuthenticationForm(props: PaperProps) {
+interface AuthenticationFormProps {
+  username: string;
+  password: string;
+}
+
+export function AuthenticationForm(
+  props: PaperProps,
+  { csrfToken }: InferGetServerSidePropsType<typeof getServerSideProps>
+) {
   const [type, toggle] = useToggle(['login', 'register']);
+  const { data: session } = useSession();
+
+  // If the user is authenticated redirect to `/profile`
+  if (session) {
+    router.push('/profile');
+    // eslint-disable-next-line consistent-return
+    return;
+  }
+
   const form = useForm({
     initialValues: {
       email: '',
@@ -28,7 +48,7 @@ export function AuthenticationForm(props: PaperProps) {
     },
 
     validate: {
-      email: (val) => (/^\S+@\S+$/.test(val) ? null : 'Invalid email'),
+      // email: (val) => (/^\S+@\S+$/.test(val) ? null : 'Invalid email'),
       username: (val) =>
         val.length <= 150
           ? null
@@ -37,6 +57,39 @@ export function AuthenticationForm(props: PaperProps) {
     },
   });
 
+  const handleSubmit = async (values: AuthenticationFormProps) => {
+    await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/login/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(values),
+    })
+      .then((response) => {
+        if (response.status >= 400 && response.status < 600) {
+          showNotification({
+            title: 'Error Signing In',
+            color: 'red',
+            message: 'Sorry, there was an error submitting your request.',
+          });
+          return response.json();
+        }
+        showNotification({
+          title: 'Logged In!',
+          color: 'green',
+          message: `You are now logged in as {response}.`,
+        });
+        router.push('/profile');
+        return response.json();
+      })
+      .catch((error) => {
+        if (error !== null) {
+          null;
+        }
+      });
+  };
+
+  // eslint-disable-next-line consistent-return
   return (
     <Paper radius="md" p="xl" withBorder {...props}>
       <Text size="lg" fw={500}>
@@ -45,13 +98,13 @@ export function AuthenticationForm(props: PaperProps) {
 
       <Group grow mb="md" mt="md">
         <GoogleButton radius="xl">Google</GoogleButton>
-        <TwitterButton radius="xl">Twitter</TwitterButton>
       </Group>
 
       <Divider label="Or continue with email" labelPosition="center" my="lg" />
 
-      <form onSubmit={form.onSubmit(() => {})}>
+      <form onSubmit={form.onSubmit(() => handleSubmit)}>
         <Stack>
+          <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
           {type === 'register' && (
             <TextInput
               label="Name"
@@ -73,7 +126,6 @@ export function AuthenticationForm(props: PaperProps) {
           />
 
           <TextInput
-            required
             label="Email"
             placeholder="hello@mantine.dev"
             value={form.values.email}
@@ -114,4 +166,11 @@ export function AuthenticationForm(props: PaperProps) {
       </form>
     </Paper>
   );
+}
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const csrfToken = await getCsrfToken(context);
+  return {
+    props: { csrfToken },
+  };
 }
