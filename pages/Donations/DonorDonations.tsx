@@ -1,7 +1,8 @@
-// donor-donations.tsx
-import { Container, Grid, Skeleton, Title } from '@mantine/core';
+import { Container, Grid, Title } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { useSession } from 'next-auth/react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import DonationsTable from '@/components/DonationsTable/DonationsTable';
 import DonationForm from '@/components/DonationForm/DonationForm';
 import {
@@ -10,11 +11,11 @@ import {
 } from '@/components/DonationForm/DonationFormContext';
 import { DonationFormValues } from '@/components/Interfaces/DonationFormValues';
 import { DonationFormDefaultValues } from '@/components/DonationForm/DonationFormDefaultValues';
+import { child } from './donor-donations';
 
-const child = <Skeleton height={140} radius="md" animate={false} />;
-
-const DonorDonations = () => {
+export const DonorDonations = () => {
   const { data: session } = useSession();
+  const [response, setResponse] = useState('{}');
   // Form Instantiation and Submission Method for CREATE Action
   const form = useDonationForm({
     initialValues: {
@@ -75,9 +76,29 @@ const DonorDonations = () => {
       });
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      if (session !== null) {
+        try {
+          const res = await axios.get(
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${session?.user.pk}`
+          );
+          setResponse(JSON.stringify(res.data));
+          console.log(res.data);
+        } catch (error) {
+          if (error instanceof Error) {
+            setResponse(error.message);
+          }
+        }
+      }
+    };
+    fetchData();
+  }, [session]);
+
   return (
     <Container my="md">
       <Grid>
+        <Grid.Col span={{ base: 12, xs: 12 }}>{response}</Grid.Col>
         <Grid.Col span={{ base: 12, xs: 12 }}>
           <Title order={2}>My Donations</Title>
         </Grid.Col>
@@ -101,4 +122,3 @@ const DonorDonations = () => {
     </Container>
   );
 };
-export default DonorDonations;

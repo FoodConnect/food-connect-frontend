@@ -15,6 +15,7 @@ export default function Home() {
         headers: useToken ? { Authorization: `Bearer ${session?.access_token}` } : {},
       });
       setResponse(JSON.stringify(res.data));
+      console.log(res.data);
     } catch (error) {
       if (error instanceof Error) {
         setResponse(error.message);
