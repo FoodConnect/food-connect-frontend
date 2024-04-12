@@ -12,8 +12,16 @@ export interface DonationData {
   description?: string;
   is_available?: boolean;
   image_data?: string;
-  donor?: number;
   created_at?: string;
+  donor?: {
+    id?: number;
+    business_name?: string;
+    city?: string;
+    email?: string;
+    image_data?: string;
+    phone_number?: string;
+    state?: String;
+  };
 }
 
 export type DonationsContextType = {

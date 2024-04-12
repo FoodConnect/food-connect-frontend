@@ -132,7 +132,7 @@ export function ApplicationContainer({
     >
       <AppShell.Header>
         <Group h="100%" px="md">
-          <Image src="/favicon.svg" alt="Food Connect Favicon" width={60} height={60} />
+          <Image src="/favicon.svg" alt="Food Connect Favicon" width={60} height={60} priority />
           <Text size="md" ta="center" fw={700}>
             Food Connect
           </Text>

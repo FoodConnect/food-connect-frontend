@@ -176,19 +176,13 @@ import DonationsTableLoading from '../Loading/DonationsTableLoading';
 const DonationsTable = () => {
   const [tableItems, setTableItems] = useState<DonationData[]>();
   const [loading, setLoading] = useState(true);
-  // Condition for Donor Donation Page filtered donation list
   const { data: session } = useSession();
   const [user, setUser] = useState<UserData>();
   const path = useRouter().asPath;
-  const filterData = (data: DonationData[]) => {
-    let arr = [];
-    if (path === '/Donations/donor-donations') {
-      arr = data.filter((row) => row.donor === session?.user.pk);
-    } else {
-      arr = data;
-    }
-    return arr;
-  };
+
+  // Condition for Donor Donation Page filtered donation list
+  const filterData = (data: DonationData[]) =>
+    data.filter((donation) => donation.donor === session?.user.pk);
 
   // *REMOVE* DELAY FUNCTION for Development Presentation of Loading State
   function timeout(delay: number) {
@@ -209,7 +203,9 @@ const DonationsTable = () => {
   useEffect(() => {
     const fetchData = async () => {
       let data = await getData();
-      data = filterData(data);
+      if (path === '/Donations/donor-donations') {
+        data = filterData(data);
+      }
       setTableItems(data);
     };
     // eslint-disable-next-line no-console
@@ -231,24 +227,25 @@ const DonationsTable = () => {
     fetchData2();
   }, [session]);
 
-  const rows = tableItems?.map((row: DonationData) => {
-    const totalInventory = row.remaining_inventory! + row.claimed_inventory!;
-    const remainingInventory = (row.remaining_inventory! / totalInventory) * 100;
-    const claimedInventory = (row.claimed_inventory! / totalInventory) * 100;
+  const donations = tableItems?.map((donation: DonationData) => {
+    const totalInventory = donation.remaining_inventory! + donation.claimed_inventory!;
+    const remainingInventory = (donation.remaining_inventory! / totalInventory) * 100;
+    const claimedInventory = (donation.claimed_inventory! / totalInventory) * 100;
+    const donorName = donation?.donor?.business_name;
 
     return (
-      <Table.Tr key={row.id}>
+      <Table.Tr key={donation.id}>
         <Table.Td>
-          <Anchor component={Link} href={`/Donations/${encodeURIComponent(row.id!)}`} fz="sm">
-            {row.title}
+          <Anchor component={Link} href={`/Donations/${encodeURIComponent(donation.id!)}`} fz="sm">
+            {donation.title}
           </Anchor>
         </Table.Td>
         <Table.Td>
-          <DateFormat dateString={row.pick_up_deadline} />
+          <DateFormat dateString={donation.pick_up_deadline} />
         </Table.Td>
         <Table.Td>
           <Anchor component={Link} href="/" fz="sm">
-            {user?.business_name!}
+            {donorName}
           </Anchor>
         </Table.Td>
         <Table.Td>{Intl.NumberFormat().format(totalInventory)}</Table.Td>
@@ -292,7 +289,7 @@ const DonationsTable = () => {
                 <Table.Th>Inventory Claimed</Table.Th>
               </Table.Tr>
             </Table.Thead>
-            <Table.Tbody>{rows}</Table.Tbody>
+            <Table.Tbody>{donations}</Table.Tbody>
           </Table>
         </Table.ScrollContainer>
       )}
