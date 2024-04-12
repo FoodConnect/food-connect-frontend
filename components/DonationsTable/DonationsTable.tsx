@@ -3,8 +3,6 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
-import axios from 'axios';
-import { UserData } from '@/components/Interfaces/UserData';
 import classes from './DonationsTable.module.css';
 import DateFormat from '../DateFormat';
 import { DonationData } from '@/components/Interfaces/DonationData';
@@ -177,7 +175,6 @@ const DonationsTable = () => {
   const [tableItems, setTableItems] = useState<DonationData[]>();
   const [loading, setLoading] = useState(true);
   const { data: session } = useSession();
-  const [user, setUser] = useState<UserData>();
   const path = useRouter().asPath;
 
   // Condition for Donor Donation Page filtered donation list
@@ -202,30 +199,19 @@ const DonationsTable = () => {
   }
   useEffect(() => {
     const fetchData = async () => {
-      let data = await getData();
-      if (path === '/Donations/donor-donations') {
-        data = filterData(data);
-      }
-      setTableItems(data);
-    };
-    // eslint-disable-next-line no-console
-    fetchData().catch(console.error);
-    const fetchData2 = async () => {
-      if (session !== null) {
-        try {
-          const res = await axios.get(
-            `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${session?.user.pk}`
-          );
-          setUser(res.data);
-        } catch (error) {
-          if (error instanceof Error) {
-            console.log(error);
-          }
+      try {
+        let data = await getData();
+        if (path === '/Donations/donor-donations') {
+          data = filterData(data);
         }
+        setTableItems(data);
+      } catch (error) {
+        console.warn(error);
       }
     };
-    fetchData2();
-  }, [session]);
+
+    fetchData();
+  }, []);
 
   const donations = tableItems?.map((donation: DonationData) => {
     const totalInventory = donation.remaining_inventory! + donation.claimed_inventory!;
