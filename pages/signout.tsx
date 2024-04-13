@@ -1,7 +1,6 @@
-import { signIn, useSession } from 'next-auth/react';
-import { Box, Button, Text, Stack, Loader } from '@mantine/core';
+import { signOut, useSession } from 'next-auth/react';
+import { Button, Loader, Group, Paper, Divider, Center, Flex } from '@mantine/core';
 import { useRouter } from 'next/router';
-import { AuthenticationForm } from '@/components/AuthenticationForm/AuthenticationForm';
 
 export default function SignOut() {
   const router = useRouter();
@@ -9,29 +8,28 @@ export default function SignOut() {
 
   // eslint-disable-next-line eqeqeq
   if (status == 'loading') {
-    return <Loader size="lg" color="shrek" />;
+    return (
+      <Center>
+        <Loader size="xl" color="navy" type="dots" />
+      </Center>
+    );
   }
 
-  // If the user is authenticated redirect to `/profile`
-  if (session) {
-    router.push('profile');
-    // eslint-disable-next-line consistent-return
-    return;
+  if (!session) {
+    router.push('/signin');
   }
 
   // Redirect to Sign Up Page
   return (
-    <Box m={8}>
-      <Stack>
-        <Text>You are not authenticated.</Text>
-        <Button color="green" onClick={() => signIn(undefined, { callbackUrl: '/profile' })}>
-          Sign in
-        </Button>
-        <Button color="green" onClick={() => signIn(undefined, { callbackUrl: '/profile' })}>
-          Sign in
-        </Button>
-      </Stack>
-      <AuthenticationForm />
-    </Box>
+    <Flex justify="center" align="center" direction="column">
+      <Paper radius="md" p="xl" withBorder shadow="sm">
+        <Divider label="Click the button to sign out" labelPosition="center" my="lg" />
+        <Group justify="center" mt="xl">
+          <Button color="green" onClick={() => signOut(undefined)}>
+            Sign out
+          </Button>
+        </Group>
+      </Paper>
+    </Flex>
   );
 }

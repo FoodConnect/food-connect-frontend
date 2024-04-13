@@ -37,7 +37,7 @@ export default function Home() {
         <Stack>
           <Text>PK: {session.user.pk}</Text>
           <Text>Username: {session.user.username}</Text>
-          <Text>Email: {session.user.email || 'Not provided'}</Text>
+          <Text>Role: {session.user.role}</Text>
           <Code>{response}</Code>
         </Stack>
         <Stack justify="center" mt={4}>

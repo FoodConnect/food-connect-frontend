@@ -30,7 +30,7 @@ export function AuthenticationForm() {
 
   // If the user is authenticated redirect to `/profile`
   if (session) {
-    router.push('/profile');
+    router.push('/');
     // eslint-disable-next-line consistent-return
     return;
   }

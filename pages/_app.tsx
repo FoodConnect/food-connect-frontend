@@ -11,7 +11,6 @@ import { theme } from '../theme';
 import { ApplicationContainer } from '@/components/ApplicationContainer';
 
 // Dummy User ID and Role for feaux authorization
-const dummyUser = { id: 2, role: 'donor' };
 
 export default function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
@@ -27,8 +26,8 @@ export default function App({ Component, pageProps: { session, ...pageProps } }:
             />
             <link rel="shortcut icon" href="/favicon.svg" />
           </Head>
-          <ApplicationContainer dummyUser={dummyUser}>
-            <Component {...pageProps} dummyUser={dummyUser} />
+          <ApplicationContainer>
+            <Component {...pageProps} />
           </ApplicationContainer>
         </ModalsProvider>
       </MantineProvider>

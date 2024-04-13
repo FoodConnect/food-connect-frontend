@@ -11,6 +11,7 @@ import {
   IconLayoutSidebarLeftCollapse,
   IconLayoutSidebarLeftExpand,
   IconLogin,
+  IconLogout,
   IconMap2,
   IconSearch,
   IconShoppingCart,
@@ -19,17 +20,14 @@ import {
 } from '@tabler/icons-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useSession } from 'next-auth/react';
 import classes from './FooterCentered.module.css';
+import { render } from '@/test-utils';
 
 // REMINDER!!! Remove 'cdn.iconscout.com' from next.config.js
 
-export function ApplicationContainer({
-  children,
-  dummyUser,
-}: {
-  children: React.ReactNode;
-  dummyUser: { id: number; role: string };
-}) {
+export function ApplicationContainer({ children }: { children: React.ReactNode }) {
+  const { data: session } = useSession();
   const [opened, { toggle }] = useDisclosure();
   // Footer Link Features and Map Function
   const links = [
@@ -56,13 +54,27 @@ export function ApplicationContainer({
 
   // Navbar Link Features and Map Function
   const checkUserType = () => {
-    if (dummyUser.role === 'donor') {
+    if (session?.user.role === 'donor') {
       return '/Donations/donor-donations';
     }
-    if (dummyUser.role === 'charity') {
+    if (session?.user.role === 'charity') {
       return '/Donations/charity-donations';
     }
     return '/';
+  };
+  const renderSignInOrOut = () => {
+    if (!session) {
+      return {
+        icon: <IconLogin size="1.3rem" stroke={1.5} />,
+        href: '/signin',
+        label: 'Sign In',
+      };
+    }
+    return {
+      icon: <IconLogout size="1.3rem" stroke={1.5} />,
+      href: '/signout',
+      label: 'Sign Out',
+    };
   };
   const navLinks: any[] = [
     {
@@ -101,9 +113,7 @@ export function ApplicationContainer({
       label: 'Cart',
     },
     {
-      icon: <IconLogin size="1.3rem" stroke={1.5} />,
-      href: '/signin',
-      label: 'Sign In',
+      ...renderSignInOrOut(),
     },
   ];
   const navItems = navLinks.map((navLink) => (
