@@ -54,40 +54,6 @@ export function AuthenticationForm() {
     },
   });
 
-  // const handleSubmit = async (values: AuthenticationFormProps) => {
-  //   console.log('SUBMITTED');
-
-  //   await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/login/`, {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify(values),
-  //   })
-  //     .then((response) => {
-  //       if (response.status >= 400 && response.status < 600) {
-  //         showNotification({
-  //           title: 'Error Logging In',
-  //           color: 'red',
-  //           message: 'Sorry, there was an error submitting your request.',
-  //         });
-  //         return response.json();
-  //       }
-  //       showNotification({
-  //         title: 'Logged In!',
-  //         color: 'green',
-  //         message: 'You are now logged in as {response}.',
-  //       });
-  //       router.push('/profile');
-  //       return response.json();
-  //     })
-  //     .catch((error) => {
-  //       if (error !== null) {
-  //         null;
-  //       }
-  //     });
-  // };
-
   const handleSubmit = async (values: AuthenticationFormProps) => {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/login/`, {
@@ -155,13 +121,23 @@ export function AuthenticationForm() {
         <Stack>
           <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
           {type === 'register' && (
-            <TextInput
-              label="Name"
-              placeholder="Your name"
-              value={form.values.name}
-              onChange={(event) => form.setFieldValue('name', event.currentTarget.value)}
-              radius="md"
-            />
+            <>
+              <TextInput
+                label="Name"
+                placeholder="Your name"
+                value={form.values.name}
+                onChange={(event) => form.setFieldValue('name', event.currentTarget.value)}
+                radius="md"
+              />
+              <TextInput
+                label="Email"
+                placeholder="hello@foodconnect.com"
+                value={form.values.email}
+                onChange={(event) => form.setFieldValue('email', event.currentTarget.value)}
+                error={form.errors.email && 'Invalid email'}
+                radius="md"
+              />
+            </>
           )}
 
           <TextInput
@@ -173,15 +149,6 @@ export function AuthenticationForm() {
             error={form.errors.email && 'Invalid username'}
             radius="md"
           />
-
-          {/* <TextInput
-            label="Email"
-            placeholder="hello@foodconnect.com"
-            value={form.values.email}
-            onChange={(event) => form.setFieldValue('email', event.currentTarget.value)}
-            error={form.errors.email && 'Invalid email'}
-            radius="md"
-          /> */}
 
           <PasswordInput
             required

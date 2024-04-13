@@ -1,6 +1,7 @@
 import { signOut, useSession } from 'next-auth/react';
 import { Button, Loader, Group, Paper, Divider, Center, Flex } from '@mantine/core';
 import { useRouter } from 'next/router';
+import { showNotification } from '@mantine/notifications';
 
 export default function SignOut() {
   const router = useRouter();
@@ -16,6 +17,11 @@ export default function SignOut() {
   }
 
   if (!session) {
+    showNotification({
+      title: 'Signed Out!',
+      color: 'green',
+      message: 'You are now signed out.',
+    });
     router.push('/signin');
   }
 

@@ -1,5 +1,5 @@
-import { signIn, signOut, useSession } from 'next-auth/react';
-import { Box, Button, Text, Stack, Loader, Center } from '@mantine/core';
+import { useSession } from 'next-auth/react';
+import { Box, Loader, Center } from '@mantine/core';
 import { useRouter } from 'next/router';
 import { AuthenticationForm } from '@/components/AuthenticationForm/AuthenticationForm';
 
@@ -27,15 +27,6 @@ export default function SignIn() {
   // Redirect to Sign Up Page
   return (
     <Box m={8}>
-      <Stack>
-        <Text>You are not authenticated.</Text>
-        <Button color="green" onClick={() => signIn(undefined, { callbackUrl: '/' })}>
-          Sign in
-        </Button>
-        <Button color="green" onClick={() => signOut(undefined)}>
-          Sign out
-        </Button>
-      </Stack>
       <AuthenticationForm />
     </Box>
   );

@@ -22,7 +22,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import classes from './FooterCentered.module.css';
-import { render } from '@/test-utils';
 
 // REMINDER!!! Remove 'cdn.iconscout.com' from next.config.js
 
