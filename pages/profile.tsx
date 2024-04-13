@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { signOut, useSession } from 'next-auth/react';
-import { Box, Button, Code, Loader, Text, Stack } from '@mantine/core';
+import { Box, Button, Code, Loader, Text, Stack, Center } from '@mantine/core';
 import axios from 'axios';
 
 export default function Home() {
@@ -24,7 +24,11 @@ export default function Home() {
   };
 
   if (status === 'loading') {
-    return <Loader color="teal" size="lg" type="dots" />;
+    return (
+      <Center>
+        <Loader size="xl" color="navy" type="dots" />
+      </Center>
+    );
   }
 
   if (session) {

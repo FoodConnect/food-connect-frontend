@@ -46,7 +46,7 @@ export const authOptions = {
     }),
   ],
   pages: {
-    signIn: '/signup',
+    signIn: '/signin',
     signOut: '/signout',
     newUser: '/signup', // New users will be directed here on first sign in (leave the property out if not of interest)
   },

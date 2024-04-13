@@ -9,7 +9,7 @@ export default function SignOut() {
 
   // eslint-disable-next-line eqeqeq
   if (status == 'loading') {
-    return <Loader size="lg" />;
+    return <Loader size="lg" color="shrek" />;
   }
 
   // If the user is authenticated redirect to `/profile`

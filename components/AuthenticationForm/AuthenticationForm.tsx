@@ -13,7 +13,7 @@ import {
   Stack,
 } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
-import { getCsrfToken, useSession } from 'next-auth/react';
+import { getCsrfToken, signIn, useSession } from 'next-auth/react';
 import router from 'next/router';
 import { useEffect, useState } from 'react';
 import { GoogleButton } from './GoogleButton';
@@ -24,7 +24,7 @@ interface AuthenticationFormProps {
 }
 
 export function AuthenticationForm() {
-  const [type, toggle] = useToggle(['login', 'register']);
+  const [type, toggle] = useToggle(['sign in', 'register']);
   const { data: session } = useSession();
   const [csrfToken, setCsrfToken] = useState('');
 
@@ -54,40 +54,78 @@ export function AuthenticationForm() {
     },
   });
 
+  // const handleSubmit = async (values: AuthenticationFormProps) => {
+  //   console.log('SUBMITTED');
+
+  //   await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/login/`, {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify(values),
+  //   })
+  //     .then((response) => {
+  //       if (response.status >= 400 && response.status < 600) {
+  //         showNotification({
+  //           title: 'Error Logging In',
+  //           color: 'red',
+  //           message: 'Sorry, there was an error submitting your request.',
+  //         });
+  //         return response.json();
+  //       }
+  //       showNotification({
+  //         title: 'Logged In!',
+  //         color: 'green',
+  //         message: 'You are now logged in as {response}.',
+  //       });
+  //       router.push('/profile');
+  //       return response.json();
+  //     })
+  //     .catch((error) => {
+  //       if (error !== null) {
+  //         null;
+  //       }
+  //     });
+  // };
+
   const handleSubmit = async (values: AuthenticationFormProps) => {
-    console.log('SUBMITTED');
-
-    await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/login/`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(values),
-    })
-      .then((response) => {
-        if (response.status >= 400 && response.status < 600) {
-          showNotification({
-            title: 'Error Logging In',
-            color: 'red',
-            message: 'Sorry, there was an error submitting your request.',
-          });
-          return response.json();
-        }
-        showNotification({
-          title: 'Logged In!',
-          color: 'green',
-          message: 'You are now logged in as {response}.',
-        });
-        router.push('/profile');
-        return response.json();
-      })
-      .catch((error) => {
-        if (error !== null) {
-          null;
-        }
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/login/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
       });
-  };
+      if (response.status >= 400 && response.status < 600) {
+        showNotification({
+          title: 'Error Signing In',
+          color: 'red',
+          message: 'Sorry, there was an error submitting your request.',
+        });
+        return;
+      }
+      showNotification({
+        title: 'Signed In!',
+        color: 'green',
+        message: 'You are now signed in.',
+      });
 
+      // Authentication successful, sign in the user
+      await signIn('credentials', {
+        username: values.username,
+        password: values.password,
+        callbackUrl: '/profile', // Redirect to the profile page after successful login
+      });
+    } catch (error) {
+      console.error('Error logging in:', error);
+      showNotification({
+        title: 'Error Logging In',
+        color: 'red',
+        message: 'Sorry, there was an error logging in.',
+      });
+    }
+  };
   useEffect(() => {
     const fetchCsrfToken = async () => {
       const token = await getCsrfToken();
@@ -113,7 +151,7 @@ export function AuthenticationForm() {
 
       <Divider label="Or continue with username" labelPosition="center" my="lg" />
 
-      <form onSubmit={form.onSubmit(() => handleSubmit)}>
+      <form onSubmit={form.onSubmit(handleSubmit)}>
         <Stack>
           <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
           {type === 'register' && (
@@ -136,14 +174,14 @@ export function AuthenticationForm() {
             radius="md"
           />
 
-          <TextInput
+          {/* <TextInput
             label="Email"
             placeholder="hello@foodconnect.com"
             value={form.values.email}
             onChange={(event) => form.setFieldValue('email', event.currentTarget.value)}
             error={form.errors.email && 'Invalid email'}
             radius="md"
-          />
+          /> */}
 
           <PasswordInput
             required
