@@ -19,7 +19,7 @@ export default function SignOut() {
   if (!session) {
     showNotification({
       title: 'Signed Out!',
-      color: 'green',
+      color: 'teal',
       message: 'You are now signed out.',
     });
     router.push('/signin');

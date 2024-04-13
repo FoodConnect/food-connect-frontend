@@ -18,7 +18,6 @@ export default function SignIn() {
 
   // If the user is authenticated redirect to `/profile`
   if (session) {
-    console.log('SESSION');
     router.push('/');
     // eslint-disable-next-line consistent-return
     return;
