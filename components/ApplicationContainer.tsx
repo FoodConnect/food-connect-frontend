@@ -102,8 +102,8 @@ export function ApplicationContainer({
     },
     {
       icon: <IconLogin size="1.3rem" stroke={1.5} />,
-      href: '/login',
-      label: 'Log In',
+      href: '/signin',
+      label: 'Sign In',
     },
   ];
   const navItems = navLinks.map((navLink) => (

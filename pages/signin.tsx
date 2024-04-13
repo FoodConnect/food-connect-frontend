@@ -1,8 +1,9 @@
-import { signIn, useSession } from 'next-auth/react';
+import { providers, signIn, getSession, csrfToken, useSession } from 'next-auth/react';
 import { Box, Button, Text, Stack, Loader } from '@mantine/core';
 import { useRouter } from 'next/router';
+import { AuthenticationForm } from '@/components/AuthenticationForm/AuthenticationForm';
 
-export default function Login() {
+export default function SignIn() {
   const router = useRouter();
   const { data: session, status } = useSession();
 
@@ -17,6 +18,8 @@ export default function Login() {
     // eslint-disable-next-line consistent-return
     return;
   }
+
+  // Redirect to Sign Up Page
   return (
     <Box m={8}>
       <Stack>
@@ -24,7 +27,11 @@ export default function Login() {
         <Button color="green" onClick={() => signIn(undefined, { callbackUrl: '/profile' })}>
           Sign in
         </Button>
+        <Button color="green" onClick={() => signIn(undefined, { callbackUrl: '/profile' })}>
+          Sign in
+        </Button>
       </Stack>
+      <AuthenticationForm />
     </Box>
   );
 }

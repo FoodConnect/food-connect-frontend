@@ -6,7 +6,6 @@ import {
   Text,
   Paper,
   Group,
-  PaperProps,
   Button,
   Divider,
   Checkbox,
@@ -15,8 +14,8 @@ import {
 } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { getCsrfToken, useSession } from 'next-auth/react';
-import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import router from 'next/router';
+import { useEffect, useState } from 'react';
 import { GoogleButton } from './GoogleButton';
 
 interface AuthenticationFormProps {
@@ -24,12 +23,10 @@ interface AuthenticationFormProps {
   password: string;
 }
 
-export function AuthenticationForm(
-  props: PaperProps,
-  { csrfToken }: InferGetServerSidePropsType<typeof getServerSideProps>
-) {
+export function AuthenticationForm() {
   const [type, toggle] = useToggle(['login', 'register']);
   const { data: session } = useSession();
+  const [csrfToken, setCsrfToken] = useState('');
 
   // If the user is authenticated redirect to `/profile`
   if (session) {
@@ -79,7 +76,7 @@ export function AuthenticationForm(
         showNotification({
           title: 'Logged In!',
           color: 'green',
-          message: `You are now logged in as {response}.`,
+          message: 'You are now logged in as {response}.',
         });
         router.push('/profile');
         return response.json();
@@ -91,9 +88,21 @@ export function AuthenticationForm(
       });
   };
 
+  useEffect(() => {
+    const fetchCsrfToken = async () => {
+      const token = await getCsrfToken();
+      if (token != null) {
+        setCsrfToken(token.toString());
+      }
+      return token;
+    };
+
+    fetchCsrfToken();
+  }, []);
+
   // eslint-disable-next-line consistent-return
   return (
-    <Paper radius="md" p="xl" withBorder {...props}>
+    <Paper radius="md" p="xl" withBorder>
       <Text size="lg" fw={500}>
         {type} with
       </Text>
@@ -129,7 +138,7 @@ export function AuthenticationForm(
 
           <TextInput
             label="Email"
-            placeholder="hello@mantine.dev"
+            placeholder="hello@foodconnect.com"
             value={form.values.email}
             onChange={(event) => form.setFieldValue('email', event.currentTarget.value)}
             error={form.errors.email && 'Invalid email'}
@@ -168,11 +177,4 @@ export function AuthenticationForm(
       </form>
     </Paper>
   );
-}
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const csrfToken = await getCsrfToken(context);
-  return {
-    props: { csrfToken },
-  };
 }

@@ -2,7 +2,7 @@ import NextAuth from 'next-auth/next';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import axios from 'axios';
 
-const BACKEND_ACCESS_TOKEN_LIFETIME = 45 * 60;
+const BACKEND_ACCESS_TOKEN_LIFETIME = 180 * 60;
 const BACKEND_REFRESH_TOKEN_LIFETIME = 6 * 24 * 60 * 60;
 
 const getCurrentEpochTime = () => Math.floor(new Date().getTime() / 1000);
@@ -45,6 +45,11 @@ export const authOptions = {
       },
     }),
   ],
+  pages: {
+    signIn: '/signup',
+    signOut: '/signout',
+    newUser: '/signup', // New users will be directed here on first sign in (leave the property out if not of interest)
+  },
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
       if (!SIGN_IN_PROVIDERS.includes(account.provider)) return false;

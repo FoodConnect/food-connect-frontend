@@ -206,7 +206,7 @@ const DonationsTable = () => {
         }
         setTableItems(data);
       } catch (error) {
-        console.warn(error);
+        console.log(error);
       }
     };
 
