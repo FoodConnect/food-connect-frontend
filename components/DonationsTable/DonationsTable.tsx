@@ -178,8 +178,12 @@ const DonationsTable = () => {
   const path = useRouter().asPath;
 
   // Condition for Donor Donation Page filtered donation list
-  const filterData = (data: DonationData[]) =>
-    data.filter((donation) => donation.donor === session?.user.pk);
+  const filterData = (data: DonationData[]) => {
+    if (path === '/Donations/donor-donations') {
+      return data.filter((donation) => donation?.donor?.id === session?.user.pk);
+    }
+    return data;
+  };
 
   // *REMOVE* DELAY FUNCTION for Development Presentation of Loading State
   function timeout(delay: number) {
@@ -200,10 +204,9 @@ const DonationsTable = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        let data = await getData();
-        if (path === '/Donations/donor-donations') {
-          data = filterData(data);
-        }
+        const res = await getData();
+        const data = filterData(res);
+        console.log(res);
         setTableItems(data);
       } catch (error) {
         console.log(error);

@@ -15,6 +15,7 @@ const child = <Skeleton height={140} radius="md" animate={false} />;
 
 const DonorDonations = () => {
   const { data: session } = useSession();
+  const donorId = session?.user.pk.toString();
   // Form Instantiation and Submission Method for CREATE Action
   const form = useDonationForm({
     initialValues: {
@@ -30,7 +31,7 @@ const DonorDonations = () => {
       state: '',
       zipcode: '',
       is_available: true,
-      donor: session?.user.pk!,
+      donor: donorId!,
     },
     validate: {
       title: (value) =>
@@ -43,36 +44,42 @@ const DonorDonations = () => {
   });
   // Form Submission Method
   const handleSubmit = async (values: DonationFormValues) => {
-    await fetch('http://localhost:8080/donations/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(values),
-    })
-      .then((response) => {
-        if (response.status >= 400 && response.status < 600) {
+    console.log('DONOR ID:', donorId);
+    console.log('VALUES:', values);
+    if (session) {
+      await fetch('http://localhost:8080/donations/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
+      })
+        .then((response) => {
+          if (response.status >= 400 && response.status < 600) {
+            showNotification({
+              title: 'Error Submitting',
+              color: 'red',
+              message:
+                'Sorry, there was an error submitting your request. Be sure to select a date before submmitting.',
+            });
+            return response.json();
+          }
+          form.setValues(DonationFormDefaultValues);
           showNotification({
-            title: 'Error Submitting',
-            color: 'red',
-            message:
-              'Sorry, there was an error submitting your request. Be sure to select a date before submmitting.',
+            title: 'Success Submitting',
+            color: 'green',
+            message: 'Your request has been successfully submitted.',
           });
           return response.json();
-        }
-        form.setValues(DonationFormDefaultValues);
-        showNotification({
-          title: 'Success Submitting',
-          color: 'green',
-          message: 'Your request has been successfully submitted.',
+        })
+        .catch((error) => {
+          if (error !== null) {
+            null;
+          }
         });
-        return response.json();
-      })
-      .catch((error) => {
-        if (error !== null) {
-          null;
-        }
-      });
+    } else {
+      console.log('Please sign in.');
+    }
   };
 
   return (
@@ -90,6 +97,7 @@ const DonorDonations = () => {
         <Grid.Col span={{ base: 12, xs: 12 }}>
           <DonationFormProvider form={form}>
             <form onSubmit={form.onSubmit(handleSubmit)}>
+              <input name="donor" type="hidden" defaultValue={donorId} />
               <DonationForm />
             </form>
           </DonationFormProvider>

@@ -7,6 +7,7 @@ import {
   Grid,
   Group,
   Image,
+  Paper,
   ScrollArea,
   Text,
   Title,
@@ -198,7 +199,7 @@ const Donation = () => {
           <Grid>
             <Grid.Col span={{ base: 12, xs: 12 }}>
               <GradientHeaderImage category="produce" />
-              <Card
+              <Paper
                 style={{ zIndex: 2 }}
                 pos="relative"
                 mt={-80}
@@ -260,7 +261,7 @@ const Donation = () => {
                     </Grid.Col>
                   </Grid>
                 )}
-              </Card>
+              </Paper>
             </Grid.Col>
             <Grid.Col span={{ base: 12, xs: 12 }}>
               <Card h={140} radius="md" bg="teal.2" />

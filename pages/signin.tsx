@@ -1,5 +1,5 @@
 import { useSession } from 'next-auth/react';
-import { Box, Loader, Center } from '@mantine/core';
+import { Box, Loader, Center, Grid } from '@mantine/core';
 import { useRouter } from 'next/router';
 import { AuthenticationForm } from '@/components/AuthenticationForm/AuthenticationForm';
 
@@ -25,8 +25,10 @@ export default function SignIn() {
 
   // Redirect to Sign Up Page
   return (
-    <Box m={8}>
-      <AuthenticationForm />
-    </Box>
+    <Center>
+      <Box m={8}>
+        <AuthenticationForm />
+      </Box>
+    </Center>
   );
 }

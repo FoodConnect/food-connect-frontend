@@ -10,7 +10,6 @@ import {
   Divider,
   Checkbox,
   Anchor,
-  Stack,
   Grid,
 } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
@@ -90,7 +89,7 @@ export function AuthenticationForm() {
         showNotification({
           title: 'Error Signing In',
           color: 'red',
-          message: 'Sorry, there was an error submitting your request.',
+          message: 'Please verify your username and password and try again.',
         });
         return;
       }
