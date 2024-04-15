@@ -65,7 +65,6 @@ const Donation = () => {
       state: '',
       zipcode: '',
       is_available: donation?.is_available!,
-      donor: session?.user.pk!,
     },
     validate: {
       title: (value) =>
@@ -131,6 +130,7 @@ const Donation = () => {
   useEffect(() => {
     if (!id) return;
     setDomLoaded(true);
+    console.log('SESSION', session);
     const fetchData = async () => {
       const data = await getData();
       setDonation(data);
@@ -140,10 +140,10 @@ const Donation = () => {
     };
     // eslint-disable-next-line no-console
     fetchData().catch(console.error);
-  }, [id]);
+  }, [id, session]);
 
   // *REMOVE* Delete Feaux Authorization Check (To be ammended upon official Auth setup)
-  const isAuthorized = () => donation?.donor === session?.user.pk;
+  const isAuthorized = () => donation?.donor?.id === session?.user.pk;
 
   // API Request to Delete Donation
   async function handleDeleteDonation() {
