@@ -21,6 +21,7 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
+import { useEffect } from 'react';
 import classes from './FooterCentered.module.css';
 
 // REMINDER!!! Remove 'cdn.iconscout.com' from next.config.js
@@ -61,6 +62,16 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
     }
     return '/no-auth';
   };
+  const renderProfile = () => {
+    if (session) {
+      return {
+        icon: <IconUserCircle size="1.3rem" stroke={1.5} />,
+        href: '/profile',
+        label: 'Profile',
+      };
+    }
+    return null;
+  };
   const renderSignInOrOut = () => {
     if (!session) {
       return {
@@ -92,11 +103,6 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
       label: 'Donations',
     },
     {
-      icon: <IconUserCircle size="1.3rem" stroke={1.5} />,
-      href: '/profile',
-      label: 'Profile',
-    },
-    {
       icon: <IconMap2 size="1.3rem" stroke={1.5} />,
       href: '/',
       label: 'Map View',
@@ -111,25 +117,30 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
       href: '/',
       label: 'Cart',
     },
+    renderProfile(),
     {
       ...renderSignInOrOut(),
     },
   ];
-  const navItems = navLinks.map((navLink) => (
-    <NavLink
-      key={navLink.label}
-      component={Link}
-      href={navLink.href}
-      label={navLink.label}
-      color="green"
-      leftSection={navLink.icon}
-      rightSection={<IconChevronRight size="1rem" stroke={1.5} className="mantine-rotate-rtl" />}
-      variant="filled"
-      active
-      onClick={toggle}
-    />
-  ));
+  const navItems = navLinks
+    .filter((item) => item !== null)
+    .map((navLink) => (
+      <NavLink
+        key={navLink.label}
+        component={Link}
+        href={navLink.href}
+        label={navLink.label}
+        color="green"
+        leftSection={navLink.icon}
+        rightSection={<IconChevronRight size="1rem" stroke={1.5} className="mantine-rotate-rtl" />}
+        variant="filled"
+        active
+        onClick={toggle}
+      />
+    ));
   // End Navbar item features and function
+
+  useEffect(() => {}, [session]);
 
   return (
     <AppShell
