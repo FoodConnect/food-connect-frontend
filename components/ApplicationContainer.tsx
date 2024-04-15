@@ -53,7 +53,6 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
 
   // Navbar Link Features and Map Function
   const checkUserType = () => {
-    console.log('SESSION', session?.user);
     if (session?.user.role === 'donor') {
       return '/Donations/donor-donations';
     }
