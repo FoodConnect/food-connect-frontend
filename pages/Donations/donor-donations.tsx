@@ -2,6 +2,7 @@
 import { Container, Grid, Skeleton, Title } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { useSession } from 'next-auth/react';
+import { useEffect } from 'react';
 import DonationsTable from '@/components/DonationsTable/DonationsTable';
 import DonationForm from '@/components/DonationForm/DonationForm';
 import {
@@ -31,7 +32,7 @@ const DonorDonations = () => {
       state: '',
       zipcode: '',
       is_available: true,
-      donor: donorId!,
+      donor_id: donorId!,
     },
     validate: {
       title: (value) =>
@@ -44,8 +45,6 @@ const DonorDonations = () => {
   });
   // Form Submission Method
   const handleSubmit = async (values: DonationFormValues) => {
-    console.log('DONOR ID:', donorId);
-    console.log('VALUES:', values);
     if (session) {
       await fetch('http://localhost:8080/donations/', {
         method: 'POST',
@@ -78,9 +77,15 @@ const DonorDonations = () => {
           }
         });
     } else {
-      console.log('Please sign in.');
+      showNotification({
+        title: 'Error Submitting',
+        color: 'red',
+        message: 'Sorry, there was an error submitting your request. Please Sign In to proceed.',
+      });
     }
   };
+
+  useEffect(() => {}, [session]);
 
   return (
     <Container my="md">

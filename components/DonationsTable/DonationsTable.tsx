@@ -206,7 +206,6 @@ const DonationsTable = () => {
       try {
         const res = await getData();
         const data = filterData(res);
-        console.log(res);
         setTableItems(data);
       } catch (error) {
         console.log(error);
@@ -214,7 +213,7 @@ const DonationsTable = () => {
     };
 
     fetchData();
-  }, []);
+  }, [session]);
 
   const donations = tableItems?.map((donation: DonationData) => {
     const totalInventory = donation.remaining_inventory! + donation.claimed_inventory!;

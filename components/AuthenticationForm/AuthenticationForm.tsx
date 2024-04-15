@@ -13,7 +13,7 @@ import {
   Grid,
 } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
-import { getCsrfToken, signIn } from 'next-auth/react';
+import { getCsrfToken, signIn, useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { GoogleButton } from './GoogleButton';
 
@@ -24,7 +24,19 @@ interface AuthenticationFormProps {
 
 export function AuthenticationForm() {
   const [type, toggle] = useToggle(['sign in', 'register']);
+  const { data: session } = useSession();
   const [csrfToken, setCsrfToken] = useState('');
+  // TODO: Reroute to donations page on sign-in
+  // If the user is authenticated redirect to `/profile`
+  const checkUserType = () => {
+    if (session?.user.role === 'donor') {
+      return '/Donations/donor-donations';
+    }
+    if (session?.user.role === 'charity') {
+      return '/Donations/charity-donations';
+    }
+    return '/';
+  };
 
   const form = useForm({
     initialValues: {
@@ -89,17 +101,19 @@ export function AuthenticationForm() {
         color: 'teal',
         message: 'You are now signed in.',
       });
+      console.log('RESPONSE: ', response);
       // Authentication successful, sign in the user
       await signIn('credentials', {
         username: values.username,
         password: values.password,
-        callbackUrl: '/', // Redirect to the donations page after successful login
+        callbackUrl: await checkUserType(), // Redirect to the donations page after successful login
       });
     } catch (error) {
+      console.error('Error logging in:', error);
       showNotification({
         title: 'Error Logging In',
         color: 'red',
-        message: `Sorry, there was an error logging in.${error}`,
+        message: 'Sorry, there was an error logging in.',
       });
     }
   };
@@ -113,7 +127,7 @@ export function AuthenticationForm() {
     };
 
     fetchCsrfToken();
-  }, []);
+  }, [session]);
 
   return (
     <Paper radius="md" p="xl" withBorder>
