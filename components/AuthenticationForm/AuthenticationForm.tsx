@@ -101,19 +101,16 @@ export function AuthenticationForm() {
         color: 'teal',
         message: 'You are now signed in.',
       });
-      console.log('RESPONSE: ', response);
-      // Authentication successful, sign in the user
       await signIn('credentials', {
         username: values.username,
         password: values.password,
-        callbackUrl: await checkUserType(), // Redirect to the donations page after successful login
+        callbackUrl: await checkUserType(),
       });
     } catch (error) {
-      console.error('Error logging in:', error);
       showNotification({
         title: 'Error Logging In',
         color: 'red',
-        message: 'Sorry, there was an error logging in.',
+        message: `Sorry, there was an error logging in. ${error}`,
       });
     }
   };
