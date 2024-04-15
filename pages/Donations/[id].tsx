@@ -93,7 +93,6 @@ const Donation = () => {
           });
           return response.json();
         }
-        // form.setValues(formResetValues);
         showNotification({
           title: 'Update Successful',
           color: 'green',
@@ -130,7 +129,6 @@ const Donation = () => {
   useEffect(() => {
     if (!id) return;
     setDomLoaded(true);
-    console.log('SESSION', session);
     const fetchData = async () => {
       const data = await getData();
       setDonation(data);
