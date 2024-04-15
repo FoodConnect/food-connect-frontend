@@ -1,8 +1,8 @@
-// donor-donations.tsx
-import { Container, Grid, Skeleton, Title } from '@mantine/core';
+import { Container, Grid, Title } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { useSession } from 'next-auth/react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import DonationsTable from '@/components/DonationsTable/DonationsTable';
 import DonationForm from '@/components/DonationForm/DonationForm';
 import {
@@ -11,12 +11,11 @@ import {
 } from '@/components/DonationForm/DonationFormContext';
 import { DonationFormValues } from '@/components/Interfaces/DonationFormValues';
 import { DonationFormDefaultValues } from '@/components/DonationForm/DonationFormDefaultValues';
+import { child } from './donor-donations';
 
-const child = <Skeleton height={140} radius="md" animate={false} />;
-
-const DonorDonations = () => {
+export const DonorDonations = () => {
   const { data: session } = useSession();
-  const donorId = session?.user.pk.toString();
+  const [response, setResponse] = useState('{}');
   // Form Instantiation and Submission Method for CREATE Action
   const form = useDonationForm({
     initialValues: {
@@ -32,7 +31,7 @@ const DonorDonations = () => {
       state: '',
       zipcode: '',
       is_available: true,
-      donor_id: donorId!,
+      donor: session?.user.pk!,
     },
     validate: {
       title: (value) =>
@@ -45,51 +44,61 @@ const DonorDonations = () => {
   });
   // Form Submission Method
   const handleSubmit = async (values: DonationFormValues) => {
-    if (session) {
-      await fetch('http://localhost:8080/donations/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(values),
-      })
-        .then((response) => {
-          if (response.status >= 400 && response.status < 600) {
-            showNotification({
-              title: 'Error Submitting',
-              color: 'red',
-              message:
-                'Sorry, there was an error submitting your request. Be sure to select a date before submmitting.',
-            });
-            return response.json();
-          }
-          form.setValues(DonationFormDefaultValues);
+    await fetch('http://localhost:8080/donations/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(values),
+    })
+      .then((response) => {
+        if (response.status >= 400 && response.status < 600) {
           showNotification({
-            title: 'Success Submitting',
-            color: 'green',
-            message: 'Your request has been successfully submitted.',
+            title: 'Error Submitting',
+            color: 'red',
+            message:
+              'Sorry, there was an error submitting your request. Be sure to select a date before submmitting.',
           });
           return response.json();
-        })
-        .catch((error) => {
-          if (error !== null) {
-            null;
-          }
+        }
+        form.setValues(DonationFormDefaultValues);
+        showNotification({
+          title: 'Success Submitting',
+          color: 'green',
+          message: 'Your request has been successfully submitted.',
         });
-    } else {
-      showNotification({
-        title: 'Error Submitting',
-        color: 'red',
-        message: 'Sorry, there was an error submitting your request. Please Sign In to proceed.',
+        return response.json();
+      })
+      .catch((error) => {
+        if (error !== null) {
+          null;
+        }
       });
-    }
   };
 
-  useEffect(() => {}, [session]);
+  useEffect(() => {
+    const fetchData = async () => {
+      if (session !== null) {
+        try {
+          const res = await axios.get(
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${session?.user.pk}`
+          );
+          setResponse(JSON.stringify(res.data));
+          console.log(res.data);
+        } catch (error) {
+          if (error instanceof Error) {
+            setResponse(error.message);
+          }
+        }
+      }
+    };
+    fetchData();
+  }, [session]);
 
   return (
     <Container my="md">
       <Grid>
+        <Grid.Col span={{ base: 12, xs: 12 }}>{response}</Grid.Col>
         <Grid.Col span={{ base: 12, xs: 12 }}>
           <Title order={2}>My Donations</Title>
         </Grid.Col>
@@ -102,7 +111,6 @@ const DonorDonations = () => {
         <Grid.Col span={{ base: 12, xs: 12 }}>
           <DonationFormProvider form={form}>
             <form onSubmit={form.onSubmit(handleSubmit)}>
-              <input name="donor" type="hidden" defaultValue={donorId} />
               <DonationForm />
             </form>
           </DonationFormProvider>
@@ -114,4 +122,3 @@ const DonorDonations = () => {
     </Container>
   );
 };
-export default DonorDonations;

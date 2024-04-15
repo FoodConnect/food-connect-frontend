@@ -11,5 +11,5 @@ export interface DonationFormValues {
   state?: string;
   zipcode?: string;
   is_available?: boolean;
-  donor?: number;
+  donor_id?: string;
 }

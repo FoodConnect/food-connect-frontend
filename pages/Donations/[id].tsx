@@ -7,6 +7,7 @@ import {
   Grid,
   Group,
   Image,
+  Paper,
   ScrollArea,
   Text,
   Title,
@@ -17,6 +18,7 @@ import { showNotification } from '@mantine/notifications';
 import { modals } from '@mantine/modals';
 import { useDisclosure, useViewportSize } from '@mantine/hooks';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
+import { useSession } from 'next-auth/react';
 import GradientHeaderImage from '@/components/GradientHeaderImage/GradientHeaderImage';
 import DateFormat from '@/components/DateFormat';
 import StatsSegments from '@/components/StatsSegments/StatsSegments';
@@ -29,15 +31,13 @@ import {
 } from '@/components/DonationForm/DonationFormContext';
 import DonationInfoLoading from '@/components/Loading/DonationInfoLoading';
 
-interface DonationProps {
-  dummyUser: { id: number; role: string };
-}
-const Donation = (props: DonationProps) => {
+const Donation = () => {
   const [domLoaded, setDomLoaded] = useState(false);
   const [loading, setLoading] = useState(true);
   const [donation, setDonation] = useState<DonationData>();
   const router = useRouter();
   const { id }: any = router.query;
+  const { data: session } = useSession();
 
   // Update Donation Drawer Variables
   const [opened, { open, close }] = useDisclosure(false);
@@ -65,7 +65,6 @@ const Donation = (props: DonationProps) => {
       state: '',
       zipcode: '',
       is_available: donation?.is_available!,
-      donor: props.dummyUser.id,
     },
     validate: {
       title: (value) =>
@@ -94,7 +93,6 @@ const Donation = (props: DonationProps) => {
           });
           return response.json();
         }
-        // form.setValues(formResetValues);
         showNotification({
           title: 'Update Successful',
           color: 'green',
@@ -140,10 +138,10 @@ const Donation = (props: DonationProps) => {
     };
     // eslint-disable-next-line no-console
     fetchData().catch(console.error);
-  }, [id]);
+  }, [id, session]);
 
   // *REMOVE* Delete Feaux Authorization Check (To be ammended upon official Auth setup)
-  const isAuthorized = () => donation?.donor === props.dummyUser.id;
+  const isAuthorized = () => donation?.donor?.id === session?.user.pk;
 
   // API Request to Delete Donation
   async function handleDeleteDonation() {
@@ -199,7 +197,7 @@ const Donation = (props: DonationProps) => {
           <Grid>
             <Grid.Col span={{ base: 12, xs: 12 }}>
               <GradientHeaderImage category="produce" />
-              <Card
+              <Paper
                 style={{ zIndex: 2 }}
                 pos="relative"
                 mt={-80}
@@ -261,7 +259,7 @@ const Donation = (props: DonationProps) => {
                     </Grid.Col>
                   </Grid>
                 )}
-              </Card>
+              </Paper>
             </Grid.Col>
             <Grid.Col span={{ base: 12, xs: 12 }}>
               <Card h={140} radius="md" bg="teal.2" />

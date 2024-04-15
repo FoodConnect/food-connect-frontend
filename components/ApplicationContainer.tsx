@@ -10,6 +10,8 @@ import {
   IconLayoutDashboard,
   IconLayoutSidebarLeftCollapse,
   IconLayoutSidebarLeftExpand,
+  IconLogin,
+  IconLogout,
   IconMap2,
   IconSearch,
   IconShoppingCart,
@@ -18,17 +20,14 @@ import {
 } from '@tabler/icons-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useSession } from 'next-auth/react';
+import { useEffect } from 'react';
 import classes from './FooterCentered.module.css';
 
 // REMINDER!!! Remove 'cdn.iconscout.com' from next.config.js
 
-export function ApplicationContainer({
-  children,
-  dummyUser,
-}: {
-  children: React.ReactNode;
-  dummyUser: { id: number; role: string };
-}) {
+export function ApplicationContainer({ children }: { children: React.ReactNode }) {
+  const { data: session } = useSession();
   const [opened, { toggle }] = useDisclosure();
   // Footer Link Features and Map Function
   const links = [
@@ -55,13 +54,37 @@ export function ApplicationContainer({
 
   // Navbar Link Features and Map Function
   const checkUserType = () => {
-    if (dummyUser.role === 'donor') {
+    if (session?.user.role === 'donor') {
       return '/Donations/donor-donations';
     }
-    if (dummyUser.role === 'charity') {
+    if (session?.user.role === 'charity') {
       return '/Donations/charity-donations';
     }
-    return '/';
+    return '/no-auth';
+  };
+  const renderProfile = () => {
+    if (session) {
+      return {
+        icon: <IconUserCircle size="1.3rem" stroke={1.5} />,
+        href: '/profile',
+        label: 'Profile',
+      };
+    }
+    return null;
+  };
+  const renderSignInOrOut = () => {
+    if (!session) {
+      return {
+        icon: <IconLogin size="1.3rem" stroke={1.5} />,
+        href: '/signin',
+        label: 'Sign In',
+      };
+    }
+    return {
+      icon: <IconLogout size="1.3rem" stroke={1.5} />,
+      href: '/signout',
+      label: 'Sign Out',
+    };
   };
   const navLinks: any[] = [
     {
@@ -80,11 +103,6 @@ export function ApplicationContainer({
       label: 'Donations',
     },
     {
-      icon: <IconUserCircle size="1.3rem" stroke={1.5} />,
-      href: '/signup',
-      label: 'Profile',
-    },
-    {
       icon: <IconMap2 size="1.3rem" stroke={1.5} />,
       href: '/',
       label: 'Map View',
@@ -99,22 +117,30 @@ export function ApplicationContainer({
       href: '/',
       label: 'Cart',
     },
+    renderProfile(),
+    {
+      ...renderSignInOrOut(),
+    },
   ];
-  const navItems = navLinks.map((navLink) => (
-    <NavLink
-      key={navLink.label}
-      component={Link}
-      href={navLink.href}
-      label={navLink.label}
-      color="green"
-      leftSection={navLink.icon}
-      rightSection={<IconChevronRight size="1rem" stroke={1.5} className="mantine-rotate-rtl" />}
-      variant="filled"
-      active
-      onClick={toggle}
-    />
-  ));
+  const navItems = navLinks
+    .filter((item) => item !== null)
+    .map((navLink) => (
+      <NavLink
+        key={navLink.label}
+        component={Link}
+        href={navLink.href}
+        label={navLink.label}
+        color="green"
+        leftSection={navLink.icon}
+        rightSection={<IconChevronRight size="1rem" stroke={1.5} className="mantine-rotate-rtl" />}
+        variant="filled"
+        active
+        onClick={toggle}
+      />
+    ));
   // End Navbar item features and function
+
+  useEffect(() => {}, [session]);
 
   return (
     <AppShell
@@ -126,7 +152,7 @@ export function ApplicationContainer({
     >
       <AppShell.Header>
         <Group h="100%" px="md">
-          <Image src="/favicon.svg" alt="Food Connect Favicon" width={60} height={60} />
+          <Image src="/favicon.svg" alt="Food Connect Favicon" width={60} height={60} priority />
           <Text size="md" ta="center" fw={700}>
             Food Connect
           </Text>
