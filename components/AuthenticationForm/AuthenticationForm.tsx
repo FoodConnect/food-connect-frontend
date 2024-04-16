@@ -29,7 +29,7 @@ interface AuthenticationFormProps {
   terms: boolean;
   business_name: string;
   role: string;
-  ein_name: string;
+  ein_number: string;
   image_data: string;
   address: string;
   city: string;
@@ -64,7 +64,7 @@ export function AuthenticationForm() {
       terms: true,
       business_name: '',
       role: '',
-      ein_name: '',
+      ein_number: '',
       image_data: '',
       address: '',
       city: '',
@@ -82,8 +82,6 @@ export function AuthenticationForm() {
       password: (val) => (val.length <= 6 ? 'Password should include at least 6 characters' : null),
       business_name: (val) =>
         val.length > 255 ? 'Business name should not be more than 255 characters' : null,
-      ein_name: (val) =>
-        val.length > 255 ? 'EIN Number should not be more than 255 characters' : null,
       image_data: (val) =>
         val.length > 255 ? 'Image URL should not be more than 255 characters' : null,
       address: (val) =>
@@ -153,6 +151,10 @@ export function AuthenticationForm() {
           color: 'teal',
           message: 'Account has been created.',
         });
+        form.reset();
+        form.setFieldValue('username', values.username);
+        form.setFieldValue('password', values.password);
+        toggle();
       } catch (error) {
         showNotification({
           title: 'Error Registering',
@@ -257,10 +259,10 @@ export function AuthenticationForm() {
                         type="number"
                         gap="xs"
                         placeholder="○"
-                        value={form.values.ein_name}
+                        value={form.values.ein_number}
                         onChange={(value: string) => {
                           if (/^[0-9]*$/.test(value)) {
-                            form.setFieldValue('ein_name', value);
+                            form.setFieldValue('ein_number', value);
                           }
                         }}
                         radius="md"
@@ -268,7 +270,7 @@ export function AuthenticationForm() {
                       {/* <TextInput
       label="EIN Number"
       placeholder="1234567"
-      value={form.values.ein_name}
+      value={form.values.ein_number}
       onChange={(event) => form.setFieldValue('einNumber', event.currentTarget.value)}
       error={form.errors.einNumber && 'Invalid EIN Number'}
       radius="md"
