@@ -173,9 +173,8 @@ export function AuthenticationForm() {
       }
       return token;
     };
-    console.log(form.values);
     fetchCsrfToken();
-  }, [session, form.values]);
+  }, [session]);
 
   return (
     <Container size="xs">
