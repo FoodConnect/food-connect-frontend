@@ -1,6 +1,22 @@
-import { Card, Avatar, Text, Group, Button, Flex, Title, Center } from '@mantine/core';
+import {
+  Card,
+  Avatar,
+  Text,
+  Group,
+  Button,
+  Flex,
+  Title,
+  Center,
+  Image,
+  Drawer,
+} from '@mantine/core';
 import { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
+import { useDisclosure, useViewportSize } from '@mantine/hooks';
+import { showNotification } from '@mantine/notifications';
+import { modals } from '@mantine/modals';
+import { useRouter } from 'next/router';
+import { IconEdit, IconTrash } from '@tabler/icons-react';
 import { UserData } from '@/components/Interfaces/UserData';
 import classes from '@/components/Profile.module.css';
 
@@ -13,6 +29,62 @@ const stats = [
 export default function Profile() {
   const [user, setUser] = useState<UserData>();
   const { data: session } = useSession();
+  const router = useRouter();
+
+  // Update Donation Drawer Variables
+  const [opened, { open, close }] = useDisclosure(false);
+  const { width } = useViewportSize();
+  const setPosition = () => {
+    if (width > 720) {
+      return 'bottom';
+    }
+    return 'right';
+  };
+
+  // Delete Modal and Request for User Account
+  function cancelDeleteDonation() {
+    showNotification({
+      title: 'Cancelled',
+      color: 'teal',
+      message: 'Delete Donation was cancelled.',
+    });
+  }
+  async function handleDeleteDonation() {
+    const response = await fetch(`http://localhost:8080/users/${session?.user.pk!}/`, {
+      method: 'DELETE',
+    });
+    if (!response.ok) {
+      showNotification({
+        title: 'Error Deleting',
+        color: 'red',
+        message: 'Sorry, there was an error deleting your account.',
+      });
+      return response.json();
+    }
+    showNotification({
+      title: 'Deleted',
+      color: 'green',
+      message: 'Your account has been successfully deleted.',
+    });
+    router.push('/signin');
+    return null;
+  }
+  const openDeleteModal = () =>
+    modals.openConfirmModal({
+      title: 'Delete Account',
+      centered: true,
+      overlayProps: { backgroundOpacity: 0.3, blur: 2 },
+      children: (
+        <Text size="sm">
+          Are you sure you want to delete your account? This action is destructive and you will not
+          be able to retreive it again.
+        </Text>
+      ),
+      labels: { confirm: 'Delete Account', cancel: "No don't delete it" },
+      confirmProps: { color: 'red' },
+      onCancel: () => cancelDeleteDonation(),
+      onConfirm: () => handleDeleteDonation(),
+    });
 
   // API Request and useEffect Functions to populate donation profile
   async function getData() {
@@ -26,7 +98,6 @@ export default function Profile() {
   useEffect(() => {
     const fetchData = async () => {
       const data = await getData();
-      console.log(data);
       setUser(data);
     };
     // eslint-disable-next-line no-console
@@ -46,13 +117,9 @@ export default function Profile() {
 
   return (
     <Card withBorder padding="xl" radius="md" className={classes.card}>
-      <Card.Section
-        h={140}
-        style={{
-          backgroundImage:
-            'url(https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80)',
-        }}
-      />
+      <Card.Section>
+        <Image src="/gradient.png" height={140} alt="blue-green gradient" />
+      </Card.Section>
       <Avatar
         src={user?.image_data}
         size={80}
@@ -73,9 +140,19 @@ export default function Profile() {
       </Group>
       <Center>
         <Flex my="lg" direction="column" gap={0}>
-          <Title order={5}>Business Name</Title>
-          <Text c="dimmed">{user?.business_name ? user?.business_name : null}</Text>
+          {user?.role === 'donor' ? (
+            <>
+              <Title order={5}>Business Name</Title>
+              <Text c="dimmed">{user?.business_name}</Text>
+            </>
+          ) : (
+            <>
+              <Title order={5}>Username</Title>
+              <Text c="dimmed">{user?.username}</Text>
+            </>
+          )}
           <Title order={5}>Location</Title>
+          <Text c="dimmed">{user?.address}</Text>
           <Text c="dimmed">
             {user?.city}, {user?.state}
           </Text>
@@ -87,9 +164,39 @@ export default function Profile() {
           <Text c="dimmed">{user?.ein_number}</Text>
         </Flex>
       </Center>
-      <Button fullWidth radius="md" mt="xl" size="md" variant="default">
-        Contact
+      <Button
+        fullWidth
+        radius="md"
+        mt="xl"
+        size="md"
+        variant="default"
+        onClick={open}
+        rightSection={<IconEdit />}
+      >
+        Update Account
       </Button>
+      <Drawer
+        offset={8}
+        radius="md"
+        position={setPosition()}
+        size="lg"
+        opened={opened}
+        onClose={close}
+        title="Update Donation"
+        overlayProps={{ backgroundOpacity: 0.3, blur: 2 }}
+      >
+        {/* <form onSubmit={form.onSubmit(handleSubmit)}>
+            <DonationForm />
+          </form> */}
+        <Button
+          onClick={openDeleteModal}
+          variant="default"
+          color="red"
+          rightSection={<IconTrash />}
+        >
+          Delete Account
+        </Button>
+      </Drawer>
     </Card>
   );
 }
