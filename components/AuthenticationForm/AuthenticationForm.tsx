@@ -12,6 +12,9 @@ import {
   Anchor,
   Grid,
   Container,
+  PinInput,
+  InputLabel,
+  NativeSelect,
 } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { getCsrfToken, signIn, useSession } from 'next-auth/react';
@@ -21,10 +24,23 @@ import { GoogleButton } from './GoogleButton';
 interface AuthenticationFormProps {
   username: string;
   password: string;
+  email: string;
+  name: string;
+  terms: boolean;
+  business_name: string;
+  role: string;
+  ein_name: string;
+  image_data: string;
+  address: string;
+  city: string;
+  state: string;
+  zipcode: string;
+  phone_number: string;
 }
 
 export function AuthenticationForm() {
   const [type, toggle] = useToggle(['sign in', 'register']);
+  const [role, setRole] = useState('');
   const { data: session } = useSession();
   const [csrfToken, setCsrfToken] = useState('');
   // TODO: Reroute to donations page on sign-in
@@ -46,15 +62,15 @@ export function AuthenticationForm() {
       name: '',
       password: '',
       terms: true,
-      businessName: '',
+      business_name: '',
       role: '',
-      einNumber: '',
-      imageData: '',
+      ein_name: '',
+      image_data: '',
       address: '',
       city: '',
       state: '',
       zipcode: '',
-      phoneNumber: '',
+      phone_number: '',
     },
 
     validate: {
@@ -64,18 +80,18 @@ export function AuthenticationForm() {
           ? 'Username invalid. Must not exceed 150 characters and be unique.'
           : null,
       password: (val) => (val.length <= 6 ? 'Password should include at least 6 characters' : null),
-      businessName: (val) =>
+      business_name: (val) =>
         val.length > 255 ? 'Business name should not be more than 255 characters' : null,
-      einNumber: (val) =>
+      ein_name: (val) =>
         val.length > 255 ? 'EIN Number should not be more than 255 characters' : null,
-      imageData: (val) =>
+      image_data: (val) =>
         val.length > 255 ? 'Image URL should not be more than 255 characters' : null,
       address: (val) =>
         val.length > 255 ? 'Address should not be more than 255 characters' : null,
       city: (val) => (val.length > 255 ? 'City should not be more than 255 characters' : null),
       state: (val) => (val.length > 255 ? 'State should not be more than 255 characters' : null),
       zipcode: (val) => (val.length > 255 ? 'Zipcode should not be more than 10 characters' : null),
-      phoneNumber: (val) =>
+      phone_number: (val) =>
         val.length > 255 ? 'Phone number should not be more than 20 characters' : null,
     },
   });
@@ -155,9 +171,9 @@ export function AuthenticationForm() {
       }
       return token;
     };
-
+    console.log(form.values);
     fetchCsrfToken();
-  }, [session]);
+  }, [session, form.values]);
 
   return (
     <Container size="xs">
@@ -171,8 +187,6 @@ export function AuthenticationForm() {
         </Group>
 
         <Divider label="Or continue with credentials" labelPosition="center" my="lg" />
-
-        {/* <form onSubmit={form.onSubmit({type.type === 'sign-in' ? handleSignInSubmit : handleRegisterSubmit})}> */}
         <form onSubmit={form.onSubmit(handleSubmit)}>
           <Grid grow gutter="xl">
             <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
@@ -190,46 +204,78 @@ export function AuthenticationForm() {
                 </Grid.Col>
                 <Grid.Col span={{ base: 12, xs: 6 }}>
                   <TextInput
-                    label="Business Name"
-                    placeholder="Perri Farms"
-                    value={form.values.businessName}
+                    label="Image URL"
+                    placeholder="https://your-image-url.com"
+                    value={form.values.image_data}
                     onChange={(event) =>
-                      form.setFieldValue('businessName', event.currentTarget.value)
+                      form.setFieldValue('image_data', event.currentTarget.value)
                     }
-                    error={form.errors.businessName && 'Invalid business name'}
+                    error={form.errors.image_data && 'Invalid image URL'}
                     radius="md"
                   />
                 </Grid.Col>
-                <Grid.Col span={{ base: 12, xs: 6 }}>
-                  <TextInput
+                <Grid.Col span={{ base: 12, xs: 12 }}>
+                  <NativeSelect
+                    label="Role"
+                    value={form.values.role}
+                    onChange={(event) => {
+                      const selectedRole = event.currentTarget.value;
+                      setRole(selectedRole);
+                      form.setFieldValue('role', selectedRole);
+                    }}
+                    data={['charity', 'donor']}
+                  />
+                  {/* <TextInput
                     label="Role"
                     placeholder="Donor / Charity"
                     value={form.values.role}
                     onChange={(event) => form.setFieldValue('role', event.currentTarget.value)}
                     error={form.errors.role && 'Invalid role'}
                     radius="md"
-                  />
+                  /> */}
                 </Grid.Col>
-                <Grid.Col span={{ base: 12, xs: 6 }}>
-                  <TextInput
-                    label="EIN Number"
-                    placeholder="1234567"
-                    value={form.values.einNumber}
-                    onChange={(event) => form.setFieldValue('einNumber', event.currentTarget.value)}
-                    error={form.errors.einNumber && 'Invalid EIN Number'}
-                    radius="md"
-                  />
-                </Grid.Col>
-                <Grid.Col span={{ base: 12, xs: 6 }}>
-                  <TextInput
-                    label="Image URL"
-                    placeholder="https://your-image-url.com"
-                    value={form.values.imageData}
-                    onChange={(event) => form.setFieldValue('imageData', event.currentTarget.value)}
-                    error={form.errors.imageData && 'Invalid image URL'}
-                    radius="md"
-                  />
-                </Grid.Col>
+                {role === 'donor' ? (
+                  <>
+                    <Grid.Col span={{ base: 12, xs: 6 }}>
+                      <TextInput
+                        label="Business Name"
+                        placeholder="Perri Farms"
+                        value={form.values.business_name}
+                        onChange={(event) =>
+                          form.setFieldValue('business_name', event.currentTarget.value)
+                        }
+                        error={form.errors.business_name && 'Invalid business name'}
+                        radius="md"
+                      />
+                    </Grid.Col>
+                    <Grid.Col span={{ base: 12, xs: 6 }}>
+                      <InputLabel>EIN Number</InputLabel>
+                      <PinInput
+                        length={9}
+                        size="xs"
+                        inputMode="numeric"
+                        type="number"
+                        gap="xs"
+                        placeholder="○"
+                        value={form.values.ein_name}
+                        onChange={(value: string) => {
+                          if (/^[0-9]*$/.test(value)) {
+                            form.setFieldValue('ein_name', value);
+                          }
+                        }}
+                        radius="md"
+                      />
+                      {/* <TextInput
+      label="EIN Number"
+      placeholder="1234567"
+      value={form.values.ein_name}
+      onChange={(event) => form.setFieldValue('einNumber', event.currentTarget.value)}
+      error={form.errors.einNumber && 'Invalid EIN Number'}
+      radius="md"
+    /> */}
+                    </Grid.Col>
+                  </>
+                ) : null}
                 <Grid.Col span={{ base: 12, xs: 6 }}>
                   <TextInput
                     label="Address"
@@ -271,16 +317,32 @@ export function AuthenticationForm() {
                   />
                 </Grid.Col>
                 <Grid.Col span={{ base: 12, xs: 6 }}>
-                  <TextInput
-                    label="Phone Number"
-                    placeholder="1234567890"
-                    value={form.values.phoneNumber}
-                    onChange={(event) =>
-                      form.setFieldValue('phoneNumber', event.currentTarget.value)
-                    }
-                    error={form.errors.phoneNumber && 'Invalid phone number'}
+                  <InputLabel>Phone Number</InputLabel>
+                  <PinInput
+                    length={10}
+                    size="xs"
+                    inputMode="numeric"
+                    type="number"
+                    gap="xs"
+                    placeholder="#"
+                    value={form.values.phone_number}
+                    onChange={(value: string) => {
+                      if (/^[0-9]*$/.test(value)) {
+                        form.setFieldValue('phone_number', value);
+                      }
+                    }}
                     radius="md"
                   />
+                  {/* <TextInput
+                    label="Phone Number"
+                    placeholder="1234567890"
+                    value={form.values.phone_number}
+                    onChange={(event) =>
+                      form.setFieldValue('phone_number', event.currentTarget.value)
+                    }
+                    error={form.errors.phone_number && 'Invalid phone number'}
+                    radius="md"
+                  /> */}
                 </Grid.Col>
               </>
             )}
@@ -295,7 +357,6 @@ export function AuthenticationForm() {
                 radius="md"
               />
             </Grid.Col>
-
             <Grid.Col span={{ base: 12, xs: 12 }}>
               <PasswordInput
                 required
