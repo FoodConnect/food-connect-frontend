@@ -1,4 +1,4 @@
-import { Card, Grid, Button, NumberInput, Skeleton, Container, Title, Image, Flex } from '@mantine/core';
+import { Grid, NumberInput, Skeleton, Container, Title, Image, Flex, Divider } from '@mantine/core';
 
 //grid componenet
 const child = <Skeleton height={140} radius="md" animate={false} />;
@@ -28,6 +28,7 @@ export default function CartComponent() {
           <p>Delete Donation</p>
         </Grid.Col>
 
+        <Grid.Col span={{ base: 12, xs: 12 }}><Divider my="md" /></Grid.Col>
       </Grid>
     </Container>
   )
