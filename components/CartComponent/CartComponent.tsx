@@ -13,11 +13,10 @@ export default function CartComponent({ props }) {
         <Grid.Col span={{ base: 12, xs: 12 }}><Title> Your Cart </Title></Grid.Col>
 
         <Grid.Col span={{ base: 12, xs: 4 }}>
-          {props.carted_donations.map((carted_donation) => (
-          <div key={carted_donation.id}>
-            <p>{carted_donation.cart_id}</p>
-            <p>{carted_donation.donation_id}</p>
-            <p>{carted_donation.quantity}</p>
+          <h1>Practice Data</h1>
+          {props.items.map((item) => (
+            <div key={item.id}>
+              <p>Name: {item.name} </p>
             </div>
           ))}
           <h2>

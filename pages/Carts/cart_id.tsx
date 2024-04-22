@@ -13,6 +13,11 @@ export default function CartPage() {
   const { id }: any = router.query;
   const { data: session } = useSession();
 
+  const items: { id: number; name: string; } [] = [
+    { id: 1, name: 'item1' },
+    { id: 2, name: 'item2' },
+];
+
   useEffect(() => {
     if (!id) return;
     setDomLoaded(true);
@@ -26,7 +31,7 @@ export default function CartPage() {
   return (
     <div>
       {domLoaded}
-      <CartComponent carted_donations={carted_donations} />
+      <CartComponent items={items} />
       <OrderSummaryComponent />
     </div>
   );
