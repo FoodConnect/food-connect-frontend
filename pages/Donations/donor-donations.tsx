@@ -16,7 +16,7 @@ const child = <Skeleton height={140} radius="md" animate={false} />;
 
 const DonorDonations = () => {
   const { data: session } = useSession();
-  const donorId = session?.user.pk.toString();
+  const donorId = session?.user.pk;
   // Form Instantiation and Submission Method for CREATE Action
   const form = useDonationForm({
     initialValues: {

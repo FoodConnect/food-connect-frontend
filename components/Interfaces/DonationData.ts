@@ -14,7 +14,7 @@ export interface DonationData {
   image_data?: string;
   created_at?: string;
   donor?: {
-    id?: number;
+    user_id?: number;
     business_name?: string;
     city?: string;
     email?: string;

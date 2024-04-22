@@ -14,7 +14,7 @@ interface DonationFormValues {
   state: string;
   zipcode: string;
   is_available: boolean;
-  donor_id?: string;
+  donor_id?: number;
 }
 // You can give context variables any name
 export const [DonationFormProvider, useDonationFormContext, useDonationForm] =
