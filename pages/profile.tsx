@@ -66,7 +66,7 @@ export default function Profile() {
       color: 'green',
       message: 'Your account has been successfully deleted.',
     });
-    router.push('/signin');
+    await signOut({ callbackUrl: '/signin', redirect: true });
     return null;
   }
   const openDeleteModal = () =>
@@ -98,11 +98,14 @@ export default function Profile() {
   useEffect(() => {
     const fetchData = async () => {
       const data = await getData();
+      console.log('DATA: ', data);
+
       setUser(data);
+      console.log('USER: ', user);
     };
     // eslint-disable-next-line no-console
     fetchData().catch(console.error);
-  }, [session]);
+  }, []);
 
   const items = stats.map((stat) => (
     <div key={stat.label}>
@@ -185,9 +188,6 @@ export default function Profile() {
         title="Update Donation"
         overlayProps={{ backgroundOpacity: 0.3, blur: 2 }}
       >
-        {/* <form onSubmit={form.onSubmit(handleSubmit)}>
-            <DonationForm />
-          </form> */}
         <Button
           onClick={openDeleteModal}
           variant="default"
