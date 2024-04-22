@@ -3,7 +3,16 @@ import { Grid, NumberInput, Skeleton, Container, Title, Image, Flex, Divider } f
 //grid componenet
 const child = <Skeleton height={140} radius="md" animate={false} />;
 
-export default function CartComponent({ props }) {
+interface Item {
+  id: number,
+  name: string,
+ }
+
+interface ItemProps {
+ items:Item[]
+}
+
+export default function CartComponent(props: ItemProps) {
   return (
     <Container my="md">
       <Grid>
@@ -14,7 +23,7 @@ export default function CartComponent({ props }) {
 
         <Grid.Col span={{ base: 12, xs: 4 }}>
           <h1>Practice Data</h1>
-          {props.items.map((item) => (
+          {props?.items.map((item) => (
             <div key={item.id}>
               <p>Name: {item.name} </p>
             </div>

@@ -13,7 +13,8 @@ export default function CartPage() {
   const { id }: any = router.query;
   const { data: session } = useSession();
 
-  const items: { id: number; name: string; } [] = [
+  //**REMOVE */
+  const items = [
     { id: 1, name: 'item1' },
     { id: 2, name: 'item2' },
 ];

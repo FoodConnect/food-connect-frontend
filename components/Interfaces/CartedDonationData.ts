@@ -8,7 +8,7 @@ export interface CartedDonationData {
     description?: string;
     image_data?: string;
     donor?: {
-      id?: number;
+      user_id?: number;
       business_name?: string;
       image_data?: string;
     };
