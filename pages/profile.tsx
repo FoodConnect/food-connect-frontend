@@ -389,17 +389,17 @@ export default function Profile() {
             </Grid>
           </Group>
         </form>
-        <Flex justify="center" align="center" direction="column" mt="xl">
-          <Button
-            onClick={openDeleteModal}
-            variant="default"
-            color="red"
-            rightSection={<IconTrash />}
-          >
-            Delete Account
-          </Button>
-        </Flex>
       </Drawer>
+      <Flex justify="center" align="center" direction="column" mt="xl">
+        <Button
+          onClick={openDeleteModal}
+          variant="default"
+          color="red"
+          rightSection={<IconTrash />}
+        >
+          Delete Account
+        </Button>
+      </Flex>
     </Card>
   );
 }
