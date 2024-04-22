@@ -20,23 +20,7 @@ import { showNotification } from '@mantine/notifications';
 import { getCsrfToken, signIn, useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { GoogleButton } from './GoogleButton';
-
-interface AuthenticationFormProps {
-  username: string;
-  password: string;
-  email: string;
-  name: string;
-  terms: boolean;
-  business_name: string;
-  role: string;
-  ein_number: string;
-  image_data: string;
-  address: string;
-  city: string;
-  state: string;
-  zipcode: string;
-  phone_number: string;
-}
+import { AuthenticationFormProps } from '../Interfaces/AuthenticationFormProps';
 
 export function AuthenticationForm() {
   const [type, toggle] = useToggle(['sign in', 'register']);
@@ -226,14 +210,6 @@ export function AuthenticationForm() {
                     }}
                     data={['charity', 'donor']}
                   />
-                  {/* <TextInput
-                    label="Role"
-                    placeholder="Donor / Charity"
-                    value={form.values.role}
-                    onChange={(event) => form.setFieldValue('role', event.currentTarget.value)}
-                    error={form.errors.role && 'Invalid role'}
-                    radius="md"
-                  /> */}
                 </Grid.Col>
                 {role === 'donor' ? (
                   <>
@@ -266,14 +242,6 @@ export function AuthenticationForm() {
                         }}
                         radius="md"
                       />
-                      {/* <TextInput
-      label="EIN Number"
-      placeholder="1234567"
-      value={form.values.ein_number}
-      onChange={(event) => form.setFieldValue('einNumber', event.currentTarget.value)}
-      error={form.errors.einNumber && 'Invalid EIN Number'}
-      radius="md"
-    /> */}
                     </Grid.Col>
                   </>
                 ) : null}
@@ -334,16 +302,6 @@ export function AuthenticationForm() {
                     }}
                     radius="md"
                   />
-                  {/* <TextInput
-                    label="Phone Number"
-                    placeholder="1234567890"
-                    value={form.values.phone_number}
-                    onChange={(event) =>
-                      form.setFieldValue('phone_number', event.currentTarget.value)
-                    }
-                    error={form.errors.phone_number && 'Invalid phone number'}
-                    radius="md"
-                  /> */}
                 </Grid.Col>
               </>
             )}

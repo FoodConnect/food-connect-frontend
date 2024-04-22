@@ -9,14 +9,18 @@ import {
   Center,
   Image,
   Drawer,
+  Grid,
+  TextInput,
+  InputLabel,
+  PinInput,
 } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { signOut, useSession } from 'next-auth/react';
 import { useDisclosure, useViewportSize } from '@mantine/hooks';
 import { showNotification } from '@mantine/notifications';
 import { modals } from '@mantine/modals';
-import { useRouter } from 'next/router';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
+import { useForm } from '@mantine/form';
 import { UserData } from '@/components/Interfaces/UserData';
 import classes from '@/components/Profile.module.css';
 
@@ -29,7 +33,6 @@ const stats = [
 export default function Profile() {
   const [user, setUser] = useState<UserData>();
   const { data: session } = useSession();
-  const router = useRouter();
 
   // Update Donation Drawer Variables
   const [opened, { open, close }] = useDisclosure(false);
@@ -41,15 +44,88 @@ export default function Profile() {
     return 'right';
   };
 
+  const form = useForm({
+    initialValues: {
+      email: '',
+      username: '',
+      name: '',
+      password: '',
+      terms: true,
+      business_name: '',
+      role: '',
+      ein_number: '',
+      image_data: '',
+      address: '',
+      city: '',
+      state: '',
+      zipcode: '',
+      phone_number: '',
+    },
+
+    validate: {
+      // email: (val) => (/^\S+@\S+$/.test(val) ? null : 'Invalid email'),
+      username: (val) =>
+        val.length >= 150
+          ? 'Username invalid. Must not exceed 150 characters and be unique.'
+          : null,
+      password: (val) => (val.length <= 6 ? 'Password should include at least 6 characters' : null),
+      business_name: (val) =>
+        val.length > 255 ? 'Business name should not be more than 255 characters' : null,
+      image_data: (val) =>
+        val.length > 255 ? 'Image URL should not be more than 255 characters' : null,
+      address: (val) =>
+        val.length > 255 ? 'Address should not be more than 255 characters' : null,
+      city: (val) => (val.length > 255 ? 'City should not be more than 255 characters' : null),
+      state: (val) => (val.length > 255 ? 'State should not be more than 255 characters' : null),
+      zipcode: (val) => (val.length > 255 ? 'Zipcode should not be more than 10 characters' : null),
+      phone_number: (val) =>
+        val.length > 255 ? 'Phone number should not be more than 20 characters' : null,
+    },
+  });
+
+  // Update User Submission Method
+  const handleUpdateUser = async (values: UserData) => {
+    await fetch(`http://localhost:8080/users/${session?.user?.pk}/`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(values),
+    })
+      .then((response) => {
+        if (response.status >= 400 && response.status < 600) {
+          showNotification({
+            title: 'Error Updating',
+            color: 'red',
+            message: 'Sorry, there was an error submitting your update.',
+          });
+          return response.json();
+        }
+        showNotification({
+          title: 'Update Successful',
+          color: 'green',
+          message: 'Your update has been successfully submitted.',
+        });
+        close();
+        setUser(values);
+        return response.json();
+      })
+      .catch((error) => {
+        if (error !== null) {
+          null;
+        }
+      });
+  };
+
   // Delete Modal and Request for User Account
-  function cancelDeleteDonation() {
+  function cancelDeleteUser() {
     showNotification({
       title: 'Cancelled',
       color: 'teal',
       message: 'Delete Donation was cancelled.',
     });
   }
-  async function handleDeleteDonation() {
+  async function handleDeleteUser() {
     const response = await fetch(`http://localhost:8080/users/${session?.user.pk!}/`, {
       method: 'DELETE',
     });
@@ -82,8 +158,8 @@ export default function Profile() {
       ),
       labels: { confirm: 'Delete Account', cancel: "No don't delete it" },
       confirmProps: { color: 'red' },
-      onCancel: () => cancelDeleteDonation(),
-      onConfirm: () => handleDeleteDonation(),
+      onCancel: () => cancelDeleteUser(),
+      onConfirm: () => handleDeleteUser(),
     });
 
   // API Request and useEffect Functions to populate donation profile
@@ -98,14 +174,14 @@ export default function Profile() {
   useEffect(() => {
     const fetchData = async () => {
       const data = await getData();
-      console.log('DATA: ', data);
-
       setUser(data);
-      console.log('USER: ', user);
+      if (data) {
+        form.initialize(data);
+      }
     };
     // eslint-disable-next-line no-console
     fetchData().catch(console.error);
-  }, []);
+  }, [session]);
 
   const items = stats.map((stat) => (
     <div key={stat.label}>
@@ -188,14 +264,141 @@ export default function Profile() {
         title="Update Donation"
         overlayProps={{ backgroundOpacity: 0.3, blur: 2 }}
       >
-        <Button
-          onClick={openDeleteModal}
-          variant="default"
-          color="red"
-          rightSection={<IconTrash />}
-        >
-          Delete Account
-        </Button>
+        <form onSubmit={form.onSubmit(handleUpdateUser)}>
+          <Group>
+            <Grid grow gutter="xl">
+              <Grid.Col span={{ base: 12, xs: 6 }}>
+                <TextInput
+                  label="Email"
+                  placeholder="hello@foodconnect.com"
+                  value={form.values.email}
+                  onChange={(event) => form.setFieldValue('email', event.currentTarget.value)}
+                  error={form.errors.email && 'Invalid email'}
+                  radius="md"
+                />
+              </Grid.Col>
+              <Grid.Col span={{ base: 12, xs: 6 }}>
+                <TextInput
+                  label="Image URL"
+                  placeholder="https://your-image-url.com"
+                  value={form.values.image_data}
+                  onChange={(event) => form.setFieldValue('image_data', event.currentTarget.value)}
+                  error={form.errors.image_data && 'Invalid image URL'}
+                  radius="md"
+                />
+              </Grid.Col>
+              {session?.user?.role === 'donor' ? (
+                <>
+                  <Grid.Col span={{ base: 12, xs: 6 }}>
+                    <TextInput
+                      label="Business Name"
+                      placeholder="Perri Farms"
+                      value={form.values.business_name}
+                      onChange={(event) =>
+                        form.setFieldValue('business_name', event.currentTarget.value)
+                      }
+                      error={form.errors.business_name && 'Invalid business name'}
+                      radius="md"
+                    />
+                  </Grid.Col>
+                  <Grid.Col span={{ base: 12, xs: 6 }}>
+                    <InputLabel>EIN Number</InputLabel>
+                    <PinInput
+                      length={9}
+                      size="xs"
+                      inputMode="numeric"
+                      type="number"
+                      gap="xs"
+                      placeholder="○"
+                      value={form.values.ein_number}
+                      onChange={(value: string) => {
+                        if (/^[0-9]*$/.test(value)) {
+                          form.setFieldValue('ein_number', value);
+                        }
+                      }}
+                      radius="md"
+                    />
+                  </Grid.Col>
+                </>
+              ) : null}
+              <Grid.Col span={{ base: 12, xs: 6 }}>
+                <TextInput
+                  label="Address"
+                  placeholder="123 Street"
+                  value={form.values.address}
+                  onChange={(event) => form.setFieldValue('address', event.currentTarget.value)}
+                  error={form.errors.address && 'Invalid address'}
+                  radius="md"
+                />
+              </Grid.Col>
+              <Grid.Col span={{ base: 12, xs: 6 }}>
+                <TextInput
+                  label="City"
+                  placeholder="Grayslake"
+                  value={form.values.city}
+                  onChange={(event) => form.setFieldValue('city', event.currentTarget.value)}
+                  error={form.errors.city && 'Invalid city'}
+                  radius="md"
+                />
+              </Grid.Col>
+              <Grid.Col span={{ base: 12, xs: 6 }}>
+                <TextInput
+                  label="State"
+                  placeholder="Illinois"
+                  value={form.values.state}
+                  onChange={(event) => form.setFieldValue('state', event.currentTarget.value)}
+                  error={form.errors.state && 'Invalid state'}
+                  radius="md"
+                />
+              </Grid.Col>
+              <Grid.Col span={{ base: 12, xs: 6 }}>
+                <TextInput
+                  label="Zipcode"
+                  placeholder="12345"
+                  value={form.values.zipcode}
+                  onChange={(event) => form.setFieldValue('zipcode', event.currentTarget.value)}
+                  error={form.errors.zipcode && 'Invalid zipcode'}
+                  radius="md"
+                />
+              </Grid.Col>
+              <Grid.Col span={{ base: 12, xs: 6 }}>
+                <InputLabel>Phone Number</InputLabel>
+                <PinInput
+                  length={10}
+                  size="xs"
+                  inputMode="numeric"
+                  type="number"
+                  gap="xs"
+                  placeholder="#"
+                  value={form.values.phone_number}
+                  onChange={(value: string) => {
+                    if (/^[0-9]*$/.test(value)) {
+                      form.setFieldValue('phone_number', value);
+                    }
+                  }}
+                  radius="md"
+                />
+              </Grid.Col>
+              <Grid.Col span={{ base: 12, xs: 6 }}>
+                <Flex justify="center">
+                  <Button type="submit" color="green" radius="xl">
+                    Submit
+                  </Button>
+                </Flex>
+              </Grid.Col>
+            </Grid>
+          </Group>
+        </form>
+        <Flex justify="center" align="center" direction="column" mt="xl">
+          <Button
+            onClick={openDeleteModal}
+            variant="default"
+            color="red"
+            rightSection={<IconTrash />}
+          >
+            Delete Account
+          </Button>
+        </Flex>
       </Drawer>
     </Card>
   );
