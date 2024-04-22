@@ -76,7 +76,7 @@ const Donation = () => {
     },
   });
   // Form submission method
-  const handleSubmit = async (values: DonationFormValues) => {
+  const handleUpdateDonation = async (values: DonationFormValues) => {
     await fetch(`http://localhost:8080/donations/${id}/`, {
       method: 'PUT',
       headers: {
@@ -141,7 +141,7 @@ const Donation = () => {
   }, [id, session]);
 
   // *REMOVE* Delete Feaux Authorization Check (To be ammended upon official Auth setup)
-  const isAuthorized = () => donation?.donor?.id === session?.user.pk;
+  const isAuthorized = () => donation?.donor?.user_id === session?.user.pk;
 
   // API Request to Delete Donation
   async function handleDeleteDonation() {
@@ -278,7 +278,7 @@ const Donation = () => {
                 overlayProps={{ backgroundOpacity: 0.3, blur: 2 }}
               >
                 <DonationFormProvider form={form}>
-                  <form onSubmit={form.onSubmit(handleSubmit)}>
+                  <form onSubmit={form.onSubmit(handleUpdateDonation)}>
                     <DonationForm />
                   </form>
                 </DonationFormProvider>
