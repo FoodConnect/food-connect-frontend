@@ -180,7 +180,7 @@ const DonationsTable = () => {
   // Condition for Donor Donation Page filtered donation list
   const filterData = (data: DonationData[]) => {
     if (path === '/Donations/donor-donations') {
-      return data.filter((donation) => donation?.donor?.id === session?.user.pk);
+      return data.filter((donation) => donation?.donor?.user_id === session?.user.pk);
     }
     return data;
   };
@@ -208,7 +208,7 @@ const DonationsTable = () => {
         const data = filterData(res);
         setTableItems(data);
       } catch (error) {
-        console.log(error);
+        null;
       }
     };
 
