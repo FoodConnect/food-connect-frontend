@@ -17,6 +17,7 @@ import {
   IconShoppingCart,
   IconUserCircle,
   IconX,
+  IconNumber0Small,
 } from '@tabler/icons-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -151,11 +152,16 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
       layout="alt"
     >
       <AppShell.Header>
-        <Group h="100%" px="md">
-          <Image src="/favicon.svg" alt="Food Connect Favicon" width={60} height={60} priority />
-          <Text size="md" ta="center" fw={700}>
-            Food Connect
-          </Text>
+        <Group h="100%" px="md" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <Image src="/favicon.svg" alt="Food Connect Favicon" width={60} height={60} priority />
+        <Text size="md" fw={700}>
+          Food Connect
+        </Text>
+      </div>
+      <div>
+         <IconNumber0Small /> <IconShoppingCart />
+      </div>
         </Group>
         <Group pos="absolute" mt={50} pl={10} style={{ zIndex: 700 }}>
           <ActionIcon
