@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/react';
 import CartComponent from '@/components/CartComponent/CartComponent';
 import OrderSummaryComponent from '@/components/OrderSummaryComponent/OrderSummaryComponent';
 import { CartedDonationData } from '@/components/Interfaces/CartedDonationData';
-import { getCartedData } from '@/utils/carting-functions';
+import { getCartedData } from '@/utils/getCartedData';
 
 export default function CartPage() {
   const [domLoaded, setDomLoaded] = useState(false);
