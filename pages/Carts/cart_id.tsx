@@ -1,5 +1,5 @@
 import { Grid, Container, Card } from '@mantine/core';
-import { useEffect, useState } from 'react';
+// import { useEffect, useState } from 'react';
 // import { useRouter } from 'next/router';
 // import { useSession } from 'next-auth/react';
 import CartComponent from '@/components/CartComponent/CartComponent';
@@ -26,7 +26,10 @@ export default function CartPage() {
         <h1>Your Cart</h1>
         <Grid>
           <Grid.Col span={{ base: 12, xs: 8 }}><CartComponent items={items} /></Grid.Col>
-          <Grid.Col span={{ base: 12, xs: 4 }}><OrderSummaryComponent /></Grid.Col>
+
+          <Grid.Col span={{ base: 12, xs: 4 }}>
+            <OrderSummaryComponent isCartPage />
+          </Grid.Col>
 
         <Grid.Col span={{ base: 12, xs: 12 }}>
           <Card h={140} radius="md" bg="teal.2" />

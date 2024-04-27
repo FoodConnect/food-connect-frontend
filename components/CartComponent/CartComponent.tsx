@@ -1,7 +1,4 @@
-import { NumberInput, Skeleton, Container, Image, Card } from '@mantine/core';
-
-//grid componenet
-const child = <Skeleton height={140} radius="md" animate={false} />;
+import { NumberInput, Container, Image, Card } from '@mantine/core';
 
 interface Item {
   id: number,
