@@ -5,14 +5,19 @@ import { useForm } from '@mantine/form';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { showNotification } from '@mantine/notifications';
+import { useRouter } from 'next/router';
 import { CartedDonationData } from '../Interfaces/CartedDonationData';
 
 export default function AddToCartComponent() {
   const { data: session } = useSession();
+  const router = useRouter();
+
+   // Get the donation ID from the URL
+   const { id } = router.query;
 
   const form = useForm({
     initialValues: {
-      donation_id: 3,
+      donation_id: parseInt(id as string, 10),
       quantity: 0,
     },
   });
