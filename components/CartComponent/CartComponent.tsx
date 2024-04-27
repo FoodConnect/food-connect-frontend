@@ -1,11 +1,15 @@
-import { Grid, NumberInput, Skeleton, Container, Title, Image, Flex, Divider } from '@mantine/core';
+import { NumberInput, Skeleton, Container, Image, Card } from '@mantine/core';
 
 //grid componenet
 const child = <Skeleton height={140} radius="md" animate={false} />;
 
 interface Item {
   id: number,
-  name: string,
+  donation_title: string,
+  image_url: string,
+  description: string,
+  donor: string,
+  quantity: number
  }
 
 interface ItemProps {
@@ -15,36 +19,27 @@ interface ItemProps {
 export default function CartComponent(props: ItemProps) {
   return (
     <Container my="md">
-      <Grid>
-        <Grid.Col span={{ base: 12, xs: 4 }}>{child}</Grid.Col>
-        <Grid.Col span={{ base: 12, xs: 8 }}>{child}</Grid.Col>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
 
-        <Grid.Col span={{ base: 12, xs: 12 }}><Title> Your Cart </Title></Grid.Col>
-
-        <Grid.Col span={{ base: 12, xs: 4 }}>
-          <h1>Practice Data</h1>
-          {props?.items.map((item) => (
-            <div key={item.id}>
-              <p>Name: {item.name} </p>
+        {props?.items.map((item) => (
+          <Card key={item.id} shadow="xs" padding="md" withBorder style={{ width: '100%' }}>
+            <div style={{ display: 'flex' }}>
+              <div style={{ width: '200px', flexShrink: 0 }}>
+                <Image src={item.image_url} alt="Donation Image" fit="contain" width="200px" height="220px" />
+              </div>
+              <div style={{ flex: 1, paddingLeft: '20px' }}>
+                <h3>{item.description}</h3>
+                <p>{item.donor}</p>
+                <h4>Quantity</h4>
+                <div style={{ width: '200px' }}>
+                  <NumberInput radius="sm" defaultValue={1} />
+                </div>
+                <p>Delete Donation</p>
+              </div>
             </div>
-          ))}
-          <h2>
-          Donation Title
-          </h2>
-          <Flex>
-          <Image src="/logo.svg" alt="Food Connect Logo" width={100} height={120} />
-          </Flex>
-        </Grid.Col>
-
-        <Grid.Col span={{ base: 12, xs: 8 }}>
-          <h2>Donation Description</h2>
-          <h4>Quantity</h4>
-          <NumberInput />
-          <p>Delete Donation</p>
-        </Grid.Col>
-
-        <Grid.Col span={{ base: 12, xs: 12 }}><Divider my="md" /></Grid.Col>
-      </Grid>
+          </Card>
+        ))}
+      </div>
     </Container>
   );
 }
