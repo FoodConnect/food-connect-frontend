@@ -19,9 +19,8 @@ export default function CartComponent(props: CartedDonationProps) {
               <div style={{ flex: 1, paddingLeft: '20px' }}>
                 <h3>{donation.donation?.description}</h3>
                 <p>{donation.donation?.donor?.business_name}</p>
-                <h4>Quantity: {donation.quantity}</h4>
                 <div style={{ width: '200px' }}>
-                  <NumberInput radius="sm" defaultValue={1} />
+                  <NumberInput radius="sm" label="Quantity" variant="filled" value={donation.quantity} />
                 </div>
                 <p>Delete Donation</p>
               </div>
