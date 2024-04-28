@@ -1,3 +1,4 @@
+import React from 'react';
 import { Paper, Container, Button } from '@mantine/core';
 
 interface OrderSummaryProps {
