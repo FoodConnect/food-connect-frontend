@@ -1,33 +1,25 @@
 import { NumberInput, Container, Image, Card } from '@mantine/core';
+import { CartedDonationData } from '../Interfaces/CartedDonationData';
 
-interface Item {
-  id: number,
-  donation_title: string,
-  image_url: string,
-  description: string,
-  donor: string,
-  quantity: number
- }
-
-interface ItemProps {
- items:Item[]
+interface CartedDonationProps {
+  carted_donations: CartedDonationData[];
 }
 
-export default function CartComponent(props: ItemProps) {
+export default function CartComponent(props: CartedDonationProps) {
   return (
     <Container my="md">
       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
 
-        {props?.items.map((item) => (
-          <Card key={item.id} shadow="xs" padding="md" withBorder style={{ width: '100%' }}>
+        {props?.carted_donations.map((donation) => (
+          <Card key={donation.id} shadow="xs" padding="md" withBorder style={{ width: '100%' }}>
             <div style={{ display: 'flex' }}>
               <div style={{ width: '200px', flexShrink: 0 }}>
-                <Image src={item.image_url} alt="Donation Image" fit="contain" width="200px" height="220px" />
+                <Image src={donation.donation?.image_data} alt="Donation Image" fit="contain" width="200px" height="220px" />
               </div>
               <div style={{ flex: 1, paddingLeft: '20px' }}>
-                <h3>{item.description}</h3>
-                <p>{item.donor}</p>
-                <h4>Quantity</h4>
+                <h3>{donation.donation?.description}</h3>
+                <p>{donation.donation?.donor?.business_name}</p>
+                <h4>Quantity: {donation.quantity}</h4>
                 <div style={{ width: '200px' }}>
                   <NumberInput radius="sm" defaultValue={1} />
                 </div>
