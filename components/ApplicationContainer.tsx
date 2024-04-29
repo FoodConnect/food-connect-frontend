@@ -127,11 +127,6 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
       href: '/',
       label: 'Notifications',
     },
-    // {
-    //   icon: <IconShoppingCart size="1.3rem" stroke={1.5} />,
-    //   href: '/',
-    //   label: 'Cart',
-    // },
     renderCart(),
     renderProfile(),
     {

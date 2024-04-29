@@ -28,7 +28,7 @@ export default function OrderPage() {
       throw new Error('Failed to fetch data');
     }
 
-    return response.json();
+    return response.json(); //add quantities here in function than pass to props for order summary
   }
 
   useEffect(() => {
