@@ -209,7 +209,16 @@ export function AuthenticationForm() {
                       form.setFieldValue('role', selectedRole);
                     }}
                     data={['charity', 'donor']}
-                  />
+                  >
+                    <option>Select Role</option>
+
+                    <hr />
+
+                    <optgroup label="Account Role Type">
+                      <option value="charity">Charity</option>
+                      <option value="donor">Donor</option>
+                    </optgroup>
+                  </NativeSelect>
                 </Grid.Col>
                 {role === 'donor' ? (
                   <>
