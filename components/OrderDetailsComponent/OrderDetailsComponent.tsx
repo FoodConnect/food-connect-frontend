@@ -1,18 +1,8 @@
 import { Container, Image, Card, Divider } from '@mantine/core';
-
-interface OrderedDonation {
-  order_number: number,
-  order_created_at: string,
-  donation_title: string,
-  donation_image_url: string,
-  donation_description: string,
-  donation_donor: string,
-  donation_pickup_address: string,
-  donation_quantity: number
- }
+import { OrderedDonationData } from '../Interfaces/OrderedDonationData';
 
 interface OrderedDonationProps {
- ordered_donations:OrderedDonation[]
+ ordered_donations:OrderedDonationData[]
 }
 
 export default function OrderDetailsComponent(props: OrderedDonationProps) {
@@ -25,13 +15,18 @@ export default function OrderDetailsComponent(props: OrderedDonationProps) {
         {props?.ordered_donations.map((ordered_donation) => (
             <div style={{ display: 'flex' }}>
               <div style={{ width: '200px', flexShrink: 0 }}>
-                <Image src={ordered_donation.donation_image_url} alt="Donation Image" fit="contain" width="100px" height="120px" />
+                <Image src={ordered_donation.donation?.image_data} alt="Donation Image" fit="contain" width="100px" height="120px" />
               </div>
               <div style={{ flex: 1, paddingLeft: '20px' }}>
-                <h4>{ordered_donation.donation_description}</h4>
-                <p>Quantity: X</p>
-                <p>Donated by {ordered_donation.donation_donor}</p>
-                <p>Pickup Address: {ordered_donation.donation_pickup_address}</p>
+                <h4>{ordered_donation.donation?.description}</h4>
+                <p>Quantity: {ordered_donation.quantity}</p>
+                <p>Donated by {ordered_donation.donation?.donor?.business_name}</p>
+                <p>Pickup Deadline: {ordered_donation.donation?.pick_up_deadline}</p>
+                <p>Pickup Address: {ordered_donation.donation?.address},
+                 {ordered_donation.donation?.city},
+                 {ordered_donation.donation?.state},
+                 {ordered_donation.donation?.zipcode}
+                </p>
                 <Divider />
               </div>
             </div>

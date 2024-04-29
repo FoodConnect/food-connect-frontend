@@ -1,4 +1,5 @@
 import { AppShell, Group, Text, ActionIcon, Stack, NavLink, Anchor, rem, Box } from '@mantine/core';
+import { useRouter } from 'next/router';
 import { useDisclosure } from '@mantine/hooks';
 import {
   IconBell,
@@ -15,6 +16,7 @@ import {
   IconMap2,
   IconSearch,
   IconShoppingCart,
+  IconShoppingCartFilled,
   IconUserCircle,
   IconX,
   IconNumber0Small,
@@ -87,24 +89,17 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
       label: 'Sign Out',
     };
   };
-
-  // const renderCart = () => {
-  //   // Check if the user role is 'charity' and if the charity has a cart
-  //   if (session?.user.role === 'charity' && cart.charity && cart.charity.id === session.charity?.id) {
-
-  //     return {
-  //       icon: <IconShoppingCartFilled size="1.3rem" stroke={1.5} />,
-  //       href: `/Carts/${cart.id}`,
-  //       label: 'Cart',
-  //     };
-  //   }
-
-  //     return {
-  //       icon: <IconShoppingCart size="1.3rem" stroke={1.5} />,
-  //       href: '/Carts/no-cart',
-  //       label: 'Cart',
-  //     };
-  // };
+  const renderCart = () => {
+    if (session) {
+      const router = useRouter();
+      return {
+        icon: <IconShoppingCart size="1.3rem" stroke={1.5} />,
+        href: `/Carts/${router.query.id}`,
+        label: 'Cart',
+      };
+    }
+    return null;
+  };
 
   const navLinks: any[] = [
     {
@@ -132,11 +127,12 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
       href: '/',
       label: 'Notifications',
     },
-    {
-      icon: <IconShoppingCart size="1.3rem" stroke={1.5} />,
-      href: '/',
-      label: 'Cart',
-    },
+    // {
+    //   icon: <IconShoppingCart size="1.3rem" stroke={1.5} />,
+    //   href: '/',
+    //   label: 'Cart',
+    // },
+    renderCart(),
     renderProfile(),
     {
       ...renderSignInOrOut(),
