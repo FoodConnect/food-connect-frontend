@@ -1,13 +1,10 @@
 import { Grid, Container, Card } from '@mantine/core';
-import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import CartComponent from '@/components/CartComponent/CartComponent';
 import OrderSummaryComponent from '@/components/OrderSummaryComponent/OrderSummaryComponent';
 
 export default function CartPage() {
-  const router = useRouter();
-  const { id }: any = router.query;
   const { data: session } = useSession();
   const [carted_donations, setCartedDonations] = useState([]);
 
@@ -17,7 +14,7 @@ export default function CartPage() {
     }
 
     const token = session.access_token;
-    const response = await fetch(`http://localhost:8080/carts/${id}/`, {
+    const response = await fetch('http://localhost:8080/carts/', {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -32,23 +29,23 @@ export default function CartPage() {
   }
 
   useEffect(() => {
-    if (!id || !session) return;
+    if (!session) return;
 
     const fetchData = async () => {
       try {
         const data = await getData();
+        console.log(data);
         setCartedDonations(data.carted_donations);
       } catch (error) {
         console.error('Error fetching cart data:', error);
       }
     };
     fetchData();
-  }, [id, session]);
+  }, [session]);
 
   return (
     <Container my="md">
       <h1>Your Cart</h1>
-      <p>Cart ID: {router.query.id}</p>
       <Grid>
         <Grid.Col span={{ base: 12, xs: 8 }}>
           <CartComponent carted_donations={carted_donations} />
