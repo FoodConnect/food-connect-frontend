@@ -1,10 +1,13 @@
 import { Grid, Container, Card } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 import CartComponent from '@/components/CartComponent/CartComponent';
 import OrderSummaryComponent from '@/components/OrderSummaryComponent/OrderSummaryComponent';
 
 export default function CartPage() {
+  const router = useRouter();
+  const { id }: any = router.query;
   const { data: session } = useSession();
   const [carted_donations, setCartedDonations] = useState([]);
 
@@ -14,7 +17,7 @@ export default function CartPage() {
     }
 
     const token = session.access_token;
-    const response = await fetch('http://localhost:8080/carts/', {
+    const response = await fetch(`http://localhost:8080/carts/${id}`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -29,7 +32,7 @@ export default function CartPage() {
   }
 
   useEffect(() => {
-    if (!session) return;
+    if (!id || !session) return;
 
     const fetchData = async () => {
       try {
@@ -41,7 +44,7 @@ export default function CartPage() {
       }
     };
     fetchData();
-  }, [session]);
+  }, [id, session]);
 
   return (
     <Container my="md">
