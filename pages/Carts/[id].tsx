@@ -46,12 +46,59 @@ export default function CartPage() {
     fetchData();
   }, [id, session]);
 
+  // update quantity, aka remove item from cart
+  const handleUpdateQuantity = async (donationId: any, newQuantity: any) => {
+    try {
+      const token = session?.access_token;
+      await fetch(`http://localhost:8080/carts/${id}/remove_from_cart/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ donation_id: donationId, quantity: newQuantity }),
+      });
+
+      const updatedDonations = carted_donations.map(donation => {
+        if (donation.id === donationId) {
+          return { ...donation, quantity: newQuantity };
+        }
+        return donation;
+      });
+      setCartedDonations(updatedDonations);
+    } catch (error) {
+      console.error('Error updating quantity:', error);
+    }
+  };
+
+  // delete, aka remove carted donation
+  const handleDeleteDonation = async (donationId: any) => {
+    try {
+      const token = session.access_token;
+      await fetch(`http://localhost:8080/carted_donations/${donationId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const updatedDonations = carted_donations.filter(donation => donation.id !== donationId);
+      setCartedDonations(updatedDonations);
+    } catch (error) {
+      console.error('Error deleting donation:', error);
+    }
+  };
+
   return (
     <Container my="md">
       <h1>Your Cart</h1>
       <Grid>
         <Grid.Col span={{ base: 12, xs: 8 }}>
-          <CartComponent carted_donations={carted_donations} />
+          <CartComponent
+            carted_donations={carted_donations}
+            onUpdateQuantity={handleUpdateQuantity}
+            onDeleteDonation={handleDeleteDonation}
+          />
         </Grid.Col>
 
         <Grid.Col span={{ base: 12, xs: 4 }}>

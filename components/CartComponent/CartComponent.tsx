@@ -1,15 +1,24 @@
-import { NumberInput, Container, Image, Card } from '@mantine/core';
+import { NumberInput, Container, Image, Card, Button } from '@mantine/core';
 import { CartedDonationData } from '../Interfaces/CartedDonationData';
 
 interface CartedDonationProps {
   carted_donations: CartedDonationData[];
+  onUpdateQuantity: (donationId: number, newQuantity: number) => void;
+  onDeleteDonation: (donationId: number) => void;
 }
 
 export default function CartComponent(props: CartedDonationProps) {
+  const handleUpdateQuantity = (donationId: number, newValue: number) => {
+    props.onUpdateQuantity(donationId, newValue);
+  };
+
+  const handleDeleteDonation = (donationId: number) => {
+    props.onDeleteDonation(donationId);
+  };
+
   return (
     <Container my="md">
       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-
         {props?.carted_donations.map((donation) => (
           <Card key={donation.id} shadow="xs" padding="md" withBorder style={{ width: '100%' }}>
             <div style={{ display: 'flex' }}>
@@ -19,10 +28,21 @@ export default function CartComponent(props: CartedDonationProps) {
               <div style={{ flex: 1, paddingLeft: '20px' }}>
                 <h3>{donation.donation?.description}</h3>
                 <p>{donation.donation?.donor?.business_name}</p>
+
                 <div style={{ width: '200px' }}>
-                  <NumberInput radius="sm" label="Quantity" variant="filled" value={donation.quantity} />
+                  <NumberInput
+                    radius="sm"
+                    label="Quantity"
+                    variant="filled"
+                    value={donation.quantity}
+                    onChange={(value) => handleUpdateQuantity(donation.id, value)}
+                  />
                 </div>
-                <p>Delete Donation</p>
+
+                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+                  <Button onClick={() => handleUpdateQuantity(donation.id, donation.quantity)} style={{ marginRight: '10px' }}>Update Donation</Button>
+                  <Button onClick={() => handleDeleteDonation(donation.id)}>Delete Donation</Button>
+                </div>
               </div>
             </div>
           </Card>
