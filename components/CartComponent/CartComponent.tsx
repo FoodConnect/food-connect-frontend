@@ -36,6 +36,7 @@ export default function CartComponent(props: CartedDonationProps) {
                     variant="filled"
                     value={donation.quantity}
                     onChange={(value) => handleUpdateQuantity(donation.id, value)}
+                    style={{ paddingBottom: '10px' }}
                   />
                 </div>
 

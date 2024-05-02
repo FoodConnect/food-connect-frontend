@@ -74,7 +74,7 @@ export default function CartPage() {
   // delete, aka remove carted donation
   const handleDeleteDonation = async (donationId: any) => {
     try {
-      const token = session.access_token;
+      const token = session?.access_token;
       await fetch(`http://localhost:8080/carted_donations/${donationId}`, {
         method: 'DELETE',
         headers: {
