@@ -88,7 +88,7 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
     };
   };
   const renderCart = () => {
-    if (session) {
+    if (session && session?.user.role === 'charity') {
       return {
         icon: <IconShoppingCart size="1.3rem" stroke={1.5} />,
         href: '/cart',
@@ -170,9 +170,11 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
               Food Connect
             </Text>
           </div>
-          <div>
-            <IconNumber0Small /> <IconShoppingCart />
-          </div>
+          {session?.user.role === 'charity' ? (
+            <div>
+              <IconNumber0Small /> <IconShoppingCart />
+            </div>
+          ) : null}
         </Group>
         <Group pos="absolute" mt={50} pl={10} style={{ zIndex: 700 }}>
           <ActionIcon
