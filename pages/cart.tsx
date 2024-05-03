@@ -1,15 +1,15 @@
 import { Grid, Container, Card } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
 import CartComponent from '@/components/CartComponent/CartComponent';
 import OrderSummaryComponent from '@/components/OrderSummaryComponent/OrderSummaryComponent';
+import { CartData } from '@/components/Interfaces/CartData';
+import { CartedDonationData } from '@/components/Interfaces/CartedDonationData';
 
-export default function CartPage() {
-  const router = useRouter();
-  const { id }: any = router.query;
+export default function cart() {
   const { data: session } = useSession();
-  const [carted_donations, setCartedDonations] = useState([]);
+  const [userCart, setUserCart] = useState<CartData>();
+  const [cartedDonations, setCartedDonations] = useState<CartedDonationData[]>([]);
 
   async function getData() {
     if (!session) {
@@ -17,7 +17,7 @@ export default function CartPage() {
     }
 
     const token = session.access_token;
-    const response = await fetch(`http://localhost:8080/carts/${id}`, {
+    const response = await fetch('http://localhost:8080/carts/cart_for_current_user/', {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -32,25 +32,25 @@ export default function CartPage() {
   }
 
   useEffect(() => {
-    if (!id || !session) return;
-
+    if (!session) return;
     const fetchData = async () => {
       try {
         const data = await getData();
         console.log(data);
+        setUserCart(data);
         setCartedDonations(data.carted_donations);
       } catch (error) {
         console.error('Error fetching cart data:', error);
       }
     };
     fetchData();
-  }, [id, session]);
+  }, [session]);
 
   // update quantity, aka remove item from cart
   const handleUpdateQuantity = async (donationId: any, newQuantity: any) => {
     try {
       const token = session?.access_token;
-      await fetch(`http://localhost:8080/carts/${id}/remove_from_cart/`, {
+      await fetch(`http://localhost:8080/carts/${userCart?.id}/remove_from_cart/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -59,7 +59,7 @@ export default function CartPage() {
         body: JSON.stringify({ donation_id: donationId, quantity: newQuantity }),
       });
 
-      const updatedDonations = carted_donations.map(donation => {
+      const updatedDonations = cartedDonations?.map((donation) => {
         if (donation.id === donationId) {
           return { ...donation, quantity: newQuantity };
         }
@@ -82,7 +82,9 @@ export default function CartPage() {
         },
       });
 
-      const updatedDonations = carted_donations.filter(donation => donation.id !== donationId);
+      const updatedDonations = cartedDonations?.filter(
+        (donation: { id: any }) => donation.id !== donationId
+      );
       setCartedDonations(updatedDonations);
     } catch (error) {
       console.error('Error deleting donation:', error);
@@ -95,7 +97,7 @@ export default function CartPage() {
       <Grid>
         <Grid.Col span={{ base: 12, xs: 8 }}>
           <CartComponent
-            carted_donations={carted_donations}
+            cartedDonations={cartedDonations}
             onUpdateQuantity={handleUpdateQuantity}
             onDeleteDonation={handleDeleteDonation}
           />
