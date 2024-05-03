@@ -30,6 +30,7 @@ import {
   useDonationForm,
 } from '@/components/DonationForm/DonationFormContext';
 import DonationInfoLoading from '@/components/Loading/DonationInfoLoading';
+import AddToCartComponent from '@/components/AddToCartComponent/AddToCartComponent';
 
 const Donation = () => {
   const [domLoaded, setDomLoaded] = useState(false);
@@ -257,8 +258,10 @@ const Donation = () => {
                     <Grid.Col span={{ base: 12, xs: 5 }}>
                       <Image height="500rem" src={donation?.image_data} radius="md" />
                     </Grid.Col>
+                    <AddToCartComponent />
                   </Grid>
                 )}
+
               </Paper>
             </Grid.Col>
             <Grid.Col span={{ base: 12, xs: 12 }}>

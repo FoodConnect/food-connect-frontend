@@ -1,4 +1,5 @@
 import { AppShell, Group, Text, ActionIcon, Stack, NavLink, Anchor, rem, Box } from '@mantine/core';
+import { useRouter } from 'next/router';
 import { useDisclosure } from '@mantine/hooks';
 import {
   IconBell,
@@ -15,8 +16,10 @@ import {
   IconMap2,
   IconSearch,
   IconShoppingCart,
+  IconShoppingCartFilled,
   IconUserCircle,
   IconX,
+  IconNumber0Small,
 } from '@tabler/icons-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -86,6 +89,18 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
       label: 'Sign Out',
     };
   };
+  const renderCart = () => {
+    if (session) {
+      const router = useRouter();
+      return {
+        icon: <IconShoppingCart size="1.3rem" stroke={1.5} />,
+        href: `/Carts/${router.query.id}`,
+        label: 'Cart',
+      };
+    }
+    return null;
+  };
+
   const navLinks: any[] = [
     {
       icon: <IconLayoutDashboard size="1.3rem" stroke={1.5} />,
@@ -112,11 +127,7 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
       href: '/',
       label: 'Notifications',
     },
-    {
-      icon: <IconShoppingCart size="1.3rem" stroke={1.5} />,
-      href: '/',
-      label: 'Cart',
-    },
+    renderCart(),
     renderProfile(),
     {
       ...renderSignInOrOut(),
@@ -151,11 +162,16 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
       layout="alt"
     >
       <AppShell.Header>
-        <Group h="100%" px="md">
-          <Image src="/favicon.svg" alt="Food Connect Favicon" width={60} height={60} priority />
-          <Text size="md" ta="center" fw={700}>
-            Food Connect
-          </Text>
+        <Group h="100%" px="md" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <Image src="/favicon.svg" alt="Food Connect Favicon" width={60} height={60} priority />
+        <Text size="md" fw={700}>
+          Food Connect
+        </Text>
+      </div>
+      <div>
+         <IconNumber0Small /> <IconShoppingCart />
+      </div>
         </Group>
         <Group pos="absolute" mt={50} pl={10} style={{ zIndex: 700 }}>
           <ActionIcon
