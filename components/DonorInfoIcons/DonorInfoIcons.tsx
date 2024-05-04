@@ -1,18 +1,7 @@
 import { Avatar, Text, Group } from '@mantine/core';
 import { IconAt, IconMapPin } from '@tabler/icons-react';
-import classes from './UserInfoIcons.module.css';
-
-interface DonorData {
-  donor?: {
-    business_name?: string;
-    city?: string;
-    email?: string;
-    image_data?: string;
-    phone_number?: string;
-    state?: String;
-    user_id?: number;
-  };
-}
+import classes from './DonorInfoIcons.module.css';
+import { DonorData } from '../Interfaces/DonorData';
 
 const UserInfoIcons = (props: DonorData) => {
   const { donor } = props;

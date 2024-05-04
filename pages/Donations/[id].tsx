@@ -1,6 +1,5 @@
 import {
   Button,
-  Card,
   Container,
   Drawer,
   Flex,
@@ -31,7 +30,7 @@ import {
 } from '@/components/DonationForm/DonationFormContext';
 import DonationInfoLoading from '@/components/Loading/DonationInfoLoading';
 import AddToCartComponent from '@/components/AddToCartComponent/AddToCartComponent';
-import UserInfoIcons from '@/components/UserInfoIcons/UserInfoIcons';
+import UserInfoIcons from '@/components/DonorInfoIcons/DonorInfoIcons';
 
 const Donation = () => {
   const [domLoaded, setDomLoaded] = useState(false);

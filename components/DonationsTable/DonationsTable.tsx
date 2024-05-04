@@ -1,4 +1,4 @@
-import { Table, Progress, Anchor, Text, Group } from '@mantine/core';
+import { Table, Progress, Anchor, Text, Group, Popover } from '@mantine/core';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -7,6 +7,7 @@ import classes from './DonationsTable.module.css';
 import DateFormat from '../DateFormat';
 import { DonationData } from '@/components/Interfaces/DonationData';
 import DonationsTableLoading from '../Loading/DonationsTableLoading';
+import DonorInfoPopover from '../DonorInfoPopover.tsx/DonorInfoPopover';
 
 // *REMOVE* Dummy Data for feaux authorization
 // TO BE Removed upon call connection to Django API
@@ -224,7 +225,12 @@ const DonationsTable = () => {
     return (
       <Table.Tr key={donation.id}>
         <Table.Td>
-          <Anchor component={Link} href={`/Donations/${encodeURIComponent(donation.id!)}`} fz="sm">
+          <Anchor
+            component={Link}
+            href={`/Donations/${encodeURIComponent(donation.id!)}`}
+            fz="sm"
+            c="navy"
+          >
             {donation.title}
           </Anchor>
         </Table.Td>
@@ -232,9 +238,16 @@ const DonationsTable = () => {
           <DateFormat dateString={donation.pick_up_deadline} />
         </Table.Td>
         <Table.Td>
-          <Anchor component={Link} href="/" fz="sm">
-            {donorName}
-          </Anchor>
+          <Popover width={300} position="bottom" withArrow shadow="md">
+            <Popover.Target>
+              <Anchor fz="sm" component="button" type="button" c="navy" size="xs">
+                {donorName}
+              </Anchor>
+            </Popover.Target>
+            <Popover.Dropdown>
+              <DonorInfoPopover donor={donation?.donor} />
+            </Popover.Dropdown>
+          </Popover>
         </Table.Td>
         <Table.Td>{Intl.NumberFormat().format(totalInventory)}</Table.Td>
         <Table.Td>
