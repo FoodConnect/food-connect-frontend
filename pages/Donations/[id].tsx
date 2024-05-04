@@ -31,6 +31,7 @@ import {
 } from '@/components/DonationForm/DonationFormContext';
 import DonationInfoLoading from '@/components/Loading/DonationInfoLoading';
 import AddToCartComponent from '@/components/AddToCartComponent/AddToCartComponent';
+import UserInfoIcons from '@/components/UserInfoIcons/UserInfoIcons';
 
 const Donation = () => {
   const [domLoaded, setDomLoaded] = useState(false);
@@ -261,11 +262,10 @@ const Donation = () => {
                     <AddToCartComponent />
                   </Grid>
                 )}
-
               </Paper>
             </Grid.Col>
-            <Grid.Col span={{ base: 12, xs: 12 }}>
-              <Card h={140} radius="md" bg="teal.2" />
+            <Grid.Col span={{ base: 12, xs: 12 }} my="md">
+              <UserInfoIcons donor={donation?.donor} />
             </Grid.Col>
           </Grid>
           {isAuthorized() ? (
