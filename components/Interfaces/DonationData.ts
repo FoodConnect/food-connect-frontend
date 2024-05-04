@@ -14,13 +14,13 @@ export interface DonationData {
   image_data?: string;
   created_at?: string;
   donor?: {
-    user_id?: number;
     business_name?: string;
     city?: string;
     email?: string;
     image_data?: string;
     phone_number?: string;
     state?: String;
+    user_id?: number;
   };
 }
 
