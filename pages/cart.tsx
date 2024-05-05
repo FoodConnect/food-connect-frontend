@@ -1,4 +1,5 @@
 import { Grid, Container, Card } from '@mantine/core';
+import { showNotification } from '@mantine/notifications';
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import CartComponent from '@/components/CartComponent/CartComponent';
@@ -46,11 +47,11 @@ export default function cart() {
     fetchData();
   }, [session]);
 
-  // update quantity, aka remove item from cart
-  const handleUpdateQuantity = async (donationId: any, newQuantity: any) => {
+  // Update Cart
+  const handleUpdateQuantity = async (donationId: number, newQuantity: number) => {
     try {
       const token = session?.access_token;
-      await fetch(`http://localhost:8080/carts/${userCart?.id}/remove_from_cart/`, {
+      const response = await fetch(`http://localhost:8080/carts/${userCart?.id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -59,15 +60,32 @@ export default function cart() {
         body: JSON.stringify({ donation_id: donationId, quantity: newQuantity }),
       });
 
-      const updatedDonations = cartedDonations?.map((donation) => {
+      if (!response.ok) {
+        throw new Error('Failed to update cart quantity');
+      }
+
+      const updatedDonations = cartedDonations.map((donation) => {
         if (donation.id === donationId) {
           return { ...donation, quantity: newQuantity };
         }
         return donation;
       });
+
       setCartedDonations(updatedDonations);
+
+      showNotification({
+        title: 'Success',
+        color: 'green',
+        message: 'Quantity updated!',
+      });
     } catch (error) {
       console.error('Error updating quantity:', error);
+
+      showNotification({
+        title: 'Error',
+        message: 'Failed to update quantity',
+        color: 'red',
+      });
     }
   };
 
