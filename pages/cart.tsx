@@ -7,12 +7,12 @@ import OrderSummaryComponent from '@/components/OrderSummaryComponent/OrderSumma
 import { CartData } from '@/components/Interfaces/CartData';
 import { CartedDonationData } from '@/components/Interfaces/CartedDonationData';
 
-export default function cart() {
+export default function Cart() {
   const { data: session } = useSession();
   const [userCart, setUserCart] = useState<CartData>();
   const [cartedDonations, setCartedDonations] = useState<CartedDonationData[]>([]);
 
-  async function getData() {
+  async function fetchData() {
     if (!session) {
       throw new Error('User not authenticated');
     }
@@ -34,24 +34,24 @@ export default function cart() {
 
   useEffect(() => {
     if (!session) return;
-    const fetchData = async () => {
+
+    async function getData() {
       try {
-        const data = await getData();
-        console.log(data);
+        const data = await fetchData();
         setUserCart(data);
         setCartedDonations(data.carted_donations);
       } catch (error) {
         console.error('Error fetching cart data:', error);
       }
-    };
-    fetchData();
+    }
+
+    getData();
   }, [session]);
 
-  // Update Cart
   const handleUpdateQuantity = async (donationId: number, newQuantity: number) => {
     try {
       const token = session?.access_token;
-      const response = await fetch(`http://localhost:8080/carts/${userCart?.id}`, {
+      const response = await fetch(`http://localhost:8080/carts/${userCart?.id}/update_cart/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -89,20 +89,20 @@ export default function cart() {
     }
   };
 
-  // delete, aka remove carted donation
   const handleDeleteDonation = async (donationId: any) => {
     try {
       const token = session?.access_token;
-      await fetch(`http://localhost:8080/carted_donations/${donationId}`, {
+      await fetch(`http://localhost:8080/carted_donations/${donationId}/`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      const updatedDonations = cartedDonations?.filter(
-        (donation: { id: any }) => donation.id !== donationId
+      const updatedDonations = cartedDonations.filter(
+        (donation) => donation.id !== donationId
       );
+
       setCartedDonations(updatedDonations);
     } catch (error) {
       console.error('Error deleting donation:', error);
@@ -118,6 +118,8 @@ export default function cart() {
             cartedDonations={cartedDonations}
             onUpdateQuantity={handleUpdateQuantity}
             onDeleteDonation={handleDeleteDonation}
+            session={session}
+            userCart={userCart}
           />
         </Grid.Col>
 
