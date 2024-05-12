@@ -1,16 +1,18 @@
-import { Grid, Container, Card } from '@mantine/core';
+import { Grid, Container, Card, Button, Image, NumberInput } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
+import { useForm } from '@mantine/form';
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
-import CartComponent from '@/components/CartComponent/CartComponent';
 import OrderSummaryComponent from '@/components/OrderSummaryComponent/OrderSummaryComponent';
 import { CartData } from '@/components/Interfaces/CartData';
 import { CartedDonationData } from '@/components/Interfaces/CartedDonationData';
 
-export default function Cart() {
+export default function CartPage() {
   const { data: session } = useSession();
   const [userCart, setUserCart] = useState<CartData>();
   const [cartedDonations, setCartedDonations] = useState<CartedDonationData[]>([]);
+
+  const form = useForm();
 
   async function fetchData() {
     if (!session) {
@@ -48,36 +50,30 @@ export default function Cart() {
     getData();
   }, [session]);
 
-  const handleUpdateQuantity = async (donationId: number, newQuantity: number) => {
+  // donation update
+  const handleSubmit = async (values: { newQuantity: any }, donationId: any) => {
     try {
-      const token = session?.access_token;
-      const response = await fetch(`http://localhost:8080/carts/${userCart?.id}/update_cart/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ donation_id: donationId, quantity: newQuantity }),
-      });
+      if (session) {
+        const token = session.access_token;
+        const response = await fetch(`http://localhost:8080/carts/${userCart?.id}/update_cart/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(values),
+        });
 
-      if (!response.ok) {
-        throw new Error('Failed to update cart quantity');
-      }
-
-      const updatedDonations = cartedDonations.map((donation) => {
-        if (donation.id === donationId) {
-          return { ...donation, quantity: newQuantity };
+        if (!response.ok) {
+          throw new Error('Failed to update cart quantity');
         }
-        return donation;
-      });
 
-      setCartedDonations(updatedDonations);
-
-      showNotification({
-        title: 'Success',
-        color: 'green',
-        message: 'Quantity updated!',
-      });
+        showNotification({
+          title: 'Success',
+          color: 'green',
+          message: 'Quantity updated!',
+        });
+      }
     } catch (error) {
       console.error('Error updating quantity:', error);
 
@@ -114,13 +110,51 @@ export default function Cart() {
       <h1>Your Cart</h1>
       <Grid>
         <Grid.Col span={{ base: 12, xs: 8 }}>
-          <CartComponent
-            cartedDonations={cartedDonations}
-            onUpdateQuantity={handleUpdateQuantity}
-            onDeleteDonation={handleDeleteDonation}
-            session={session}
-            userCart={userCart}
-          />
+          <Container my="md">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              {cartedDonations.map((donation) => (
+                <Card key={donation.id} shadow="xs" padding="md" withBorder style={{ width: '100%' }}>
+                  <div style={{ display: 'flex' }}>
+                    <div style={{ width: '200px', flexShrink: 0 }}>
+                      <Image
+                        src={donation.donation?.image_data}
+                        alt="Donation Image"
+                        fit="contain"
+                        width="200px"
+                        height="220px"
+                      />
+                    </div>
+                    <div style={{ flex: 1, paddingLeft: '20px' }}>
+                      <h3>{donation.donation?.description}</h3>
+                      <p>{donation.donation?.donor?.business_name}</p>
+
+                      <form onSubmit={form.onSubmit(({ newQuantity }) =>
+                        handleSubmit({ newQuantity }, donation.id!))}
+                      >
+                        <div style={{ width: '150px', paddingBottom: '10px' }}>
+                          <p>Quantity</p>
+                          <NumberInput
+                            label="Quantity"
+                            defaultValue={donation.quantity}
+                            {...form.getInputProps('newQuantity')}
+                          />
+                        </div>
+
+                        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+                          <Button type="submit" style={{ marginRight: '10px' }}>
+                            Update Donation
+                          </Button>
+                          <Button onClick={() => handleDeleteDonation(donation.id!)}>
+                            Delete Donation
+                          </Button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </Container>
         </Grid.Col>
 
         <Grid.Col span={{ base: 12, xs: 4 }}>
