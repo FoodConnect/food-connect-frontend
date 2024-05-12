@@ -1,6 +1,5 @@
 import { Grid, Container, Card, Button, Image, NumberInput } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
-import { useForm } from '@mantine/form';
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import OrderSummaryComponent from '@/components/OrderSummaryComponent/OrderSummaryComponent';
@@ -11,8 +10,7 @@ export default function CartPage() {
   const { data: session } = useSession();
   const [userCart, setUserCart] = useState<CartData>();
   const [cartedDonations, setCartedDonations] = useState<CartedDonationData[]>([]);
-
-  const form = useForm();
+  const [newQuantities, setNewQuantities] = useState<{ [key: string]: number }>({});
 
   async function fetchData() {
     if (!session) {
@@ -50,30 +48,28 @@ export default function CartPage() {
     getData();
   }, [session]);
 
-  // donation update
-  const handleSubmit = async (values: { newQuantity: any }, donationId: any) => {
+  // Function to handle quantity update
+  const handleUpdateQuantity = async (donationId: number) => {
     try {
-      if (session) {
-        const token = session.access_token;
-        const response = await fetch(`http://localhost:8080/carts/${userCart?.id}/update_cart/`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(values),
-        });
+      const token = session?.access_token;
+      const response = await fetch(`http://localhost:8080/carts/${userCart?.id}/update_cart/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ newQuantity: newQuantities[String(donationId)] }),
+      });
 
-        if (!response.ok) {
-          throw new Error('Failed to update cart quantity');
-        }
-
-        showNotification({
-          title: 'Success',
-          color: 'green',
-          message: 'Quantity updated!',
-        });
+      if (!response.ok) {
+        throw new Error('Failed to update cart quantity');
       }
+
+      showNotification({
+        title: 'Success',
+        color: 'green',
+        message: 'Quantity updated!',
+      });
     } catch (error) {
       console.error('Error updating quantity:', error);
 
@@ -83,6 +79,14 @@ export default function CartPage() {
         color: 'red',
       });
     }
+  };
+
+  // Function to handle quantity change in NumberInput
+  const handleQuantityChange = (value: string | number, donationId: number) => {
+    setNewQuantities((prevQuantities) => ({
+      ...prevQuantities,
+      [String(donationId)]: typeof value === 'string' ? parseInt(value, 10) : value,
+    }));
   };
 
   const handleDeleteDonation = async (donationId: any) => {
@@ -128,27 +132,25 @@ export default function CartPage() {
                       <h3>{donation.donation?.description}</h3>
                       <p>{donation.donation?.donor?.business_name}</p>
 
-                      <form onSubmit={form.onSubmit(({ newQuantity }) =>
-                        handleSubmit({ newQuantity }, donation.id!))}
-                      >
                         <div style={{ width: '150px', paddingBottom: '10px' }}>
                           <p>Quantity</p>
                           <NumberInput
                             label="Quantity"
-                            defaultValue={donation.quantity}
-                            {...form.getInputProps('newQuantity')}
+                            value={newQuantities[String(donation.id)] !== undefined ?
+                               newQuantities[String(donation.id)].toString() :
+                                donation.quantity.toString()}
+                            onChange={(value) => handleQuantityChange(value, donation.id!)}
                           />
                         </div>
 
                         <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-                          <Button type="submit" style={{ marginRight: '10px' }}>
-                            Update Donation
-                          </Button>
+                        <Button onClick={() => handleUpdateQuantity(donation.id!)}>
+                          Update Donation
+                        </Button>
                           <Button onClick={() => handleDeleteDonation(donation.id!)}>
                             Delete Donation
                           </Button>
                         </div>
-                      </form>
                     </div>
                   </div>
                 </Card>
