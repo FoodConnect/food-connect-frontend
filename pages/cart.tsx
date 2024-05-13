@@ -48,38 +48,47 @@ export default function CartPage() {
     getData();
   }, [session]);
 
-  // Function to handle quantity update
-  const handleUpdateQuantity = async (donationId: number) => {
-    try {
-      const token = session?.access_token;
-      const response = await fetch(`http://localhost:8080/carts/${userCart?.id}/update_cart/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ newQuantity: newQuantities[String(donationId)] }),
-      });
+ // Function to handle quantity update
+ const handleUpdateQuantity = async (donationId: number) => {
+  console.log('DONATION ID: ', donationId);
+  try {
+    const token = session?.access_token;
+    const response = await fetch(`http://localhost:8080/carts/${userCart?.id}/update_cart/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        donation_id: donationId,
+        quantity: newQuantities[String(donationId)],
+      }),
+    });
 
-      if (!response.ok) {
-        throw new Error('Failed to update cart quantity');
-      }
+    console.log(JSON.stringify({
+      donation_id: donationId,
+      quantity: newQuantities[String(donationId)],
+    }));
 
-      showNotification({
-        title: 'Success',
-        color: 'green',
-        message: 'Quantity updated!',
-      });
-    } catch (error) {
-      console.error('Error updating quantity:', error);
-
-      showNotification({
-        title: 'Error',
-        message: 'Failed to update quantity',
-        color: 'red',
-      });
+    if (!response.ok) {
+      throw new Error('Failed to update cart quantity');
     }
-  };
+
+    showNotification({
+      title: 'Success',
+      color: 'green',
+      message: 'Quantity updated!',
+    });
+  } catch (error) {
+    console.error('Error updating quantity:', error);
+
+    showNotification({
+      title: 'Error',
+      message: 'Failed to update quantity',
+      color: 'red',
+    });
+  }
+};
 
   // Function to handle quantity change in NumberInput
   const handleQuantityChange = (value: string | number, donationId: number) => {
