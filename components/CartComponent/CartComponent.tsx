@@ -67,7 +67,7 @@ const CartComponent = (props: CartProps) => {
       showNotification({
         title: 'Success',
         color: 'green',
-        message: 'Quantity updated!',
+        message: 'Donation deleted.',
       });
     } catch (error) {
       console.error('Error deleting donation:', error);
