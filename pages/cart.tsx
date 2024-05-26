@@ -1,4 +1,4 @@
-import { Grid, Container, Card } from '@mantine/core';
+import { Grid, Container, Card, Notification } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
@@ -14,6 +14,7 @@ export default function CartPage() {
   const { data: session } = useSession();
   const [userCart, setUserCart] = useState<CartData>();
   const [cartedDonations, setCartedDonations] = useState<CartedDonationData[]>([]);
+  const [checkoutSuccess, setCheckoutSuccess] = useState(false);
 
   async function fetchData() {
     if (!session) {
@@ -68,10 +69,7 @@ export default function CartPage() {
       if (!response.ok) {
         throw new Error('Failed to checkout');
       }
-      // replace with re-route to completed order page
-      if (response.ok) {
-        router.push('/Donations/charity-donations');
-      }
+      setCheckoutSuccess(true);
     } catch (error) {
       console.error('Error checking out:', error);
 
@@ -82,6 +80,22 @@ export default function CartPage() {
       });
     }
   };
+
+  useEffect(() => {
+    let redirectTimer: NodeJS.Timeout | null = null;
+
+    if (checkoutSuccess) {
+      redirectTimer = setTimeout(() => {
+        router.push('/Orders/charity-orders');
+      }, 3000);
+    }
+
+    return () => {
+      if (redirectTimer) {
+        clearTimeout(redirectTimer);
+      }
+    };
+  }, [checkoutSuccess, router]);
 
   return cartedDonations.length === 0 ? (
     <NoCartHeroTitle />
@@ -105,12 +119,21 @@ export default function CartPage() {
           </Container>
         </Grid.Col>
         <Grid.Col span={{ base: 12, xs: 4 }}>
-        <OrderSummaryComponent isCartPage onCheckout={handleCheckout} />
+          <OrderSummaryComponent isCartPage onCheckout={handleCheckout} />
         </Grid.Col>
         <Grid.Col span={{ base: 12, xs: 12 }}>
           <Card h={140} radius="md" bg="teal.2" />
         </Grid.Col>
       </Grid>
+      {checkoutSuccess && (
+        <Notification
+          color="green"
+          title="Checkout Successful"
+          onClose={() => setCheckoutSuccess(false)}
+        >
+          Redirecting...
+        </Notification>
+      )}
     </Container>
   );
 }
