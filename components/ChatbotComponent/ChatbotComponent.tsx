@@ -64,7 +64,7 @@ export default function ChatbotComponent() {
             shadow="sm"
           >
         <Grid.Col span={12}>
-        <Title order={2} style={{ color: 'black', fontSize: '34px' }}>Chat with CompostBot <IconRobotFace /></Title>
+        <Title order={2} style={{ color: 'black', fontSize: '34px' }}>Chat with CompostBot <IconRobotFace size="2rem" /></Title>
         </Grid.Col>
             <Grid>
               <Grid.Col span={12}>
