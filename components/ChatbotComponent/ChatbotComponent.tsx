@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, ChangeEvent } from 'react';
+import { useState, ChangeEvent, useEffect } from 'react';
 import OpenAI from 'openai';
 import { Button, Card, Text, TextInput, Loader, ScrollArea, Container, Paper, Grid, Title } from '@mantine/core';
 import { IconRobotFace } from '@tabler/icons-react';
@@ -49,31 +49,37 @@ export default function ChatbotComponent() {
     setIsLoading(false);
   };
 
+  // starting message from bot
+  useEffect(() => {
+    setChatHistory([{ role: 'assistant', content: 'Hello, I am your compost helper! What food items do you need to dispose of today?' }]);
+  }, []);
+
   return (
     <Container my="md">
       <Grid>
-      <Grid.Col span={12}>
-        <Title order={2} style={{ color: 'black' }}>Compost Chatbot <IconRobotFace /></Title>
-      </Grid.Col>
         <Grid.Col span={12}>
           <Paper
-            style={{ padding: '20px', backgroundColor: '#f0fff0', borderRadius: '8px' }}
+            style={{ padding: '20px', borderRadius: '8px', backgroundColor: 'white' }}
+            withBorder
             shadow="sm"
           >
+        <Grid.Col span={12}>
+        <Title order={2} style={{ color: 'black', fontSize: '34px' }}>Chat with CompostBot <IconRobotFace /></Title>
+        </Grid.Col>
             <Grid>
               <Grid.Col span={12}>
-                <ScrollArea style={{ height: '400px', marginBottom: '20px' }}>
+                <ScrollArea style={{ height: '600px', marginBottom: '20px' }}>
                   {chatHistory.map((message, index) => (
                     <Card
                       key={index}
                       style={{
                         margin: '10px 0',
                         alignSelf: message.role === 'user' ? 'flex-end' : 'flex-start',
-                        backgroundColor: message.role === 'user' ? '#a5d6a7' : '#c8e6c9',
+                        backgroundColor: message.role === 'user' ? '#cfe8e6' : '#d9ead3',
                       }}
                     >
-                      <Text>
-                        <strong>{message.role === 'user' ? 'User' : 'Assistant'}:</strong> {message.content}
+                      <Text style={{ fontSize: '20px' }}>
+                        <strong>{message.role === 'user' ? 'User' : 'CompostBot'}:</strong> {message.content}
                       </Text>
                     </Card>
                   ))}
@@ -81,23 +87,24 @@ export default function ChatbotComponent() {
                 </ScrollArea>
               </Grid.Col>
               <Grid.Col span={12}>
+              <div style={{ display: 'flex', alignItems: 'center', fontSize: '20px' }}>
                 <TextInput
+                  size="lg"
                   value={userInput}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => setUserInput(e.target.value)}
+                  style={{ flex: 1, marginRight: '10px' }}
                   placeholder="Type your message"
-                  styles={{
-                    input: { paddingRight: '100px' },
-                  }}
-                  rightSection={
-                    <Button
-                      onClick={handleUserInput}
-                      disabled={isLoading}
-                      style={{ marginRight: '-90px', height: '44px', backgroundColor: '#4caf50', color: 'white' }}
-                    >
-                      {isLoading ? 'Loading...' : 'Send'}
-                    </Button>
-                  }
                 />
+                <Button
+                  size="lg"
+                  onClick={handleUserInput}
+                  disabled={isLoading}
+                  color="green"
+                  style={{ fontSize: 'inherit' }}
+                >
+                  {isLoading ? 'Loading...' : 'Send'}
+                </Button>
+              </div>
               </Grid.Col>
             </Grid>
           </Paper>
