@@ -79,7 +79,7 @@ export default function ChatbotComponent() {
                       }}
                     >
                       <Text style={{ fontSize: '20px' }}>
-                        <strong>{message.role === 'user' ? 'User' : 'CompostBot'}:</strong> {message.content}
+                        <strong>{message.role === 'user' ? 'You' : 'CompostBot'}:</strong> {message.content}
                       </Text>
                     </Card>
                   ))}
