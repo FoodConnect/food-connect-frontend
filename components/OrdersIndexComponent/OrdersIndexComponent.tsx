@@ -17,9 +17,13 @@ function formatDate(dateString?: string): string {
 }
 
 export default function OrdersIndexComponent({ orders }: OrderDataProps) {
+  const sortedOrders = orders.sort((a, b) => {
+    if (!a.created_at || !b.created_at) return 0;
+    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+  });
   return (
     <Container my="md">
-      {orders.map((order) => (
+      {sortedOrders.map((order) => (
           <Card shadow="xs" padding="md" withBorder style={{ marginBottom: '20px', cursor: 'pointer' }}>
             <div style={{ paddingLeft: '20px' }}>
               <Link href={`/Orders/${order.id}`} key={order.id} passHref>
