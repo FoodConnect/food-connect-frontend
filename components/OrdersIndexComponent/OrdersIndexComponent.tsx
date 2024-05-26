@@ -22,7 +22,7 @@ export default function OrdersIndexComponent({ orders }: OrderDataProps) {
       {orders.map((order) => (
           <Card shadow="xs" padding="md" withBorder style={{ marginBottom: '20px', cursor: 'pointer' }}>
             <div style={{ paddingLeft: '20px' }}>
-              <Link href={`/orders/${order.id}`} key={order.id} passHref>
+              <Link href={`/Orders/${order.id}`} key={order.id} passHref>
                 <h3>Order ID: {order.id}</h3>
               </Link>
               <h4>Order Placed: {formatDate(order.created_at)}</h4>

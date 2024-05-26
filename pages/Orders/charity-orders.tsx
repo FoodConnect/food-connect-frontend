@@ -36,7 +36,7 @@ export default function OrderIndexPage() {
     async function getData() {
       try {
         const data = await fetchData();
-        setOrders(data); // No need for filtering here
+        setOrders(data);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching order data', error);

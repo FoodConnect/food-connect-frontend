@@ -25,7 +25,7 @@ export function OrderSuccessHeroTitle() {
         <Group className={classes.controls}>
           <Button
             component={Link}
-            href="/"
+            href="/Orders/charity-orders/"
             size="xl"
             className={classes.control}
             variant="gradient"

@@ -18,6 +18,7 @@ import {
   IconUserCircle,
   IconX,
   IconNumber0Small,
+  IconPackage,
 } from '@tabler/icons-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -114,6 +115,12 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
       href: checkUserType(),
       label: 'Donations',
     },
+    renderCart(),
+    {
+      icon: <IconPackage size="1.3rem" stroke={1.5} />,
+      href: '/Orders/charity-orders/',
+      label: 'Orders',
+    },
     {
       icon: <IconMap2 size="1.3rem" stroke={1.5} />,
       href: '/',
@@ -124,7 +131,6 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
       href: '/',
       label: 'Notifications',
     },
-    renderCart(),
     renderProfile(),
     {
       ...renderSignInOrOut(),
@@ -172,7 +178,10 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
           </div>
           {session?.user.role === 'charity' ? (
             <div>
-              <IconNumber0Small /> <IconShoppingCart />
+              <IconNumber0Small />
+              <Link href="/cart">
+              <IconShoppingCart />
+              </Link>
             </div>
           ) : null}
         </Group>
