@@ -86,7 +86,7 @@ export default function CartPage() {
 
     if (checkoutSuccess) {
       redirectTimer = setTimeout(() => {
-        router.push('/Orders/charity-orders');
+        router.push('/Orders/all-orders/');
       }, 3000);
     }
 

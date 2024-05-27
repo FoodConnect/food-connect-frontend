@@ -16,7 +16,7 @@ function formatDate(dateString?: string): string {
   });
 }
 
-export default function OrdersIndexComponent({ orders }: OrderDataProps) {
+export default function CharityOrdersComponent({ orders }: OrderDataProps) {
   const sortedOrders = orders.sort((a, b) => {
     if (!a.created_at || !b.created_at) return 0;
     return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();

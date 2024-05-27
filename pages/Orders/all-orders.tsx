@@ -2,7 +2,7 @@ import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { Container } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
-import OrdersIndexComponent from '@/components/OrdersIndexComponent/OrdersIndexComponent';
+import CharityOrdersComponent from '@/components/OrdersIndexComponent/CharityOrdersComponent';
 import { OrderData } from '@/components/Interfaces/OrderData';
 
 export default function OrderIndexPage() {
@@ -62,7 +62,7 @@ export default function OrderIndexPage() {
   return (
     <Container my="md">
       <h1>Your Orders</h1>
-      <OrdersIndexComponent orders={orders} />
+      <CharityOrdersComponent orders={orders} />
     </Container>
   );
 }

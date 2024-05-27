@@ -11,7 +11,6 @@ export default function OrderDetailsComponent(props: OrderedDonationProps) {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
 
       <Card shadow="xs" padding="md" withBorder style={{ width: '100%' }}>
-        <h4>Order #: 1234567</h4>
         {props?.ordered_donations.map((ordered_donation) => (
             <div style={{ display: 'flex' }}>
               <div style={{ width: '200px', flexShrink: 0 }}>

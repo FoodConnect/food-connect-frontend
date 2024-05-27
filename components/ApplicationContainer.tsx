@@ -118,7 +118,7 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
     renderCart(),
     {
       icon: <IconPackage size="1.3rem" stroke={1.5} />,
-      href: '/Orders/charity-orders/',
+      href: '/Orders/all-orders/',
       label: 'Orders',
     },
     {
