@@ -69,6 +69,7 @@ const CartComponent = (props: CartProps) => {
         color: 'green',
         message: 'Donation deleted.',
       });
+      window.location.reload();
     } catch (error) {
       console.error('Error deleting donation:', error);
     }
