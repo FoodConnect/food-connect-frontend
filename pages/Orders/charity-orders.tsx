@@ -5,7 +5,7 @@ import { showNotification } from '@mantine/notifications';
 import CharityOrdersComponent from '@/components/OrdersIndexComponent/CharityOrdersComponent';
 import { OrderData } from '@/components/Interfaces/OrderData';
 
-export default function OrderIndexPage() {
+export default function CharityOrdersPage() {
   const { data: session } = useSession();
   const [orders, setOrders] = useState<OrderData[]>([]);
   const [loading, setLoading] = useState(true);

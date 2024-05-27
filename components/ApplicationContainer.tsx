@@ -57,10 +57,10 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
   // Navbar Link Features and Map Function
   const checkUserType = () => {
     if (session?.user.role === 'donor') {
-      return '/Donations/donor-donations';
+      return '/Donations/donor-donations' && '/Orders/donor-orders';
     }
     if (session?.user.role === 'charity') {
-      return '/Donations/charity-donations';
+      return '/Donations/charity-donations' && 'Orders/charity-orders';
     }
     return '/no-auth';
   };
@@ -118,7 +118,7 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
     renderCart(),
     {
       icon: <IconPackage size="1.3rem" stroke={1.5} />,
-      href: '/Orders/all-orders/',
+      href: checkUserType(),
       label: 'Orders',
     },
     {

@@ -7,7 +7,15 @@ export interface OrderedDonationData {
   order?: {
     id?: number;
     created_at?: string;
-    charity_id?: number;
+    charity?: {
+      user_id?: number;
+      business_name?: string;
+      city?: string;
+      email?: string;
+      image_data?: string;
+      phone_number?: string;
+      state?: string;
+    }
     donation_receipt?: string;
   }
 }
