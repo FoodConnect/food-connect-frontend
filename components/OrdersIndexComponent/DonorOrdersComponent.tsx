@@ -16,6 +16,7 @@ function formatDate(dateString?: string): string {
   });
 }
 
+// order.ordered_donation.donation.donor
 export default function DonorOrdersComponent({ ordered_donations }: DonorOrdersComponentProps) {
   return (
     <Container my="md">
