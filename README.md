@@ -1,13 +1,22 @@
 ## Getting Started
 
-First, install Next.js:
+1. First, install Next.js:
 
-```
+```bash
 npm install next@latest react@latest react-dom@latest
-
 ```
 
-Then, run the development server:
+2. Create an `.env.local` file and copy and paste the variables from `.env.defaults.` Fill in the values as appropriate.
+
+3. For use of the Compost Chatbot, install openai:
+
+```bash
+npm install openai
+```
+
+Then generate a secret key on your [OpenAI](https://openai.com/api/) account to access the API. Insert the key into your .env.local file.
+
+4. To start the frontend of the app, run the development server:
 
 ```bash
 npm run dev
@@ -19,8 +28,8 @@ pnpm dev
 bun dev
 ```
 
+# About the Template
 
-# About the Template 
 ## Mantine Next.js template
 
 This is a template for [Next.js](https://nextjs.org/) pages router + [Mantine](https://mantine.dev/).

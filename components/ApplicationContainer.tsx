@@ -18,6 +18,7 @@ import {
   IconUserCircle,
   IconX,
   IconNumber0Small,
+  IconRobotFace,
   IconPackage,
 } from '@tabler/icons-react';
 import Image from 'next/image';
@@ -114,6 +115,11 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
       icon: <IconCarrot size="1.3rem" stroke={1.5} />,
       href: checkUserType(),
       label: 'Donations',
+    },
+    {
+      icon: <IconRobotFace size="1.3rem" stroke={1.5} />,
+      href: '/chatbot',
+      label: 'CompostBot',
     },
     renderCart(),
     {
