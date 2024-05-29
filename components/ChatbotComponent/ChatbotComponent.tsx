@@ -68,7 +68,7 @@ export default function ChatbotComponent() {
         </Grid.Col>
             <Grid>
               <Grid.Col span={12}>
-                <ScrollArea style={{ height: '600px', marginBottom: '20px' }}>
+                <ScrollArea style={{ height: '550px', marginBottom: '20px' }}>
                   {chatHistory.map((message, index) => (
                     <Card
                       key={index}
