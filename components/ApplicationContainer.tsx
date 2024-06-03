@@ -19,6 +19,7 @@ import {
   IconX,
   IconNumber0Small,
   IconRobotFace,
+  IconPackage,
 } from '@tabler/icons-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -55,7 +56,7 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
   // End Footer item features and function
 
   // Navbar Link Features and Map Function
-  const checkUserType = () => {
+  const checkUserTypeDonations = () => {
     if (session?.user.role === 'donor') {
       return '/Donations/donor-donations';
     }
@@ -64,6 +65,17 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
     }
     return '/no-auth';
   };
+
+  const checkUserTypeOrders = () => {
+    if (session?.user.role === 'donor') {
+      return '/Orders/donor-orders';
+    }
+    if (session?.user.role === 'charity') {
+      return '/Orders/charity-orders';
+    }
+    return '/no-auth';
+  };
+
   const renderProfile = () => {
     if (session) {
       return {
@@ -112,13 +124,19 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
     },
     {
       icon: <IconCarrot size="1.3rem" stroke={1.5} />,
-      href: checkUserType(),
+      href: checkUserTypeDonations(),
       label: 'Donations',
     },
     {
       icon: <IconRobotFace size="1.3rem" stroke={1.5} />,
       href: '/chatbot',
       label: 'CompostBot',
+    },
+    renderCart(),
+    {
+      icon: <IconPackage size="1.3rem" stroke={1.5} />,
+      href: checkUserTypeOrders(),
+      label: 'Orders',
     },
     {
       icon: <IconMap2 size="1.3rem" stroke={1.5} />,
@@ -130,7 +148,6 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
       href: '/',
       label: 'Notifications',
     },
-    renderCart(),
     renderProfile(),
     {
       ...renderSignInOrOut(),
@@ -178,7 +195,10 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
           </div>
           {session?.user.role === 'charity' ? (
             <div>
-              <IconNumber0Small /> <IconShoppingCart />
+              <IconNumber0Small />
+              <Link href="/cart">
+              <IconShoppingCart />
+              </Link>
             </div>
           ) : null}
         </Group>

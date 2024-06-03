@@ -67,8 +67,9 @@ const CartComponent = (props: CartProps) => {
       showNotification({
         title: 'Success',
         color: 'green',
-        message: 'Quantity updated!',
+        message: 'Donation deleted.',
       });
+      window.location.reload();
     } catch (error) {
       console.error('Error deleting donation:', error);
     }
@@ -99,7 +100,6 @@ const CartComponent = (props: CartProps) => {
           <p>{props.cartedDonation.donation?.donor?.business_name}</p>
 
           <div style={{ width: '150px', paddingBottom: '10px' }}>
-            <p>Quantity</p>
             <NumberInput
               label="Quantity"
               value={quantity}
@@ -111,7 +111,7 @@ const CartComponent = (props: CartProps) => {
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-            <Button onClick={() => handleUpdateQuantity()}>Update Donation</Button>
+            <Button onClick={() => handleUpdateQuantity()} style={{ marginRight: '10px' }}>Update Donation</Button>
             <Button onClick={() => handleDeleteDonation()}>Delete Donation</Button>
           </div>
         </div>

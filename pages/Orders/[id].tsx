@@ -47,7 +47,7 @@ export default function OrderPage() {
 
   return (
       <Container my="md">
-        <h1>Order Details</h1>
+        <h1>Order #{id} Details</h1>
         <OrderSummaryComponent isCartPage={false} />
         <OrderDetailsComponent ordered_donations={ordered_donations} />
       </Container>
