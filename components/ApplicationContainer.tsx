@@ -56,15 +56,26 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
   // End Footer item features and function
 
   // Navbar Link Features and Map Function
-  const checkUserType = () => {
+  const checkUserTypeDonations = () => {
     if (session?.user.role === 'donor') {
-      return '/Donations/donor-donations' && '/Orders/donor-orders';
+      return '/Donations/donor-donations';
     }
     if (session?.user.role === 'charity') {
-      return '/Donations/charity-donations' && 'Orders/charity-orders';
+      return '/Donations/charity-donations';
     }
     return '/no-auth';
   };
+
+  const checkUserTypeOrders = () => {
+    if (session?.user.role === 'donor') {
+      return '/Orders/donor-orders';
+    }
+    if (session?.user.role === 'charity') {
+      return '/Orders/charity-orders';
+    }
+    return '/no-auth';
+  };
+
   const renderProfile = () => {
     if (session) {
       return {
@@ -113,7 +124,7 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
     },
     {
       icon: <IconCarrot size="1.3rem" stroke={1.5} />,
-      href: checkUserType(),
+      href: checkUserTypeDonations(),
       label: 'Donations',
     },
     {
@@ -124,7 +135,7 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
     renderCart(),
     {
       icon: <IconPackage size="1.3rem" stroke={1.5} />,
-      href: checkUserType(),
+      href: checkUserTypeOrders(),
       label: 'Orders',
     },
     {
