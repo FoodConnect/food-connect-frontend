@@ -12,12 +12,12 @@ export interface OrderData {
     image_data?: string;
     phone_number?: string;
     state?: string;
-  };
+  }
   ordered_donations?: [
     {
       id?: number;
       donation?: DonationData;
       quantity?: number
     }
-  ]
+  ];
 }

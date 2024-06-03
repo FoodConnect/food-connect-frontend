@@ -1,5 +1,4 @@
 import { Card, Container, Divider, Image } from '@mantine/core';
-import Link from 'next/link';
 import { OrderedDonationData } from '../Interfaces/OrderedDonationData';
 
 interface DonorOrdersComponentProps {
@@ -16,19 +15,20 @@ function formatDate(dateString?: string): string {
   });
 }
 
-// order.ordered_donation.donation.donor
 export default function DonorOrdersComponent({ ordered_donations }: DonorOrdersComponentProps) {
+  ordered_donations.sort((a, b) => {
+    const dateA = new Date(a.order?.created_at || '');
+    const dateB = new Date(b.order?.created_at || '');
+    return dateB.getTime() - dateA.getTime();
+  });
   return (
     <Container my="md">
       {ordered_donations.map((ordered_donation) => (
         <Card key={ordered_donation.order?.id} shadow="xs" padding="md" withBorder style={{ marginBottom: '20px', cursor: 'pointer' }}>
           <div style={{ paddingLeft: '20px' }}>
-            <Link href={`/Orders/${ordered_donation.order?.id}`} passHref>
               <h3>Order ID: {ordered_donation.order?.id}</h3>
-            </Link>
             <h4>Order Placed: {formatDate(ordered_donation.order?.created_at)}</h4>
-            <p>Charity: {ordered_donation.order?.charity?.business_name}</p>
-            <p>Quantity: {ordered_donation.quantity}</p>
+            <p>Ordered by: {ordered_donation.order?.charity?.user?.business_name}</p>
             <Divider />
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <div style={{ width: '100px', height: '100px', marginRight: '20px', overflow: 'hidden' }}>
@@ -40,7 +40,9 @@ export default function DonorOrdersComponent({ ordered_donations }: DonorOrdersC
               </div>
               <div>
                 <p style={{ margin: 0, fontWeight: 'bold' }}>{ordered_donation.donation?.title}</p>
-                <p style={{ margin: 0 }}>{ordered_donation.donation?.donor?.business_name}</p>
+                <p style={{ margin: 0 }}>Quantity:
+                {ordered_donation.quantity}
+                </p>
               </div>
             </div>
           </div>
