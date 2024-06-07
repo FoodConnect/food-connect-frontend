@@ -1,4 +1,4 @@
-import { Table, Progress, Anchor, Text, Group, Popover } from '@mantine/core';
+import { Table, Progress, Anchor, Text, Group, Popover, Select, TextInput } from '@mantine/core';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -15,13 +15,39 @@ const DonationsTable = () => {
   const { data: session } = useSession();
   const path = useRouter().asPath;
 
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
+
+  const categoryOptions = [
+    { value: '', label: 'All Categories' },
+    { value: 'produce', label: 'produce' },
+    { value: 'canned', label: 'canned' },
+    { value: 'dairy', label: 'dairy' },
+    { value: 'dry', label: 'dry' },
+  ];
+
   // Condition for Donor Donation Page filtered donation list
   const filterData = (data: DonationData[]) => {
+    let filteredData = data;
+
     if (path === '/Donations/donor-donations') {
-      return data.filter((donation) => donation?.donor?.user_id === session?.user.pk);
-    }
-    return data;
-  };
+      filteredData = filteredData.filter((donation) =>
+        donation?.donor?.user_id === session?.user.pk);
+  }
+  if (searchQuery) {
+    filteredData = filteredData.filter((donation) =>
+      donation?.title?.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }
+
+  if (selectedCategory) {
+    filteredData = filteredData.filter((donation) =>
+      donation?.category?.toLowerCase() === selectedCategory.toLowerCase()
+    );
+  }
+
+  return filteredData;
+};
 
   // *REMOVE* DELAY FUNCTION for Development Presentation of Loading State
   function timeout(delay: number) {
@@ -51,7 +77,7 @@ const DonationsTable = () => {
     };
 
     fetchData();
-  }, [session]);
+  }, [session, searchQuery, selectedCategory]);
 
   const donations = tableItems?.map((donation: DonationData) => {
     const totalInventory = donation.remaining_inventory! + donation.claimed_inventory!;
@@ -113,6 +139,19 @@ const DonationsTable = () => {
 
   return (
     <>
+    <div className={classes.filters}>
+      <TextInput
+        placeholder="Search by title"
+        value={searchQuery}
+        onChange={(event) => setSearchQuery(event.currentTarget.value)}
+      />
+      <Select
+        placeholder="Select category"
+        data={categoryOptions}
+        value={selectedCategory}
+        onChange={(value) => setSelectedCategory(value || '')}
+      />
+    </div>
       {loading ? (
         <DonationsTableLoading />
       ) : (
