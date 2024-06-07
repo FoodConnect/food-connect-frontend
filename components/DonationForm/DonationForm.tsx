@@ -17,7 +17,7 @@ export default function DonationForm() {
     'Write something that describes your donation concisely for charities to veiw.';
   const imageUrlTooltipText =
     'This field will eventually go away. It exists to save Image URLs until the above dropzone is functioning.';
-  const categoryOptions = ['Produce', 'Canned', 'Dairy', 'Dry'];
+  const categoryOptions = ['produce', 'canned', 'dairy', 'dry', 'other'];
 
   return (
     <Grid>
@@ -48,7 +48,10 @@ export default function DonationForm() {
           Category
         </Text>
         <ScrollArea.Autosize maw={600} type="never">
-          <GradientSegmentedControl categoryOptions={categoryOptions} />
+          <GradientSegmentedControl
+            categoryOptions={categoryOptions}
+            {...form.getInputProps('category')}
+          />
         </ScrollArea.Autosize>
       </Grid.Col>
       <Grid.Col span={{ base: 12, xs: 4 }}>
