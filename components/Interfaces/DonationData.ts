@@ -10,6 +10,7 @@ export interface DonationData {
   state?: string;
   zipcode?: string;
   description?: string;
+  category?: string;
   is_available?: boolean;
   image_data?: string;
   created_at?: string;
