@@ -1,5 +1,6 @@
 import { useMemo, useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import styles from '@/components/MapComponent/MapComponent.module.css';
 
 const MapPage: React.FC = () => {
   console.log('MapPage rendering');
@@ -20,7 +21,7 @@ const MapPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="map-container">
+    <div className={styles['map-component']}>
       <MapComponent position={[51.505, -0.09]} zoom={13} />
     </div>
   );
