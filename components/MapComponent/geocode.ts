@@ -3,6 +3,10 @@ import axios from 'axios';
 const GEOCODE_API_URL = 'https://api.opencagedata.com/geocode/v1/json';
 const API_KEY = process.env.NEXT_OPENCAGE_API_KEY;
 
+if (!API_KEY) {
+  throw new Error('Missing OpenCage API key in environment variables');
+}
+
 interface GeocodeResponse {
   lat: number;
   lng: number;
