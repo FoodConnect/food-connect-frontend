@@ -3,9 +3,7 @@ import axios from 'axios';
 const GEOCODE_API_URL = 'https://api.opencagedata.com/geocode/v1/json';
 const API_KEY = process.env.NEXT_OPENCAGE_API_KEY;
 
-if (!API_KEY) {
-  throw new Error('Missing OpenCage API key in environment variables');
-}
+console.log(API_KEY);
 
 interface GeocodeResponse {
   lat: number;
@@ -17,7 +15,6 @@ export const geocodeAddress = async (address: string): Promise<GeocodeResponse> 
     params: {
       key: API_KEY,
       q: address,
-      limit: 1,
     },
   });
 
