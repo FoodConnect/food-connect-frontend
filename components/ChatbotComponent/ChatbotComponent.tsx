@@ -12,31 +12,39 @@ import {
   Title,
 } from '@mantine/core';
 import { IconRobotFace } from '@tabler/icons-react';
+import { useSession } from 'next-auth/react';
+import { Session } from 'next-auth';
 import { sendMessage } from '../ApiRequests/messageToCompostChatbot';
+
+interface ExtendedSession extends Session {
+  jti?: string;
+}
 
 interface ChatMessage {
   role: 'user' | 'assistant';
   content: string;
 }
 
-// const openai = new OpenAI({
-//   apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY!,
-//   dangerouslyAllowBrowser: true,
-// });
-
 export default function ChatbotComponent() {
   const [userInput, setUserInput] = useState<string>('');
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { data: session } = useSession() as { data: ExtendedSession | null };
+  const [sessionId, setSessionId] = useState('');
 
   const handleUserInput = async () => {
+    if (!session) {
+      // eslint-disable-next-line no-alert
+      alert('Please sign in to use the CompostBot.');
+      return;
+    }
     setIsLoading(true);
 
     // Add the user's message to the chat history
     setChatHistory((prevChat) => [...prevChat, { role: 'user', content: userInput }]);
 
     try {
-      const assistantContent = await sendMessage(userInput, 'test_session');
+      const assistantContent = await sendMessage(userInput, sessionId ?? '');
       setChatHistory((prevChat) => [...prevChat, { role: 'assistant', content: assistantContent }]);
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -59,7 +67,14 @@ export default function ChatbotComponent() {
           'Hello, I am your compost helper! What food items do you need to dispose of today?',
       },
     ]);
-  }, []);
+    if (session) {
+      console.log('sessionID:', session.jti);
+      setSessionId(session.jti);
+    } else {
+      console.log('No session available');
+      setSessionId('unknown_user');
+    }
+  }, [session]);
 
   return (
     <Container my="md">
