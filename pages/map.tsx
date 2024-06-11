@@ -14,7 +14,7 @@ interface Position {
 }
 
 export default function MapPage() {
-  const [positions, setPositions] = useState<Position[]>([]);
+  const [donations, setDonations] = useState<(DonationData & { position: Position })[]>([]);
   const zoom = 13;
   const { data: session } = useSession();
 
@@ -35,17 +35,20 @@ export default function MapPage() {
         throw new Error('Failed to fetch donation pickup addresses');
       }
 
-      const donations = await response.json();
+      const donationsData: DonationData[] = await response.json();
 
-      const geocodedPositions = await Promise.all(
-        donations.map(async (donation: DonationData) => {
-          const fullAddress = `${donation.address}, ${donation.city}, ${donation.state}, ${donation.zipcode}, 'United States of America'`;
+      const donationsWithPositions = await Promise.all(
+        donationsData.map(async (donation) => {
+          const fullAddress = `${donation.address}, ${donation.city}, ${donation.state}, ${donation.zipcode}`;
           const { lat, lng } = await geocodeAddress(fullAddress);
-          return { lat, lng };
+          return {
+            ...donation,
+            position: { lat, lng },
+          };
         })
       );
 
-      setPositions(geocodedPositions);
+      setDonations(donationsWithPositions);
     }
 
     if (session) {
@@ -59,13 +62,13 @@ export default function MapPage() {
     return <p>User not authenticated</p>;
   }
 
-  if (positions.length === 0) {
+  if (donations.length === 0) {
     return <p>Loading map...</p>;
   }
 
   return (
     <div className={styles['map-component']}>
-      <DynamicMapComponent positions={positions} zoom={zoom} />
+      <DynamicMapComponent donations={donations} zoom={zoom} />
     </div>
   );
 }
