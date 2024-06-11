@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const GEOCODE_API_URL = 'https://api.opencagedata.com/geocode/v1/json';
-const API_KEY = process.env.NEXT_OPENCAGE_API_KEY;
+const API_KEY = process.env.NEXT_PUBLIC_OPENCAGE_API_KEY;
 
 console.log(API_KEY);
 

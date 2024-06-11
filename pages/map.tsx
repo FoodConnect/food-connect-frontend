@@ -39,7 +39,7 @@ export default function MapPage() {
 
       const geocodedPositions = await Promise.all(
         donations.map(async (donation: DonationData) => {
-          const fullAddress = `${donation.address}, ${donation.city}, ${donation.state}, ${donation.zipcode}`;
+          const fullAddress = `${donation.address}, ${donation.city}, ${donation.state}, ${donation.zipcode}, 'United States of America'`;
           const { lat, lng } = await geocodeAddress(fullAddress);
           return { lat, lng };
         })
