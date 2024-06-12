@@ -5,7 +5,7 @@ export function Welcome() {
   return (
     <>
       <Title className={classes.title} ta="center" mt={100}>
-        This Will Be a{' '}
+        This Is a{' '}
         <Text
           inherit
           variant="gradient"
@@ -20,7 +20,7 @@ export function Welcome() {
         <Image src="/logo.svg" alt="Food Connect Logo" width={200} height={200} />
       </Flex>
       <Text c="dimmed" ta="center" size="lg" maw={580} mx="auto" mt="xl">
-        This will be a landing page with information on the site and data on donations
+        This landing page will have more information on the site and data on donations
         given/received.{' '}
         <Anchor href="/" size="lg">
           more coming soon
