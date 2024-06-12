@@ -19,6 +19,7 @@ const DonationsTable = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
+  const [locationQuery, setLocationQuery] = useState<string>('');
 
   const categoryOptions = [
     { value: '', label: 'All Categories' },
@@ -71,6 +72,13 @@ const DonationsTable = () => {
     });
   }
 
+  if (locationQuery) {
+    filteredData = filteredData.filter((donation) =>
+      donation?.city?.toLowerCase() === locationQuery.toLowerCase() ||
+      donation?.zipcode === locationQuery
+    );
+  }
+
   return filteredData;
 };
 
@@ -102,7 +110,7 @@ const DonationsTable = () => {
     };
 
     fetchData();
-  }, [session, searchQuery, selectedCategory, userLocation]);
+  }, [session, searchQuery, selectedCategory, userLocation, locationQuery]);
 
   const donations = tableItems?.map((donation: DonationData) => {
     const totalInventory = donation.remaining_inventory! + donation.claimed_inventory!;
@@ -178,6 +186,11 @@ const DonationsTable = () => {
         data={categoryOptions}
         value={selectedCategory}
         onChange={(value) => setSelectedCategory(value || '')}
+      />
+      <TextInput
+        placeholder="Filter by city or zip code"
+        value={locationQuery}
+        onChange={(event) => setLocationQuery(event.currentTarget.value)}
       />
     </div>
       {loading ? (
