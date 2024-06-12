@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic';
 import styles from '@/components/MapComponent/MapComponent.module.css';
 import { geocodeAddress } from '@/components/MapComponent/geocode';
 import { DonationData } from '@/components/Interfaces/DonationData';
+import DonationsTable from '@/components/DonationsTable/DonationsTable';
 
 // leaflet needs dynamic import to disable ssr
 const DynamicMapComponent = dynamic(() => import('@/components/MapComponent/MapComponent'), { ssr: false });
@@ -15,7 +16,7 @@ interface Position {
 
 export default function MapPage() {
   const [donations, setDonations] = useState<(DonationData & { position: Position })[]>([]);
-  const zoom = 13;
+  const zoom = 11;
   const { data: session } = useSession();
 
   useEffect(() => {
@@ -69,6 +70,7 @@ export default function MapPage() {
   return (
     <div className={styles['map-component']}>
       <DynamicMapComponent donations={donations} zoom={zoom} />
+      <DonationsTable />
     </div>
   );
 }

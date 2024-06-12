@@ -8,6 +8,7 @@ import DateFormat from '../DateFormat';
 import { DonationData } from '@/components/Interfaces/DonationData';
 import DonationsTableLoading from '../Loading/DonationsTableLoading';
 import DonorInfoPopover from '../DonorInfoPopover.tsx/DonorInfoPopover';
+import { haversineDistance } from '../MapComponent/haversineDistance';
 
 const DonationsTable = () => {
   const [tableItems, setTableItems] = useState<DonationData[]>();
@@ -17,6 +18,7 @@ const DonationsTable = () => {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
 
   const categoryOptions = [
     { value: '', label: 'All Categories' },
@@ -25,6 +27,15 @@ const DonationsTable = () => {
     { value: 'dairy', label: 'dairy' },
     { value: 'dry', label: 'dry' },
   ];
+
+  // retrieve the user's location
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        setUserLocation([position.coords.latitude, position.coords.longitude]);
+      });
+    }
+  }, []);
 
   // Condition for Donor Donation Page filtered donation list
   const filterData = (data: DonationData[]) => {
@@ -44,6 +55,20 @@ const DonationsTable = () => {
     filteredData = filteredData.filter((donation) =>
       donation?.category?.toLowerCase() === selectedCategory.toLowerCase()
     );
+  }
+
+  if (userLocation) {
+    filteredData.sort((a, b) => {
+      const aCoords: [number, number] = [
+        a.latitude ?? 0,
+        a.longitude ?? 0,
+      ];
+      const bCoords: [number, number] = [
+        b.latitude ?? 0,
+        b.longitude ?? 0,
+      ];
+      return haversineDistance(userLocation, aCoords) - haversineDistance(userLocation, bCoords);
+    });
   }
 
   return filteredData;
@@ -77,7 +102,7 @@ const DonationsTable = () => {
     };
 
     fetchData();
-  }, [session, searchQuery, selectedCategory]);
+  }, [session, searchQuery, selectedCategory, userLocation]);
 
   const donations = tableItems?.map((donation: DonationData) => {
     const totalInventory = donation.remaining_inventory! + donation.claimed_inventory!;
@@ -99,6 +124,9 @@ const DonationsTable = () => {
         </Table.Td>
         <Table.Td>
           <DateFormat dateString={donation.pick_up_deadline} />
+        </Table.Td>
+        <Table.Td>
+          {donation.city}, {donation.state}
         </Table.Td>
         <Table.Td>
           <Popover width={300} position="bottom" withArrow shadow="md">
@@ -161,6 +189,7 @@ const DonationsTable = () => {
               <Table.Tr>
                 <Table.Th>Title</Table.Th>
                 <Table.Th>Deadline</Table.Th>
+                <Table.Th>Pickup Location</Table.Th>
                 <Table.Th>Donor</Table.Th>
                 <Table.Th>Total Donated</Table.Th>
                 <Table.Th>Inventory Claimed</Table.Th>

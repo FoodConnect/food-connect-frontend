@@ -23,6 +23,8 @@ export interface DonationData {
     state?: String;
     user_id?: number;
   };
+  latitude?: number;
+  longitude?: number;
 }
 
 export type DonationsContextType = {
