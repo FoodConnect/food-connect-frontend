@@ -63,15 +63,12 @@ export default function ChatbotComponent() {
     setChatHistory([
       {
         role: 'assistant',
-        content:
-          'Hello, I am your compost helper! What food items do you need to dispose of today?',
+        content: 'Hello, I am your compost helper! Ask my questions about composting.',
       },
     ]);
-    if (session) {
-      console.log('sessionID:', session.jti);
+    if (session && session.jti) {
       setSessionId(session.jti);
     } else {
-      console.log('No session available');
       setSessionId('unknown_user');
     }
   }, [session]);
