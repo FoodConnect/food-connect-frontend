@@ -9,6 +9,7 @@ import { DonationData } from '@/components/Interfaces/DonationData';
 import DonationsTableLoading from '../Loading/DonationsTableLoading';
 import DonorInfoPopover from '../DonorInfoPopover.tsx/DonorInfoPopover';
 import { haversineDistance } from '../MapComponent/haversineDistance';
+import GeolocationComponent from '../GeolocationComponent/GeolocationComponent';
 
 const DonationsTable = () => {
   const [tableItems, setTableItems] = useState<DonationData[]>();
@@ -18,7 +19,6 @@ const DonationsTable = () => {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
   const [locationQuery, setLocationQuery] = useState<string>('');
 
   const categoryOptions = [
@@ -29,14 +29,7 @@ const DonationsTable = () => {
     { value: 'dry', label: 'dry' },
   ];
 
-  // retrieve the user's location
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        setUserLocation([position.coords.latitude, position.coords.longitude]);
-      });
-    }
-  }, []);
+  const { userLocation, refreshLocation } = GeolocationComponent();
 
   // Condition for Donor Donation Page filtered donation list
   const filterData = (data: DonationData[]) => {
@@ -117,6 +110,11 @@ const DonationsTable = () => {
 
     fetchData();
   }, [session, searchQuery, selectedCategory, userLocation, locationQuery]);
+
+  useEffect(() => {
+    // Trigger refresh of geolocation on sign in or sign out
+    refreshLocation();
+  }, [session]);
 
   const donations = tableItems?.map((donation: DonationData) => {
     const totalInventory = donation.remaining_inventory! + donation.claimed_inventory!;
