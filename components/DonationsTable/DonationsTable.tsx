@@ -70,6 +70,12 @@ const DonationsTable = () => {
       ];
       return haversineDistance(userLocation, aCoords) - haversineDistance(userLocation, bCoords);
     });
+  } else {
+    filteredData.sort((a, b) => {
+      const titleA = a.title ?? '';
+      const titleB = b.title ?? '';
+      return titleA.localeCompare(titleB);
+    });
   }
 
   if (locationQuery) {
