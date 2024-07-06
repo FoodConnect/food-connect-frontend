@@ -1,11 +1,11 @@
 // DonationForm.tsx
-import { Button, Grid, NumberInput, ScrollArea, Text, Textarea } from '@mantine/core';
+import { Button, Grid, NumberInput, ScrollArea, Text, TextInput, Textarea } from '@mantine/core';
 import { IconCircleArrowUpRight } from '@tabler/icons-react';
 import GradientSegmentedControl from '../Inputs/GradientSegmentControl/GradientSegmentedControl';
 import TooltipIcon from '../Inputs/InputTooltips/TooltipIcon';
 import GradientDatePicker from '../Inputs/GradientDatePicker/GradientDatePicker';
 import CheckboxCard from '../Inputs/CheckboxCard/CheckboxCard';
-import { DropzoneButton } from '../Inputs/DopzoneButton/DropzoneButton';
+// import { DropzoneButton } from '../Inputs/DopzoneButton/DropzoneButton';
 import { useDonationFormContext } from './DonationFormContext';
 
 export default function DonationForm() {
@@ -65,12 +65,33 @@ export default function DonationForm() {
         />
       </Grid.Col>
       <Grid.Col span={{ base: 12, xs: 4 }}>
-        <DropzoneButton />
+        {/* <DropzoneButton /> */}
         <TooltipIcon
           tooltipText={imageUrlTooltipText}
           label="Image URL"
           placeholder="Image Address..."
           inputRole="image-address"
+        />
+        <h4>Pick-Up Location Details</h4>
+        <TextInput
+          label="Address"
+          required
+          {...form.getInputProps('address')}
+        />
+        <TextInput
+          label="City"
+          required
+          {...form.getInputProps('city')}
+        />
+        <TextInput
+          label="State"
+          required
+          {...form.getInputProps('state')}
+        />
+        <TextInput
+          label="Zipcode"
+          required
+          {...form.getInputProps('zipcode')}
         />
         <Button
           type="submit"
