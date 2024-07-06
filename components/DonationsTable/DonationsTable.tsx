@@ -29,7 +29,7 @@ const DonationsTable = () => {
     { value: 'dry', label: 'dry' },
   ];
 
-  const { userLocation, refreshLocation } = GeolocationComponent();
+  const { userLocation } = GeolocationComponent();
 
   // Condition for Donor Donation Page filtered donation list
   const filterData = (data: DonationData[]) => {
@@ -110,11 +110,6 @@ const DonationsTable = () => {
 
     fetchData();
   }, [session, searchQuery, selectedCategory, userLocation, locationQuery]);
-
-  useEffect(() => {
-    // Trigger refresh of geolocation on sign in or sign out
-    refreshLocation();
-  }, [session]);
 
   const donations = tableItems?.map((donation: DonationData) => {
     const totalInventory = donation.remaining_inventory! + donation.claimed_inventory!;
