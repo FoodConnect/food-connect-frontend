@@ -1,22 +1,14 @@
 ## Getting Started
 
-1. First, install Next.js:
+1. First, install Next.js and your required dependencies:
 
 ```bash
 npm install next@latest react@latest react-dom@latest
 ```
 
-2. Create an `.env.local` file and copy and paste the variables from `.env.defaults.` Fill in the values as appropriate.
+2. Create an `.env.local` file and copy and paste the variables from `.env.defaults.` Fill in the values as appropriate, including your secret key from OpenAI and an API key from OpenCage for geocoding functionality.
 
-3. For use of the Compost Chatbot, install openai:
-
-```bash
-npm install openai
-```
-
-Then generate a secret key on your [OpenAI](https://openai.com/api/) account to access the API. Insert the key into your .env.local file.
-
-4. To start the frontend of the app, run the development server:
+3. To start the frontend of the app, run the development server:
 
 ```bash
 npm run dev

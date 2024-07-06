@@ -251,7 +251,7 @@ const Donation = () => {
                       <Flex my="lg" direction="column" gap={0}>
                         <Title order={5}>Category</Title>
                         <Text c="dimmed">
-                          <Text c="dimmed">Produce</Text>
+                          <Text c="dimmed">{donation?.category}</Text>
                         </Text>
                       </Flex>
                     </Grid.Col>

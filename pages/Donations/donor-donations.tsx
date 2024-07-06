@@ -33,6 +33,7 @@ const DonorDonations = () => {
       zipcode: '',
       is_available: true,
       donor_id: donorId!,
+      category: 'produce',
     },
     validate: {
       title: (value) =>

@@ -13,7 +13,6 @@ import {
   IconLogin,
   IconLogout,
   IconMap2,
-  IconSearch,
   IconShoppingCart,
   IconUserCircle,
   IconX,
@@ -118,11 +117,6 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
       label: 'Home',
     },
     {
-      icon: <IconSearch size="1.3rem" stroke={1.5} />,
-      href: '/',
-      label: 'Search',
-    },
-    {
       icon: <IconCarrot size="1.3rem" stroke={1.5} />,
       href: checkUserTypeDonations(),
       label: 'Donations',
@@ -140,7 +134,7 @@ export function ApplicationContainer({ children }: { children: React.ReactNode }
     },
     {
       icon: <IconMap2 size="1.3rem" stroke={1.5} />,
-      href: '/',
+      href: '/map',
       label: 'Map View',
     },
     {

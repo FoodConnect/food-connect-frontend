@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Text, Group, Paper, Button, NumberInput } from '@mantine/core';
 import { IconShoppingCart, IconDeviceAnalytics } from '@tabler/icons-react';
 import { useForm } from '@mantine/form';
@@ -11,6 +11,7 @@ import { CartedDonationData } from '../Interfaces/CartedDonationData';
 export default function AddToCartComponent() {
   const { data: session } = useSession();
   const router = useRouter();
+  const [isDonor, setIsDonor] = useState(false);
 
    // Get the donation ID from the URL
    const { id } = router.query;
@@ -65,7 +66,11 @@ export default function AddToCartComponent() {
     }
   };
 
-  useEffect(() => {}, [session]);
+  useEffect(() => {
+    if (session) {
+      setIsDonor(session.user.role === 'donor');
+    }
+  }, [session]);
 
   if (!session) {
     return (
@@ -76,6 +81,7 @@ export default function AddToCartComponent() {
   }
 
   return (
+    !isDonor && (
     <Paper withBorder p="md" radius="md">
       <form onSubmit={form.onSubmit(handleSubmit)}>
         <Group justify="space-between">
@@ -102,5 +108,6 @@ export default function AddToCartComponent() {
         </Group>
       </form>
     </Paper>
+  )
   );
 }

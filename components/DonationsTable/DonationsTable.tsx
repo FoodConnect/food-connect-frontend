@@ -1,4 +1,4 @@
-import { Table, Progress, Anchor, Text, Group, Popover } from '@mantine/core';
+import { Table, Progress, Anchor, Text, Group, Popover, Select, TextInput } from '@mantine/core';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -8,169 +8,8 @@ import DateFormat from '../DateFormat';
 import { DonationData } from '@/components/Interfaces/DonationData';
 import DonationsTableLoading from '../Loading/DonationsTableLoading';
 import DonorInfoPopover from '../DonorInfoPopover.tsx/DonorInfoPopover';
-
-// *REMOVE* Dummy Data for feaux authorization
-// TO BE Removed upon call connection to Django API
-// const data = [
-//   {
-//     id: 1,
-//     title: 'Apples',
-//     description:
-//       'Locally sourced apples, freshly picked, are readied for donation. Soon to reach food banks and shelters, they offer nourishment and comfort, symbolizing the spirit of community care and support.',
-//     donor: { name: 'Test User Business', user: { id: 1 } },
-//     pick_up_deadline: '2024-03-09T09:47:00Z',
-//     inventory: { claimed: 90, remaining: 10 },
-//     is_available: true,
-//     image_data:
-//       'https://thumbs.dreamstime.com/b/fresh-carrots-farmer-s-market-pile-freshly-harvested-carrots-arranged-wooden-crate-sitting-burlap-sack-276909252.jpg',
-//     created_at: '2024-03-01T09:47:00Z',
-//     category: 'Produce',
-//   },
-//   {
-//     id: 2,
-//     title: 'Bananas',
-//     description: 'Bananas',
-//     donor: { name: 'Test User Business', user: { id: 1 } },
-//     pick_up_deadline: '2024-03-25T09:47:00Z',
-//     inventory: { claimed: 350, remaining: 756 },
-//     is_available: true,
-//     image_data:
-//       'https://thumbs.dreamstime.com/b/fresh-carrots-farmer-s-market-pile-freshly-harvested-carrots-arranged-wooden-crate-sitting-burlap-sack-276909252.jpg',
-//     created_at: '2024-03-01T09:47:00Z',
-//     category: 'Produce',
-//   },
-//   {
-//     id: 3,
-//     title: 'Oranges',
-//     description: 'Oranges',
-//     donor: { name: 'Test User Business', user: { id: 1 } },
-//     pick_up_deadline: '2024-04-15T09:47:00Z',
-//     inventory: { claimed: 2345, remaining: 812 },
-//     is_available: true,
-//     image_data:
-//       'https://thumbs.dreamstime.com/b/fresh-carrots-farmer-s-market-pile-freshly-harvested-carrots-arranged-wooden-crate-sitting-burlap-sack-276909252.jpg',
-//     created_at: '2024-03-01T09:47:00Z',
-//     category: 'Produce',
-//   },
-//   {
-//     id: 4,
-//     title: 'Pears',
-//     description: 'Pears',
-//     donor: { name: 'Test User Business', user: { id: 1 } },
-//     pick_up_deadline: '2024-04-29T09:47:00Z',
-//     inventory: { claimed: 0, remaining: 570 },
-//     is_available: true,
-//     image_data:
-//       'https://thumbs.dreamstime.com/b/fresh-carrots-farmer-s-market-pile-freshly-harvested-carrots-arranged-wooden-crate-sitting-burlap-sack-276909252.jpg',
-//     created_at: '2024-03-01T09:47:00Z',
-//     category: 'Produce',
-//   },
-//   {
-//     id: 5,
-//     title: 'Canned Chickens',
-//     description: 'Canned Chickens',
-//     donor: { name: 'Test User Business', user: { id: 1 } },
-//     pick_up_deadline: '2024-04-29T09:47:00Z',
-//     inventory: { claimed: 215, remaining: 1587 },
-//     is_available: true,
-//     image_data:
-//       'https://thumbs.dreamstime.com/b/fresh-carrots-farmer-s-market-pile-freshly-harvested-carrots-arranged-wooden-crate-sitting-burlap-sack-276909252.jpg',
-//     created_at: '2024-03-01T09:47:00Z',
-//     category: 'Canned',
-//   },
-//   {
-//     id: 6,
-//     title: 'Boxes of Crackers',
-//     description: 'Boxes of Crackers',
-//     donor: { name: 'Marges Restaurant', user: { id: 2 } },
-//     pick_up_deadline: '2024-05-12T09:47:00Z',
-//     inventory: { claimed: 1121, remaining: 397 },
-//     is_available: true,
-//     image_data:
-//       'https://thumbs.dreamstime.com/b/fresh-carrots-farmer-s-market-pile-freshly-harvested-carrots-arranged-wooden-crate-sitting-burlap-sack-276909252.jpg',
-//     created_at: '2024-03-01T09:47:00Z',
-//     category: 'Dry',
-//   },
-//   {
-//     id: 7,
-//     title: 'Eggs',
-//     description:
-//       'Local farms donate fresh eggs, packed with care. Destined for food banks and shelters, these eggs offer comfort and sustenance to those in need, symbolizing the power of kindness in our community.',
-//     donor: { name: 'Marges Restaurant', user: { id: 2 } },
-//     pick_up_deadline: '2024-03-20T09:47:00Z',
-//     inventory: { claimed: 284, remaining: 1668 },
-//     is_available: true,
-//     image_data:
-//       'https://thumbs.dreamstime.com/b/fresh-carrots-farmer-s-market-pile-freshly-harvested-carrots-arranged-wooden-crate-sitting-burlap-sack-276909252.jpg',
-//     created_at: '2024-03-01T09:47:00Z',
-//     category: 'Produce',
-//   },
-//   {
-//     id: 8,
-//     title: 'Potatoes',
-//     description: 'Potatoes',
-//     donor: { name: 'Marges Restaurant', user: { id: 2 } },
-//     pick_up_deadline: '2024-06-01T09:47:00Z',
-//     inventory: { claimed: 744, remaining: 128 },
-//     is_available: true,
-//     image_data:
-//       'https://thumbs.dreamstime.com/b/fresh-carrots-farmer-s-market-pile-freshly-harvested-carrots-arranged-wooden-crate-sitting-burlap-sack-276909252.jpg',
-//     created_at: '2024-03-01T09:47:00Z',
-//     category: 'Produce',
-//   },
-//   {
-//     id: 9,
-//     title: 'Maple Syrup Bottles',
-//     description: 'Maple Syrup Bottles',
-//     donor: { name: 'Marges Restaurant', user: { id: 2 } },
-//     pick_up_deadline: '2024-06-01T09:47:00Z',
-//     inventory: { claimed: 51, remaining: 76 },
-//     is_available: true,
-//     image_data:
-//       'https://thumbs.dreamstime.com/b/fresh-carrots-farmer-s-market-pile-freshly-harvested-carrots-arranged-wooden-crate-sitting-burlap-sack-276909252.jpg',
-//     created_at: '2024-03-01T09:47:00Z',
-//     category: 'Canned',
-//   },
-//   {
-//     id: 10,
-//     title: 'Carrots',
-//     description: 'Carrots',
-//     donor: { name: 'Marges Restaurant', user: { id: 2 } },
-//     pick_up_deadline: '2024-03-05T09:47:00Z',
-//     inventory: { claimed: 46, remaining: 10 },
-//     is_available: true,
-//     image_data:
-//       'https://thumbs.dreamstime.com/b/fresh-carrots-farmer-s-market-pile-freshly-harvested-carrots-arranged-wooden-crate-sitting-burlap-sack-276909252.jpg',
-//     created_at: '2024-03-01T09:47:00Z',
-//     category: 'Produce',
-//   },
-//   {
-//     id: 11,
-//     title: 'Salt Packets',
-//     description: 'Salt Packets',
-//     donor: { name: 'Marges Restaurant', user: { id: 2 } },
-//     pick_up_deadline: '2024-03-05T09:47:00Z',
-//     inventory: { claimed: 100, remaining: 3568 },
-//     is_available: true,
-//     image_data:
-//       'https://thumbs.dreamstime.com/b/fresh-carrots-farmer-s-market-pile-freshly-harvested-carrots-arranged-wooden-crate-sitting-burlap-sack-276909252.jpg',
-//     created_at: '2024-03-01T09:47:00Z',
-//     category: 'Dry',
-//   },
-//   {
-//     id: 12,
-//     title: 'Cartons of Milk',
-//     description: 'Cartons of Milk',
-//     donor: { name: 'Test User Business', user: { id: 1 } },
-//     pick_up_deadline: '2024-03-05T09:47:00Z',
-//     inventory: { claimed: 365, remaining: 789 },
-//     is_available: true,
-//     image_data:
-//       'https://thumbs.dreamstime.com/b/fresh-carrots-farmer-s-market-pile-freshly-harvested-carrots-arranged-wooden-crate-sitting-burlap-sack-276909252.jpg',
-//     created_at: '2024-03-01T09:47:00Z',
-//     category: 'Dairy',
-//   },
-// ];
+import { haversineDistance } from '../MapComponent/haversineDistance';
+import GeolocationComponent from '../GeolocationComponent/GeolocationComponent';
 
 const DonationsTable = () => {
   const [tableItems, setTableItems] = useState<DonationData[]>();
@@ -178,13 +17,69 @@ const DonationsTable = () => {
   const { data: session } = useSession();
   const path = useRouter().asPath;
 
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [locationQuery, setLocationQuery] = useState<string>('');
+
+  const categoryOptions = [
+    { value: '', label: 'All Categories' },
+    { value: 'produce', label: 'produce' },
+    { value: 'canned', label: 'canned' },
+    { value: 'dairy', label: 'dairy' },
+    { value: 'dry', label: 'dry' },
+  ];
+
+  const { userLocation } = GeolocationComponent();
+
   // Condition for Donor Donation Page filtered donation list
   const filterData = (data: DonationData[]) => {
+    let filteredData = data;
+
     if (path === '/Donations/donor-donations') {
-      return data.filter((donation) => donation?.donor?.user_id === session?.user.pk);
-    }
-    return data;
-  };
+      filteredData = filteredData.filter((donation) =>
+        donation?.donor?.user_id === session?.user.pk);
+  }
+  if (searchQuery) {
+    filteredData = filteredData.filter((donation) =>
+      donation?.title?.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }
+
+  if (selectedCategory) {
+    filteredData = filteredData.filter((donation) =>
+      donation?.category?.toLowerCase() === selectedCategory.toLowerCase()
+    );
+  }
+
+  if (userLocation) {
+    filteredData.sort((a, b) => {
+      const aCoords: [number, number] = [
+        a.latitude ?? 0,
+        a.longitude ?? 0,
+      ];
+      const bCoords: [number, number] = [
+        b.latitude ?? 0,
+        b.longitude ?? 0,
+      ];
+      return haversineDistance(userLocation, aCoords) - haversineDistance(userLocation, bCoords);
+    });
+  } else {
+    filteredData.sort((a, b) => {
+      const titleA = a.title ?? '';
+      const titleB = b.title ?? '';
+      return titleA.localeCompare(titleB);
+    });
+  }
+
+  if (locationQuery) {
+    filteredData = filteredData.filter((donation) =>
+      donation?.city?.toLowerCase() === locationQuery.toLowerCase() ||
+      donation?.zipcode === locationQuery
+    );
+  }
+
+  return filteredData;
+};
 
   // *REMOVE* DELAY FUNCTION for Development Presentation of Loading State
   function timeout(delay: number) {
@@ -214,7 +109,7 @@ const DonationsTable = () => {
     };
 
     fetchData();
-  }, [session]);
+  }, [session, searchQuery, selectedCategory, userLocation, locationQuery]);
 
   const donations = tableItems?.map((donation: DonationData) => {
     const totalInventory = donation.remaining_inventory! + donation.claimed_inventory!;
@@ -236,6 +131,9 @@ const DonationsTable = () => {
         </Table.Td>
         <Table.Td>
           <DateFormat dateString={donation.pick_up_deadline} />
+        </Table.Td>
+        <Table.Td>
+          {donation.city}, {donation.state}
         </Table.Td>
         <Table.Td>
           <Popover width={300} position="bottom" withArrow shadow="md">
@@ -276,6 +174,24 @@ const DonationsTable = () => {
 
   return (
     <>
+    <div className={classes.filters}>
+      <TextInput
+        placeholder="Search by title"
+        value={searchQuery}
+        onChange={(event) => setSearchQuery(event.currentTarget.value)}
+      />
+      <Select
+        placeholder="Select category"
+        data={categoryOptions}
+        value={selectedCategory}
+        onChange={(value) => setSelectedCategory(value || '')}
+      />
+      <TextInput
+        placeholder="Filter by city or zip code"
+        value={locationQuery}
+        onChange={(event) => setLocationQuery(event.currentTarget.value)}
+      />
+    </div>
       {loading ? (
         <DonationsTableLoading />
       ) : (
@@ -285,6 +201,7 @@ const DonationsTable = () => {
               <Table.Tr>
                 <Table.Th>Title</Table.Th>
                 <Table.Th>Deadline</Table.Th>
+                <Table.Th>Pickup Location</Table.Th>
                 <Table.Th>Donor</Table.Th>
                 <Table.Th>Total Donated</Table.Th>
                 <Table.Th>Inventory Claimed</Table.Th>

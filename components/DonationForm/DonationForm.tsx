@@ -1,11 +1,11 @@
 // DonationForm.tsx
-import { Button, Grid, NumberInput, ScrollArea, Text, Textarea } from '@mantine/core';
+import { Button, Grid, NumberInput, ScrollArea, Text, TextInput, Textarea } from '@mantine/core';
 import { IconCircleArrowUpRight } from '@tabler/icons-react';
 import GradientSegmentedControl from '../Inputs/GradientSegmentControl/GradientSegmentedControl';
 import TooltipIcon from '../Inputs/InputTooltips/TooltipIcon';
 import GradientDatePicker from '../Inputs/GradientDatePicker/GradientDatePicker';
 import CheckboxCard from '../Inputs/CheckboxCard/CheckboxCard';
-import { DropzoneButton } from '../Inputs/DopzoneButton/DropzoneButton';
+// import { DropzoneButton } from '../Inputs/DopzoneButton/DropzoneButton';
 import { useDonationFormContext } from './DonationFormContext';
 
 export default function DonationForm() {
@@ -17,7 +17,7 @@ export default function DonationForm() {
     'Write something that describes your donation concisely for charities to veiw.';
   const imageUrlTooltipText =
     'This field will eventually go away. It exists to save Image URLs until the above dropzone is functioning.';
-  const categoryOptions = ['Produce', 'Canned', 'Dairy', 'Dry'];
+  const categoryOptions = ['produce', 'canned', 'dairy', 'dry', 'other'];
 
   return (
     <Grid>
@@ -48,7 +48,10 @@ export default function DonationForm() {
           Category
         </Text>
         <ScrollArea.Autosize maw={600} type="never">
-          <GradientSegmentedControl categoryOptions={categoryOptions} />
+          <GradientSegmentedControl
+            categoryOptions={categoryOptions}
+            {...form.getInputProps('category')}
+          />
         </ScrollArea.Autosize>
       </Grid.Col>
       <Grid.Col span={{ base: 12, xs: 4 }}>
@@ -62,12 +65,33 @@ export default function DonationForm() {
         />
       </Grid.Col>
       <Grid.Col span={{ base: 12, xs: 4 }}>
-        <DropzoneButton />
+        {/* <DropzoneButton /> */}
         <TooltipIcon
           tooltipText={imageUrlTooltipText}
           label="Image URL"
           placeholder="Image Address..."
           inputRole="image-address"
+        />
+        <h4>Pick-Up Location Details</h4>
+        <TextInput
+          label="Address"
+          required
+          {...form.getInputProps('address')}
+        />
+        <TextInput
+          label="City"
+          required
+          {...form.getInputProps('city')}
+        />
+        <TextInput
+          label="State"
+          required
+          {...form.getInputProps('state')}
+        />
+        <TextInput
+          label="Zipcode"
+          required
+          {...form.getInputProps('zipcode')}
         />
         <Button
           type="submit"
